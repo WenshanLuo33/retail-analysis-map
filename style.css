@@ -1,0 +1,149 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #1f1f1f;
+}
+
+#app {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+#map {
+  width: 65%;
+  height: 100%;
+}
+
+#sidebar {
+  width: 35%;
+  height: 100%;
+  overflow-y: auto;
+  background: #f7f7f7;
+  border-left: 1px solid #ccc;
+  box-sizing: border-box;
+  padding: 18px;
+}
+
+.header {
+  margin-bottom: 18px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 12px;
+}
+
+.header h1 {
+  font-size: 22px;
+  margin: 0 0 6px 0;
+}
+
+.header p {
+  margin: 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.empty-state {
+  color: #777;
+  font-size: 14px;
+}
+
+.project-title {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+}
+
+.project-address {
+  margin: 0 0 14px 0;
+  color: #555;
+  font-size: 13px;
+}
+
+.button-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.button-row a {
+  display: inline-block;
+  padding: 8px 10px;
+  background: #003b5c;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.metric {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.metric-label {
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.section-title {
+  margin: 18px 0 8px 0;
+  font-size: 16px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 4px;
+}
+
+.site-plan {
+  width: 100%;
+  border: 1px solid #ccc;
+  background: white;
+  margin-bottom: 16px;
+}
+
+.table-wrap {
+  max-height: 360px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  background: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 6px;
+  text-align: left;
+}
+
+th {
+  background: #eee;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.leaflet-popup-content {
+  font-size: 13px;
+}
