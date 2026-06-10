@@ -36,6 +36,7 @@ Promise.all([
   projects = projectData;
   tenants = tenantData;
 
+  buildOwnerFilter(projects);
   addProjectMarkers();
 });
 
@@ -51,6 +52,41 @@ function loadCSV(path) {
       }
     });
   });
+}
+
+function buildOwnerFilter(projectsData) {
+  const ownerFilter = document.getElementById("ownerFilter");
+  if (!ownerFilter) return;
+
+  const owners = [...new Set(
+    projectsData
+      .map(p => p["Owner"])
+      .filter(owner => owner !== undefined && owner !== null && String(owner).trim() !== "")
+      .map(owner => String(owner).trim())
+  )].sort();
+
+  ownerFilter.innerHTML = "";
+
+  owners.forEach(owner => {
+    const label = document.createElement("label");
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = owner;
+    checkbox.checked = true;
+
+    checkbox.addEventListener("change", applyFilters);
+
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(owner));
+
+    ownerFilter.appendChild(label);
+  });
+}
+
+function getSelectedOwners() {
+  const checkedBoxes = document.querySelectorAll("#ownerFilter input[type='checkbox']:checked");
+  return Array.from(checkedBoxes).map(box => box.value);
 }
 
 function addProjectMarkers(filteredProjects = projects) {
@@ -122,7 +158,10 @@ function showProjectDetail(project) {
 
   sidebar.innerHTML = `
     <h2 class="project-title">${project["Project Name"] || ""}</h2>
-    <p class="project-address">${project["Address"] || ""}</p>
+    <p class="project-address">
+     ${project["Owner"] ? `<strong>${project["Owner"]}</strong><br>` : ""}
+     ${project["Address"] || ""}
+    </p>
 
     <div class="button-row">
       ${pdfButton(project)}
@@ -313,6 +352,7 @@ function tenantSummaryHTML(projectTenants) {
 }
 
 function applyFilters() {
+  const selectedOwners = getSelectedOwners();
   const tenantKeyword = document.getElementById("tenantSearch").value.toLowerCase().trim();
 
   const minGLA = getNumberInput("minGLA");
@@ -326,6 +366,16 @@ function applyFilters() {
 
   let filteredProjects = [...projects];
 
+  // Owner filter
+  if (selectedOwners.length > 0) {
+    filteredProjects = filteredProjects.filter(p =>
+      selectedOwners.includes(String(p["Owner"]).trim())
+    );
+  } else {
+    filteredProjects = [];
+  }
+
+  // Tenant keyword filter
   if (tenantKeyword) {
     const matchedProjectIds = tenants
       .filter(t => String(t["Tenant"]).toLowerCase().includes(tenantKeyword))
@@ -338,6 +388,7 @@ function applyFilters() {
     );
   }
 
+  // GLA filter
   if (minGLA !== null) {
     filteredProjects = filteredProjects.filter(p =>
       Number(p["Total GLA"]) >= minGLA
@@ -350,6 +401,7 @@ function applyFilters() {
     );
   }
 
+  // Grocery percentage filter
   if (minGroceryPct !== null) {
     filteredProjects = filteredProjects.filter(p =>
       Number(p["Grocery % GLA"]) >= minGroceryPct
@@ -362,6 +414,7 @@ function applyFilters() {
     );
   }
 
+  // Vacancy percentage filter
   if (minVacancyPct !== null) {
     filteredProjects = filteredProjects.filter(p =>
       Number(p["Vacancy %"]) >= minVacancyPct
@@ -387,7 +440,7 @@ function applyFilters() {
            onmouseenter="highlightProjectMarker('${project["Project ID"]}')"
            onmouseleave="resetProjectMarker('${project["Project ID"]}')">
         <h3>${project["Project Name"]}</h3>
-        <p>${project["City/State"] || ""}</p>
+        <p>${project["Owner"] || ""}${project["City/State"] ? " · " + project["City/State"] : ""}</p>
 
         <div class="filter-metrics">
           <div><strong>GLA:</strong> ${formatNumber(project["Total GLA"])} SF</div>
@@ -407,6 +460,7 @@ function applyFilters() {
     <p><strong>${filteredProjects.length}</strong> projects found.</p>
 
     <div class="filter-note">
+      ${selectedOwners.length ? `Owner: <strong>${selectedOwners.join(", ")}</strong><br>` : "Owner: <strong>None selected</strong><br>"}
       ${tenantKeyword ? `Tenant contains: <strong>${tenantKeyword}</strong><br>` : ""}
       ${minGLA !== null ? `Min GLA: <strong>${formatNumber(minGLA)}</strong><br>` : ""}
       ${maxGLA !== null ? `Max GLA: <strong>${formatNumber(maxGLA)}</strong><br>` : ""}
@@ -487,6 +541,10 @@ function clearFilter() {
   document.getElementById("maxGroceryPct").value = "";
   document.getElementById("minVacancyPct").value = "";
   document.getElementById("maxVacancyPct").value = "";
+
+  document.querySelectorAll("#ownerFilter input[type='checkbox']").forEach(input => {
+    input.checked = true;
+  });
 
   addProjectMarkers(projects);
 
