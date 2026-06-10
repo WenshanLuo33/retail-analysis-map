@@ -1,6 +1,8 @@
 let projects = [];
 let tenants = [];
 let projectMarkers = [];
+let markerByProjectId = {};
+let highlightedMarker = null;
 
 // Map
 const map = L.map("map").setView([39.5, -96.5], 4);
@@ -54,6 +56,8 @@ function loadCSV(path) {
 function addProjectMarkers(filteredProjects = projects) {
   projectMarkers.forEach(marker => map.removeLayer(marker));
   projectMarkers = [];
+  markerByProjectId = {};
+  highlightedMarker = null;
 
   const bounds = [];
 
@@ -84,6 +88,7 @@ function addProjectMarkers(filteredProjects = projects) {
     });
 
     projectMarkers.push(marker);
+    markerByProjectId[String(project["Project ID"])] = marker;
     bounds.push([lat, lng]);
   });
 
@@ -307,23 +312,67 @@ function tenantSummaryHTML(projectTenants) {
   `;
 }
 
-function filterByTenant() {
-  const keyword = document.getElementById("tenantSearch").value.toLowerCase().trim();
+function applyFilters() {
+  const tenantKeyword = document.getElementById("tenantSearch").value.toLowerCase().trim();
 
-  if (!keyword) {
-    addProjectMarkers(projects);
-    return;
+  const minGLA = getNumberInput("minGLA");
+  const maxGLA = getNumberInput("maxGLA");
+
+  const minGroceryPct = getNumberInput("minGroceryPct");
+  const maxGroceryPct = getNumberInput("maxGroceryPct");
+
+  const minVacancyPct = getNumberInput("minVacancyPct");
+  const maxVacancyPct = getNumberInput("maxVacancyPct");
+
+  let filteredProjects = [...projects];
+
+  if (tenantKeyword) {
+    const matchedProjectIds = tenants
+      .filter(t => String(t["Tenant"]).toLowerCase().includes(tenantKeyword))
+      .map(t => String(t["Project ID"]));
+
+    const uniqueIds = new Set(matchedProjectIds);
+
+    filteredProjects = filteredProjects.filter(p =>
+      uniqueIds.has(String(p["Project ID"]))
+    );
   }
 
-  const matchedProjectIds = tenants
-    .filter(t => String(t["Tenant"]).toLowerCase().includes(keyword))
-    .map(t => String(t["Project ID"]));
+  if (minGLA !== null) {
+    filteredProjects = filteredProjects.filter(p =>
+      Number(p["Total GLA"]) >= minGLA
+    );
+  }
 
-  const uniqueIds = new Set(matchedProjectIds);
+  if (maxGLA !== null) {
+    filteredProjects = filteredProjects.filter(p =>
+      Number(p["Total GLA"]) <= maxGLA
+    );
+  }
 
-  const filteredProjects = projects.filter(p =>
-    uniqueIds.has(String(p["Project ID"]))
-  );
+  if (minGroceryPct !== null) {
+    filteredProjects = filteredProjects.filter(p =>
+      Number(p["Grocery % GLA"]) >= minGroceryPct
+    );
+  }
+
+  if (maxGroceryPct !== null) {
+    filteredProjects = filteredProjects.filter(p =>
+      Number(p["Grocery % GLA"]) <= maxGroceryPct
+    );
+  }
+
+  if (minVacancyPct !== null) {
+    filteredProjects = filteredProjects.filter(p =>
+      Number(p["Vacancy %"]) >= minVacancyPct
+    );
+  }
+
+  if (maxVacancyPct !== null) {
+    filteredProjects = filteredProjects.filter(p =>
+      Number(p["Vacancy %"]) <= maxVacancyPct
+    );
+  }
 
   addProjectMarkers(filteredProjects);
 
@@ -333,12 +382,16 @@ function filterByTenant() {
       (Number(project["Tenant Count 3k-10k"]) || 0);
 
     return `
-      <div class="filter-project-card" onclick="showProjectDetailFromId('${project["Project ID"]}')">
+      <div class="filter-project-card"
+           onclick="showProjectDetailFromId('${project["Project ID"]}')"
+           onmouseenter="highlightProjectMarker('${project["Project ID"]}')"
+           onmouseleave="resetProjectMarker('${project["Project ID"]}')">
         <h3>${project["Project Name"]}</h3>
         <p>${project["City/State"] || ""}</p>
 
         <div class="filter-metrics">
           <div><strong>GLA:</strong> ${formatNumber(project["Total GLA"])} SF</div>
+          <div><strong>Grocery:</strong> ${project["Grocery Tenant"] || "N/A"}</div>
           <div><strong>Grocery SF:</strong> ${formatNumber(project["Grocery SF"])} SF</div>
           <div><strong>Grocery %:</strong> ${round(project["Grocery % GLA"], 1)}%</div>
           <div><strong>Tenants &lt;10k SF:</strong> ${smallTenantCount}</div>
@@ -351,8 +404,17 @@ function filterByTenant() {
 
   document.getElementById("project-detail").innerHTML = `
     <h2>Filter Result</h2>
-    <p><strong>${filteredProjects.length}</strong> projects found with tenant containing:</p>
-    <p><strong>${keyword}</strong></p>
+    <p><strong>${filteredProjects.length}</strong> projects found.</p>
+
+    <div class="filter-note">
+      ${tenantKeyword ? `Tenant contains: <strong>${tenantKeyword}</strong><br>` : ""}
+      ${minGLA !== null ? `Min GLA: <strong>${formatNumber(minGLA)}</strong><br>` : ""}
+      ${maxGLA !== null ? `Max GLA: <strong>${formatNumber(maxGLA)}</strong><br>` : ""}
+      ${minGroceryPct !== null ? `Min Grocery %: <strong>${minGroceryPct}%</strong><br>` : ""}
+      ${maxGroceryPct !== null ? `Max Grocery %: <strong>${maxGroceryPct}%</strong><br>` : ""}
+      ${minVacancyPct !== null ? `Min Vacancy %: <strong>${minVacancyPct}%</strong><br>` : ""}
+      ${maxVacancyPct !== null ? `Max Vacancy %: <strong>${maxVacancyPct}%</strong>` : ""}
+    </div>
 
     <div class="filter-result-list">
       ${projectListHTML}
@@ -360,16 +422,16 @@ function filterByTenant() {
   `;
 }
 
-function clearFilter() {
-  document.getElementById("tenantSearch").value = "";
-  addProjectMarkers(projects);
+function getNumberInput(id) {
+  const value = document.getElementById(id).value;
 
-  document.getElementById("project-detail").innerHTML = `
-    <div class="empty-state">
-      Select a project on the map.
-    </div>
-  `;
+  if (value === "") {
+    return null;
+  }
+
+  return Number(value);
 }
+
 
 function showProjectDetailFromId(projectId) {
   const project = projects.find(p => String(p["Project ID"]) === String(projectId));
@@ -377,4 +439,60 @@ function showProjectDetailFromId(projectId) {
   if (project) {
     showProjectDetail(project);
   }
+}
+
+function highlightProjectMarker(projectId) {
+  const marker = markerByProjectId[String(projectId)];
+
+  if (!marker) return;
+
+  highlightedMarker = marker;
+
+  marker.setStyle({
+    radius: 14,
+    weight: 4,
+    color: "#000",
+    fillOpacity: 1
+  });
+
+  marker.bringToFront();
+  marker.openPopup();
+}
+
+function resetProjectMarker(projectId) {
+  const marker = markerByProjectId[String(projectId)];
+
+  if (!marker) return;
+
+  const project = projects.find(p => String(p["Project ID"]) === String(projectId));
+
+  marker.setStyle({
+    radius: 8,
+    weight: 1,
+    color: "#222",
+    fillOpacity: 0.85,
+    fillColor: getMarkerColor(project)
+  });
+
+  marker.closePopup();
+
+  highlightedMarker = null;
+}
+
+function clearFilter() {
+  document.getElementById("tenantSearch").value = "";
+  document.getElementById("minGLA").value = "";
+  document.getElementById("maxGLA").value = "";
+  document.getElementById("minGroceryPct").value = "";
+  document.getElementById("maxGroceryPct").value = "";
+  document.getElementById("minVacancyPct").value = "";
+  document.getElementById("maxVacancyPct").value = "";
+
+  addProjectMarkers(projects);
+
+  document.getElementById("project-detail").innerHTML = `
+    <div class="empty-state">
+      Select a project on the map.
+    </div>
+  `;
 }

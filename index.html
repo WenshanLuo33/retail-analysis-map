@@ -21,9 +21,34 @@
       </div>
 
       <div id="controls">
-        <input id="tenantSearch" placeholder="Filter by tenant, e.g. Trader Joe's" />
-        <button onclick="filterByTenant()">Filter</button>
-       <button onclick="clearFilter()">Clear</button>
+        <label>TENANT</label>
+        <input id="tenantSearch" placeholder="Trader Joe's" />
+
+        <label>GLA</label>
+        <div class="range-row">
+          <input id="minGLA" type="number" placeholder="0" />
+          <span>–</span>
+          <input id="maxGLA" type="number" placeholder="100000" />
+        </div>
+
+        <label>GROCERY %</label>
+        <div class="range-row">
+          <input id="minGroceryPct" type="number" placeholder="20" />
+          <span>–</span>
+          <input id="maxGroceryPct" type="number" placeholder="50" />
+        </div>
+
+        <label>VACANCY %</label>
+        <div class="range-row">
+          <input id="minVacancyPct" type="number" placeholder="0" />
+          <span>–</span>
+          <input id="maxVacancyPct" type="number" placeholder="10" />
+        </div>
+
+        <div class="control-buttons">
+          <button onclick="applyFilters()">FILTER</button>
+          <button onclick="clearFilter()">CLEAR</button>
+        </div>
       </div>
 
       <div id="project-detail" class="empty-state">
