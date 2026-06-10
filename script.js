@@ -7,9 +7,32 @@ let highlightedMarker = null;
 // Map
 const map = L.map("map").setView([39.5, -96.5], 4);
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+// Base maps
+const osmLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution: "© OpenStreetMap"
+});
+
+const satelliteLayer = L.tileLayer(
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  {
+    maxZoom: 19,
+    attribution: "Tiles © Esri"
+  }
+);
+
+// Add default base map
+osmLayer.addTo(map);
+
+// Base map switch control
+const baseMaps = {
+  "OSM": osmLayer,
+  "Satellite": satelliteLayer
+};
+
+L.control.layers(baseMaps, null, {
+  position: "topright",
+  collapsed: false
 }).addTo(map);
 
 const legend = L.control({ position: "bottomleft" });
