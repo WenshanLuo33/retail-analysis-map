@@ -60,6 +60,7 @@ Promise.all([
   tenants = tenantData;
 
   buildOwnerFilter(projects);
+  buildStateFilter(projects);
   addProjectMarkers();
 });
 
@@ -105,6 +106,59 @@ function buildOwnerFilter(projectsData) {
 
     ownerFilter.appendChild(label);
   });
+}
+
+function getProjectState(project) {
+  // If you later add a separate "State" column, this will also work.
+  if (project["State"] && String(project["State"]).trim() !== "") {
+    return String(project["State"]).trim().toUpperCase();
+  }
+
+  // Current CSV format: "City/State", for example "Durham, NC"
+  const cityState = project["City/State"];
+
+  if (!cityState || String(cityState).trim() === "") {
+    return "";
+  }
+
+  const parts = String(cityState).split(",");
+  const state = parts[parts.length - 1].trim();
+
+  return state.toUpperCase();
+}
+
+function buildStateFilter(projectsData) {
+  const stateFilter = document.getElementById("stateFilter");
+  if (!stateFilter) return;
+
+  const states = [...new Set(
+    projectsData
+      .map(project => getProjectState(project))
+      .filter(state => state !== "")
+  )].sort();
+
+  stateFilter.innerHTML = "";
+
+  states.forEach(state => {
+    const label = document.createElement("label");
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = state;
+    checkbox.checked = true;
+
+    checkbox.addEventListener("change", applyFilters);
+
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(state));
+
+    stateFilter.appendChild(label);
+  });
+}
+
+function getSelectedStates() {
+  const checkedBoxes = document.querySelectorAll("#stateFilter input[type='checkbox']:checked");
+  return Array.from(checkedBoxes).map(box => box.value);
 }
 
 function getSelectedOwners() {
@@ -376,6 +430,7 @@ function tenantSummaryHTML(projectTenants) {
 
 function applyFilters() {
   const selectedOwners = getSelectedOwners();
+  const selectedStates = getSelectedStates();
   const tenantKeyword = document.getElementById("tenantSearch").value.toLowerCase().trim();
 
   const minGLA = getNumberInput("minGLA");
@@ -394,6 +449,15 @@ function applyFilters() {
     filteredProjects = filteredProjects.filter(p =>
       selectedOwners.includes(String(p["Owner"]).trim())
     );
+  } else {
+    filteredProjects = [];
+  }
+
+  // State filter
+  if (selectedStates.length > 0) {
+   filteredProjects = filteredProjects.filter(p =>
+      selectedStates.includes(getProjectState(p))
+   );
   } else {
     filteredProjects = [];
   }
@@ -484,6 +548,7 @@ function applyFilters() {
 
     <div class="filter-note">
       ${selectedOwners.length ? `Owner: <strong>${selectedOwners.join(", ")}</strong><br>` : "Owner: <strong>None selected</strong><br>"}
+      ${selectedStates.length ? `State: <strong>${selectedStates.join(", ")}</strong><br>` : "State: <strong>None selected</strong><br>"}
       ${tenantKeyword ? `Tenant contains: <strong>${tenantKeyword}</strong><br>` : ""}
       ${minGLA !== null ? `Min GLA: <strong>${formatNumber(minGLA)}</strong><br>` : ""}
       ${maxGLA !== null ? `Max GLA: <strong>${formatNumber(maxGLA)}</strong><br>` : ""}
@@ -566,6 +631,10 @@ function clearFilter() {
   document.getElementById("maxVacancyPct").value = "";
 
   document.querySelectorAll("#ownerFilter input[type='checkbox']").forEach(input => {
+    input.checked = true;
+  });
+
+  document.querySelectorAll("#stateFilter input[type='checkbox']").forEach(input => {
     input.checked = true;
   });
 
