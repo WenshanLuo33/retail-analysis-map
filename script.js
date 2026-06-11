@@ -4,6 +4,11 @@ let projectMarkers = [];
 let markerByProjectId = {};
 let highlightedMarker = null;
 
+
+let compareProjects = [];
+let compareMiniMaps = [];
+const MAX_COMPARE_PROJECTS = 4;
+
 // Map
 const map = L.map("map").setView([39.5, -96.5], 4);
 
@@ -243,7 +248,12 @@ function showProjectDetail(project) {
     <div class="button-row">
       ${pdfButton(project)}
       ${mapButton(project)}
+      <button class="compare-button-small" onclick="addCompareProject('${project["Project ID"]}', event)">
+       Add to Compare
+     </button>
     </div>
+
+    ${compareBarHTML()}
 
     <div class="metric-grid">
       ${metric("Total GLA", formatNumber(project["Total GLA"]) + " SF")}
@@ -371,6 +381,14 @@ function formatNumber(value) {
   return Number(value).toLocaleString();
 }
 
+function formatCurrency(value) {
+  if (value === undefined || value === null || value === "" || isNaN(value)) {
+    return "N/A";
+  }
+
+  return "$" + Number(value).toLocaleString();
+}
+
 function round(value, digits = 1) {
   if (value === undefined || value === null || value === "" || isNaN(value)) {
     return "";
@@ -446,8 +464,8 @@ function applyFilters() {
 
   // Owner filter
   if (selectedOwners.length > 0) {
-    filteredProjects = filteredProjects.filter(p =>
-      selectedOwners.includes(String(p["Owner"]).trim())
+    filteredProjects = filteredProjects.filter(project =>
+      selectedOwners.includes(String(project["Owner"]).trim())
     );
   } else {
     filteredProjects = [];
@@ -455,9 +473,9 @@ function applyFilters() {
 
   // State filter
   if (selectedStates.length > 0) {
-   filteredProjects = filteredProjects.filter(p =>
-      selectedStates.includes(getProjectState(p))
-   );
+    filteredProjects = filteredProjects.filter(project =>
+      selectedStates.includes(getProjectState(project))
+    );
   } else {
     filteredProjects = [];
   }
@@ -465,69 +483,76 @@ function applyFilters() {
   // Tenant keyword filter
   if (tenantKeyword) {
     const matchedProjectIds = tenants
-      .filter(t => String(t["Tenant"]).toLowerCase().includes(tenantKeyword))
-      .map(t => String(t["Project ID"]));
+      .filter(tenant =>
+        String(tenant["Tenant"]).toLowerCase().includes(tenantKeyword)
+      )
+      .map(tenant => String(tenant["Project ID"]));
 
     const uniqueIds = new Set(matchedProjectIds);
 
-    filteredProjects = filteredProjects.filter(p =>
-      uniqueIds.has(String(p["Project ID"]))
+    filteredProjects = filteredProjects.filter(project =>
+      uniqueIds.has(String(project["Project ID"]))
     );
   }
 
   // GLA filter
   if (minGLA !== null) {
-    filteredProjects = filteredProjects.filter(p =>
-      Number(p["Total GLA"]) >= minGLA
+    filteredProjects = filteredProjects.filter(project =>
+      Number(project["Total GLA"]) >= minGLA
     );
   }
 
   if (maxGLA !== null) {
-    filteredProjects = filteredProjects.filter(p =>
-      Number(p["Total GLA"]) <= maxGLA
+    filteredProjects = filteredProjects.filter(project =>
+      Number(project["Total GLA"]) <= maxGLA
     );
   }
 
   // Grocery percentage filter
   if (minGroceryPct !== null) {
-    filteredProjects = filteredProjects.filter(p =>
-      Number(p["Grocery % GLA"]) >= minGroceryPct
+    filteredProjects = filteredProjects.filter(project =>
+      Number(project["Grocery % GLA"]) >= minGroceryPct
     );
   }
 
   if (maxGroceryPct !== null) {
-    filteredProjects = filteredProjects.filter(p =>
-      Number(p["Grocery % GLA"]) <= maxGroceryPct
+    filteredProjects = filteredProjects.filter(project =>
+      Number(project["Grocery % GLA"]) <= maxGroceryPct
     );
   }
 
   // Vacancy percentage filter
   if (minVacancyPct !== null) {
-    filteredProjects = filteredProjects.filter(p =>
-      Number(p["Vacancy %"]) >= minVacancyPct
+    filteredProjects = filteredProjects.filter(project =>
+      Number(project["Vacancy %"]) >= minVacancyPct
     );
   }
 
   if (maxVacancyPct !== null) {
-    filteredProjects = filteredProjects.filter(p =>
-      Number(p["Vacancy %"]) <= maxVacancyPct
+    filteredProjects = filteredProjects.filter(project =>
+      Number(project["Vacancy %"]) <= maxVacancyPct
     );
   }
 
   addProjectMarkers(filteredProjects);
 
   const projectListHTML = filteredProjects.map(project => {
+    const projectId = String(project["Project ID"]);
+
     const smallTenantCount =
       (Number(project["Tenant Count 0-3k"]) || 0) +
       (Number(project["Tenant Count 3k-10k"]) || 0);
 
     return `
       <div class="filter-project-card"
-           onclick="showProjectDetailFromId('${project["Project ID"]}')"
-           onmouseenter="highlightProjectMarker('${project["Project ID"]}')"
-           onmouseleave="resetProjectMarker('${project["Project ID"]}')">
-        <h3>${project["Project Name"]}</h3>
-        <p>${project["Owner"] || ""}${project["City/State"] ? " · " + project["City/State"] : ""}</p>
+           onclick="showProjectDetailFromId('${projectId}')"
+           onmouseenter="highlightProjectMarker('${projectId}')"
+           onmouseleave="resetProjectMarker('${projectId}')">
+        <h3>${project["Project Name"] || ""}</h3>
+        <p>
+          ${project["Owner"] || ""}
+          ${project["City/State"] ? " · " + project["City/State"] : ""}
+        </p>
 
         <div class="filter-metrics">
           <div><strong>GLA:</strong> ${formatNumber(project["Total GLA"])} SF</div>
@@ -538,9 +563,16 @@ function applyFilters() {
           <div><strong>Vacancy SF:</strong> ${formatNumber(project["Vacancy"])}</div>
           <div><strong>Vacancy %:</strong> ${round(project["Vacancy %"], 1)}%</div>
         </div>
+
+        <button class="compare-button-small"
+                onclick="addCompareProject('${projectId}', event)">
+          Add to Compare
+        </button>
       </div>
     `;
   }).join("");
+
+  document.getElementById("project-detail").classList.remove("empty-state");
 
   document.getElementById("project-detail").innerHTML = `
     <h2>Filter Result</h2>
@@ -557,6 +589,8 @@ function applyFilters() {
       ${minVacancyPct !== null ? `Min Vacancy %: <strong>${minVacancyPct}%</strong><br>` : ""}
       ${maxVacancyPct !== null ? `Max Vacancy %: <strong>${maxVacancyPct}%</strong>` : ""}
     </div>
+
+    ${compareBarHTML()}
 
     <div class="filter-result-list">
       ${projectListHTML}
@@ -645,4 +679,308 @@ function clearFilter() {
       Select a project on the map.
     </div>
   `;
+}
+
+function addCompareProject(projectId, event) {
+  if (event) {
+    event.stopPropagation();
+  }
+
+  const project = projects.find(p => String(p["Project ID"]) === String(projectId));
+
+  if (!project) return;
+
+  const alreadyAdded = compareProjects.some(p =>
+    String(p["Project ID"]) === String(projectId)
+  );
+
+  if (alreadyAdded) {
+    alert("This project is already in the comparison.");
+    return;
+  }
+
+  if (compareProjects.length >= MAX_COMPARE_PROJECTS) {
+    alert(`You can compare up to ${MAX_COMPARE_PROJECTS} projects at a time.`);
+    return;
+  }
+
+  compareProjects.push(project);
+  refreshCompareBar();
+}
+
+function removeCompareProject(projectId, event) {
+  if (event) {
+    event.stopPropagation();
+  }
+
+  compareProjects = compareProjects.filter(p =>
+    String(p["Project ID"]) !== String(projectId)
+  );
+
+  refreshCompareBar();
+
+  if (!document.getElementById("compareView").classList.contains("hidden")) {
+    renderCompareView();
+  }
+}
+
+function clearCompareProjects(event) {
+  if (event) {
+    event.stopPropagation();
+  }
+
+  compareProjects = [];
+  refreshCompareBar();
+
+  if (!document.getElementById("compareView").classList.contains("hidden")) {
+    renderCompareView();
+  }
+}
+
+function compareBarHTML() {
+  if (!compareProjects.length) {
+    return `
+      <div class="compare-bar">
+        <h3>Compare Projects</h3>
+        <div class="compare-selected-list">
+          No projects selected yet. Use “Add to Compare” from the filter results or project detail.
+        </div>
+      </div>
+    `;
+  }
+
+  const selectedNames = compareProjects
+    .map(project => `
+      <div>
+        ${project["Project Name"] || "Unnamed Project"}
+        <button class="compare-button-small secondary"
+                onclick="removeCompareProject('${project["Project ID"]}', event)">
+          Remove
+        </button>
+      </div>
+    `)
+    .join("");
+
+  return `
+    <div class="compare-bar">
+      <h3>Compare Projects</h3>
+
+      <div class="compare-selected-list">
+        <strong>${compareProjects.length}</strong> selected:
+        ${selectedNames}
+      </div>
+
+      <div class="compare-bar-buttons">
+        <button onclick="openCompareView()">Open Compare View</button>
+        <button class="secondary" onclick="clearCompareProjects(event)">Clear Compare</button>
+      </div>
+    </div>
+  `;
+}
+
+function refreshCompareBar() {
+  const detail = document.getElementById("project-detail");
+  if (!detail) return;
+
+  const existingCompareBar = detail.querySelector(".compare-bar");
+
+  if (existingCompareBar) {
+    existingCompareBar.outerHTML = compareBarHTML();
+  }
+}
+
+function openCompareView() {
+  if (compareProjects.length < 2) {
+    alert("Please select at least 2 projects to compare.");
+    return;
+  }
+
+  document.getElementById("app").style.display = "none";
+  document.getElementById("compareView").classList.remove("hidden");
+
+  renderCompareView();
+}
+
+function closeCompareView() {
+  document.getElementById("compareView").classList.add("hidden");
+  document.getElementById("app").style.display = "flex";
+
+  // Recalculate the main map size after returning
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 100);
+}
+
+function renderCompareView() {
+  const compareGrid = document.getElementById("compareGrid");
+
+  // Remove old mini maps first
+  compareMiniMaps.forEach(miniMap => {
+    miniMap.remove();
+  });
+  compareMiniMaps = [];
+
+  if (!compareProjects.length) {
+    compareGrid.innerHTML = `<p>No projects selected.</p>`;
+    return;
+  }
+
+  compareGrid.innerHTML = compareProjects.map(project => {
+    const projectId = String(project["Project ID"]);
+    const mapId = `compare-map-${safeId(projectId)}`;
+
+    const projectTenants = tenants.filter(t =>
+      String(t["Project ID"]) === projectId
+    );
+
+    return `
+      <div class="compare-card">
+        <div class="compare-card-header">
+          <h3>${project["Project Name"] || ""}</h3>
+          <p>
+            ${project["Owner"] || ""}<br>
+            ${project["Address"] || ""}<br>
+            ${project["City/State"] || ""}
+          </p>
+        </div>
+
+        ${compareSitePlanHTML(project)}
+
+        <div id="${mapId}" class="compare-mini-map"></div>
+
+        <div class="compare-metrics">
+          ${compareMetricRow("Total GLA", formatNumber(project["Total GLA"]) + " SF")}
+          ${compareMetricRow("Year Built", project["Year Built"] || "N/A")}
+          ${compareMetricRow("5-Mile Population", formatNumber(project["5-Mile Population"]))}
+          ${compareMetricRow("5-Mile Income", formatCurrency(project["5-Mile Income"]))}
+
+          ${compareMetricRow("Grocery Tenant", project["Grocery Tenant"] || "N/A")}
+          ${compareMetricRow("Grocery SF", formatNumber(project["Grocery SF"]) + " SF")}
+          ${compareMetricRow("Grocery % GLA", round(project["Grocery % GLA"], 1) + "%")}
+
+          ${compareMetricRow("Parking Count", formatNumber(project["Parking Count"]))}
+          ${compareMetricRow("Parking Ratio / 1,000 SF", round(project["Parking Ratio / 1000 SF"], 2))}
+          ${compareMetricRow("Vacancy %", round(project["Vacancy %"], 1) + "%")}
+
+          ${compareMetricRow("Food %", round(project["Food %"], 1) + "%")}
+          ${compareMetricRow("Soft Goods %", round(project["Soft Goods %"], 1) + "%")}
+          ${compareMetricRow("Hard Goods %", round(project["Hard Goods %"], 1) + "%")}
+          ${compareMetricRow("Service %", round(project["Service %"], 1) + "%")}
+          ${compareMetricRow("Other %", round(project["Other %"], 1) + "%")}
+
+          ${compareMetricRow("0–3k SF Tenants", project["Tenant Count 0-3k"])}
+          ${compareMetricRow("3k–10k SF Tenants", project["Tenant Count 3k-10k"])}
+          ${compareMetricRow("10k+ SF Tenants", project["Tenant Count 10k+"])}
+        </div>
+
+        <div class="compare-tenant-section">
+          <h4>Tenant Mix Summary</h4>
+          ${tenantSummaryHTML(projectTenants)}
+        </div>
+
+        <div class="compare-tenant-section">
+          <h4>Tenant Table</h4>
+          ${tenantTableHTML(projectTenants)}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  // Wait until cards are actually drawn, then initialize maps
+  setTimeout(() => {
+    initializeCompareMiniMaps();
+  }, 300);
+}
+
+function initializeCompareMiniMaps() {
+  compareProjects.forEach(project => {
+    const lat = Number(project["Latitude"]);
+    const lng = Number(project["Longitude"]);
+
+    const projectId = String(project["Project ID"]);
+    const mapId = `compare-map-${safeId(projectId)}`;
+    const mapElement = document.getElementById(mapId);
+
+    if (!mapElement) return;
+
+    if (!lat || !lng || isNaN(lat) || isNaN(lng)) {
+      mapElement.innerHTML = `
+        <div class="compare-no-map">
+          No map location available
+        </div>
+      `;
+      return;
+    }
+
+    const miniMap = L.map(mapId, {
+      zoomControl: true,
+      attributionControl: true,
+      dragging: true,
+      scrollWheelZoom: true,
+      doubleClickZoom: true,
+      boxZoom: true,
+      touchZoom: true
+    }).setView([lat, lng], 18);
+
+    L.tileLayer(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      {
+        maxZoom: 19,
+        attribution: "Tiles © Esri"
+      }
+    ).addTo(miniMap);
+
+    L.circleMarker([lat, lng], {
+      radius: 8,
+      fillOpacity: 0.95,
+      color: "#222",
+      weight: 1,
+      fillColor: getMarkerColor(project)
+    }).addTo(miniMap);
+
+    compareMiniMaps.push(miniMap);
+
+    setTimeout(() => {
+      miniMap.invalidateSize();
+    }, 500);
+  });
+}
+
+function compareSitePlanHTML(project) {
+  const imagePath = project["Site Plan Image Path"];
+
+  if (!imagePath || imagePath === 0) {
+    return `
+      <div class="compare-no-image">
+        No site plan image available
+      </div>
+    `;
+  }
+
+  return `
+    <img class="compare-site-plan" src="${imagePath}" alt="Site Plan">
+  `;
+}
+
+function compareMetricRow(label, value) {
+  if (
+    value === undefined ||
+    value === null ||
+    value === "" ||
+    value === "NaN%" ||
+    value === "NaN SF"
+  ) {
+    value = "N/A";
+  }
+
+  return `
+    <div class="compare-metric-row">
+      <div class="compare-metric-label">${label}</div>
+      <div class="compare-metric-value">${value}</div>
+    </div>
+  `;
+}
+
+function safeId(value) {
+  return String(value).replace(/[^a-zA-Z0-9_-]/g, "-");
 }
