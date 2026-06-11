@@ -574,8 +574,8 @@ th {
 }
 
 .compare-tenant-section .table-wrap {
-  max-height: 260px;
-  overflow-y: auto;
+  max-height: none;
+  overflow-y: visible;
   border: 1px solid #ddd;
   background: white;
 }
@@ -587,4 +587,45 @@ th {
 .compare-tenant-section th,
 .compare-tenant-section td {
   padding: 5px;
+}
+
+/* Expand tenant table in compare view for printing */
+.compare-tenant-section .table-wrap {
+  max-height: none;
+  overflow-y: visible;
+  border: 1px solid #ddd;
+  background: white;
+}
+
+.compare-tenant-section table {
+  width: 100%;
+  font-size: 11px;
+}
+
+.compare-tenant-section th,
+.compare-tenant-section td {
+  padding: 5px;
+}
+
+/* Filter result card state after adding to compare */
+.filter-project-card.added-to-compare {
+  background: #e8e8e8;
+  border-color: #aaa;
+  opacity: 0.75;
+}
+
+.filter-project-card.added-to-compare:hover {
+  background: #e8e8e8;
+  border-color: #aaa;
+}
+
+.filter-project-card.added-to-compare h3,
+.filter-project-card.added-to-compare p,
+.filter-project-card.added-to-compare .filter-metrics {
+  color: #555;
+}
+
+.filter-project-card.added-to-compare .compare-button-small {
+  background: #777;
+  cursor: not-allowed;
 }

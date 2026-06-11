@@ -539,12 +539,16 @@ function applyFilters() {
   const projectListHTML = filteredProjects.map(project => {
     const projectId = String(project["Project ID"]);
 
+    const alreadyInCompare = compareProjects.some(compareProject =>
+      String(compareProject["Project ID"]) === projectId
+    );
+
     const smallTenantCount =
       (Number(project["Tenant Count 0-3k"]) || 0) +
       (Number(project["Tenant Count 3k-10k"]) || 0);
 
     return `
-      <div class="filter-project-card"
+      <div class="filter-project-card ${alreadyInCompare ? "added-to-compare" : ""}"
            onclick="showProjectDetailFromId('${projectId}')"
            onmouseenter="highlightProjectMarker('${projectId}')"
            onmouseleave="resetProjectMarker('${projectId}')">
@@ -565,16 +569,18 @@ function applyFilters() {
         </div>
 
         <button class="compare-button-small"
-                onclick="addCompareProject('${projectId}', event)">
-          Add to Compare
+                onclick="addCompareProject('${projectId}', event)"
+                ${alreadyInCompare ? "disabled" : ""}>
+          ${alreadyInCompare ? "Added to Compare" : "Add to Compare"}
         </button>
       </div>
     `;
   }).join("");
 
-  document.getElementById("project-detail").classList.remove("empty-state");
+  const projectDetail = document.getElementById("project-detail");
+  projectDetail.classList.remove("empty-state");
 
-  document.getElementById("project-detail").innerHTML = `
+  projectDetail.innerHTML = `
     <h2>Filter Result</h2>
     <p><strong>${filteredProjects.length}</strong> projects found.</p>
 
@@ -706,6 +712,13 @@ function addCompareProject(projectId, event) {
 
   compareProjects.push(project);
   refreshCompareBar();
+  refreshFilterResultCards();
+}
+
+function isProjectInCompare(projectId) {
+  return compareProjects.some(project =>
+    String(project["Project ID"]) === String(projectId)
+  );
 }
 
 function removeCompareProject(projectId, event) {
@@ -718,6 +731,7 @@ function removeCompareProject(projectId, event) {
   );
 
   refreshCompareBar();
+  refreshFilterResultCards();
 
   if (!document.getElementById("compareView").classList.contains("hidden")) {
     renderCompareView();
@@ -731,6 +745,7 @@ function clearCompareProjects(event) {
 
   compareProjects = [];
   refreshCompareBar();
+  refreshFilterResultCards();
 
   if (!document.getElementById("compareView").classList.contains("hidden")) {
     renderCompareView();
@@ -786,6 +801,18 @@ function refreshCompareBar() {
 
   if (existingCompareBar) {
     existingCompareBar.outerHTML = compareBarHTML();
+  }
+}
+
+function refreshFilterResultCards() {
+  const detail = document.getElementById("project-detail");
+
+  if (!detail) return;
+
+  const filterTitle = detail.querySelector("h2");
+
+  if (filterTitle && filterTitle.textContent === "Filter Result") {
+    applyFilters();
   }
 }
 
