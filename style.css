@@ -482,8 +482,7 @@ th {
 }
 
 .compare-button-small {
-  margin-top: 8px;
-  padding: 7px 9px;
+  padding: 8px 10px;
   border: none;
   border-radius: 4px;
   background: #003b5c;
@@ -493,24 +492,36 @@ th {
   cursor: pointer;
 }
 
+/* Force the three buttons in project detail to be exactly the same size */
+.button-row a,
+.button-row button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  margin: 0;
+  line-height: 1;
+  background: #003b5c;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
 .compare-button-small.secondary {
   background: #777;
 }
 
-.compare-no-map {
-  height: 300px;
-  background: #eee;
-  color: #777;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid #ddd;
-  font-size: 13px;
-}
-
+/* Filter result card button */
 .filter-project-card .compare-button-small {
   width: 100%;
   display: block;
+  margin-top: 8px;
 }
 
 
@@ -628,4 +639,24 @@ th {
 .filter-project-card.added-to-compare .compare-button-small {
   background: #777;
   cursor: not-allowed;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mini-filter-btn {
+  padding: 2px 8px;
+  font-size: 11px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.mini-filter-btn:hover {
+  background: #f2f2f2;
 }

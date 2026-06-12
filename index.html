@@ -21,11 +21,25 @@
       </div>
 
       <div id="controls">
-        <label>PROPERTY OWNER</label>
-        <div id="ownerFilter" class="checkbox-group"></div>
+        <div class="filter-header">
+          <label>PROPERTY OWNER</label>
+          <div>
+           <button class="mini-filter-btn" onclick="checkAllOwners()">All</button>
+           <button class="mini-filter-btn" onclick="uncheckAllOwners()">None</button>
+         </div>
+      </div>
 
-        <label>STATE</label>
-        <div id="stateFilter" class="checkbox-group"></div>
+<div id="ownerFilter" class="checkbox-group"></div>
+
+        <div class="filter-header">
+          <label>STATE</label>
+          <div>
+           <button class="mini-filter-btn" onclick="checkAllStates()">All</button>
+           <button class="mini-filter-btn" onclick="uncheckAllStates()">None</button>
+         </div>
+        </div>
+
+<div id="stateFilter" class="checkbox-group"></div>
 
         <label>TENANT</label>
         <input id="tenantSearch" placeholder="Trader Joe's" />

@@ -1011,3 +1011,23 @@ function compareMetricRow(label, value) {
 function safeId(value) {
   return String(value).replace(/[^a-zA-Z0-9_-]/g, "-");
 }
+
+function checkAllStates() {
+  document.querySelectorAll("#stateFilter input[type='checkbox']")
+    .forEach(cb => cb.checked = true);
+}
+
+function uncheckAllStates() {
+  document.querySelectorAll("#stateFilter input[type='checkbox']")
+    .forEach(cb => cb.checked = false);
+}
+
+function checkAllOwners() {
+  document.querySelectorAll("#ownerFilter input[type='checkbox']")
+    .forEach(cb => cb.checked = true);
+}
+
+function uncheckAllOwners() {
+  document.querySelectorAll("#ownerFilter input[type='checkbox']")
+    .forEach(cb => cb.checked = false);
+}
