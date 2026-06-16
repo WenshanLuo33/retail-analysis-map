@@ -83,15 +83,37 @@ function loadCSV(path) {
   });
 }
 
+function getOwnerGroup(owner) {
+  owner = String(owner || "").trim();
+
+  const majorOwners = [
+    "Kimco",
+    "Brixmor",
+    "Regency Centers",
+    "federalrealty",
+    "Invesco Real Estate",
+    "Oxford Properties",
+    "Atlantic Development",
+    "Linear Retail Properties",
+    "Samuels & Associates",
+    "Wilder"
+  ];
+
+  if (majorOwners.includes(owner)) {
+    return owner;
+  }
+
+  return "Other";
+}
+
 function buildOwnerFilter(projectsData) {
   const ownerFilter = document.getElementById("ownerFilter");
   if (!ownerFilter) return;
 
   const owners = [...new Set(
     projectsData
-      .map(p => p["Owner"])
-      .filter(owner => owner !== undefined && owner !== null && String(owner).trim() !== "")
-      .map(owner => String(owner).trim())
+      .map(project => getOwnerGroup(project["Owner"]))
+      .filter(owner => owner !== "")
   )].sort();
 
   ownerFilter.innerHTML = "";
@@ -465,7 +487,9 @@ function applyFilters() {
   // Owner filter
   if (selectedOwners.length > 0) {
     filteredProjects = filteredProjects.filter(project =>
-      selectedOwners.includes(String(project["Owner"]).trim())
+      selectedOwners.includes(
+        getOwnerGroup(String(project["Owner"] || "").trim())
+      )
     );
   } else {
     filteredProjects = [];
