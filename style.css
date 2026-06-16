@@ -517,6 +517,17 @@ th {
   background: #777;
 }
 
+.remove-compare-btn {
+  padding: 0px 4px;
+  font-size: 7px;
+  border: none;
+  border-radius: 2px;
+  background: #888;
+  color: white;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
 /* Filter result card button */
 .filter-project-card .compare-button-small {
   width: 100%;

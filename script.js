@@ -768,9 +768,9 @@ function compareBarHTML() {
     .map(project => `
       <div>
         ${project["Project Name"] || "Unnamed Project"}
-        <button class="compare-button-small secondary"
+        <button class="remove-compare-btn"
                 onclick="removeCompareProject('${project["Project ID"]}', event)">
-          Remove
+          ✕
         </button>
       </div>
     `)
