@@ -468,10 +468,60 @@ function tenantSummaryHTML(projectTenants) {
   `;
 }
 
+function normalizeSearchText(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFKD")
+
+    // Unify curly apostrophes / quotes
+    .replace(/[‘’‛`´]/g, "'")
+
+    // Treat apostrophe-s as optional:
+    // Trader Joe's / Trader Joes / Trader Joe all become close enough
+    .replace(/'s\b/g, "s")
+
+    // Treat & and + as "and"
+    .replace(/&/g, " and ")
+    .replace(/\+/g, " and ")
+
+    // Remove remaining apostrophes
+    .replace(/'/g, "")
+
+    // Remove punctuation, keep letters/numbers/spaces
+    .replace(/[^a-z0-9\s]/g, " ")
+
+    // Normalize common word variants
+    .replace(/\band\b/g, " and ")
+
+    // Collapse extra spaces
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function tenantMatchesSearch(tenantName, keyword) {
+  const normalizedTenant = normalizeSearchText(tenantName);
+  const normalizedKeyword = normalizeSearchText(keyword);
+
+  if (!normalizedKeyword) return true;
+
+  // Direct includes search
+  if (normalizedTenant.includes(normalizedKeyword)) {
+    return true;
+  }
+
+  // Also allow every word in the search to appear somewhere.
+  // Example: "shop and shop" can still find "Stop & Shop" if user typo is close,
+  // but mainly helps with word-order / spacing issues.
+  const keywordWords = normalizedKeyword.split(" ").filter(Boolean);
+
+  return keywordWords.every(word => normalizedTenant.includes(word));
+}
+
 function applyFilters() {
   const selectedOwners = getSelectedOwners();
   const selectedStates = getSelectedStates();
-  const tenantKeyword = document.getElementById("tenantSearch").value.toLowerCase().trim();
+  const tenantKeywordRaw = document.getElementById("tenantSearch").value.trim();
+  const tenantKeyword = normalizeSearchText(tenantKeywordRaw);
 
   const minGLA = getNumberInput("minGLA");
   const maxGLA = getNumberInput("maxGLA");
@@ -504,11 +554,11 @@ function applyFilters() {
     filteredProjects = [];
   }
 
-  // Tenant keyword filter
+    // Tenant keyword filter
   if (tenantKeyword) {
     const matchedProjectIds = tenants
       .filter(tenant =>
-        String(tenant["Tenant"]).toLowerCase().includes(tenantKeyword)
+        tenantMatchesSearch(tenant["Tenant"], tenantKeywordRaw)
       )
       .map(tenant => String(tenant["Project ID"]));
 
@@ -611,7 +661,7 @@ function applyFilters() {
     <div class="filter-note">
       ${selectedOwners.length ? `Owner: <strong>${selectedOwners.join(", ")}</strong><br>` : "Owner: <strong>None selected</strong><br>"}
       ${selectedStates.length ? `State: <strong>${selectedStates.join(", ")}</strong><br>` : "State: <strong>None selected</strong><br>"}
-      ${tenantKeyword ? `Tenant contains: <strong>${tenantKeyword}</strong><br>` : ""}
+      ${tenantKeywordRaw ? `Tenant contains: <strong>${tenantKeywordRaw}</strong><br>` : ""}
       ${minGLA !== null ? `Min GLA: <strong>${formatNumber(minGLA)}</strong><br>` : ""}
       ${maxGLA !== null ? `Max GLA: <strong>${formatNumber(maxGLA)}</strong><br>` : ""}
       ${minGroceryPct !== null ? `Min Grocery %: <strong>${minGroceryPct}%</strong><br>` : ""}
