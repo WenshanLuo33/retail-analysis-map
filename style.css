@@ -866,3 +866,159 @@ body.prototype-mode #topNav {
   text-align: center;
   padding: 16px 0;
 }
+
+
+
+
+
+/* Draw Your Own View */
+#drawView {
+  width: 100vw;
+  height: calc(100vh - 72px);
+  position: relative;
+  background: #f7f7f7;
+  overflow: hidden;
+}
+
+body.prototype-mode #drawView {
+  height: calc(100vh - 52px);
+}
+
+#drawSidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 300px;
+  height: 100%;
+  padding: 16px;
+  background: white;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+  z-index: 1000;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+#drawSidebar h2 {
+  margin: 0 0 12px 0;
+  font-size: 21px;
+}
+
+#drawSidebar h3 {
+  margin: 16px 0 8px 0;
+  font-size: 15px;
+}
+
+#drawSidebar label {
+  display: block;
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #555;
+}
+
+#drawSidebar input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#drawSidebar button {
+  margin-top: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border: none;
+  border-radius: 4px;
+  background: #003b5c;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#drawSidebar button:hover {
+  background: #002a42;
+}
+
+#drawManualParkingBtn {
+  background: #666 !important;
+}
+
+#drawClearManualParkingBtn {
+  background: #999 !important;
+}
+
+#drawSummary {
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.draw-instruction {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #444;
+}
+
+#drawMap {
+  position: absolute;
+  left: 300px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.draw-legend-item {
+  font-size: 13px;
+  margin: 7px 0;
+}
+
+.draw-box {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  border: 1px solid rgba(0,0,0,0.25);
+}
+
+.draw-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.retail { background: #e45756; }
+.residential { background: #4c78a8; }
+.hotel { background: #f2cf5b; }
+.office { background: #b279a2; }
+.parking { background: #d9d9d9; }
+.manual-parking { background: #bfbfbf; }
+.unknown { background: #8f8f8f; }
+
+.draw-polygon-symbol {
+  display: inline-block;
+  width: 22px;
+  border-top: 2px dashed #4a4a4a;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.food { background: red; }
+.grocery { background: green; }
+.fashion { background: purple; }
+.home { background: orange; }
+.beauty { background: pink; }
+.service { background: blue; }
+.fitness { background: cadetblue; }
+.office-dot { background: darkviolet; }
+.other { background: gray; }
+
+.active-mode {
+  background: #b00020 !important;
+  color: white;
+}

@@ -1129,9 +1129,11 @@ function showMapView() {
   document.getElementById("app").style.display = "flex";
   document.getElementById("prototypeView").classList.add("hidden");
   document.getElementById("compareView").classList.add("hidden");
+  document.getElementById("drawView").classList.add("hidden");
 
   document.getElementById("mapViewBtn").classList.add("active");
   document.getElementById("prototypeViewBtn").classList.remove("active");
+  document.getElementById("drawViewBtn").classList.remove("active");
 
   setTimeout(() => {
     map.invalidateSize();
@@ -1144,10 +1146,12 @@ function showPrototypeView() {
   document.getElementById("topNav").style.display = "flex";
   document.getElementById("app").style.display = "none";
   document.getElementById("compareView").classList.add("hidden");
+  document.getElementById("drawView").classList.add("hidden");
   document.getElementById("prototypeView").classList.remove("hidden");
 
   document.getElementById("mapViewBtn").classList.remove("active");
   document.getElementById("prototypeViewBtn").classList.add("active");
+  document.getElementById("drawViewBtn").classList.remove("active");
 
   renderPrototypeTypeFilter();
   renderPrototypeView();
@@ -1304,4 +1308,71 @@ function openProjectFromPrototype(projectId) {
     map.setView([lat, lng], 17);
     marker.openPopup();
   }
+}
+
+
+
+
+
+
+let drawMap = null;
+
+function showDrawView() {
+  document.body.classList.remove("prototype-mode");
+
+  document.getElementById("topNav").style.display = "flex";
+  document.getElementById("app").style.display = "none";
+  document.getElementById("prototypeView").classList.add("hidden");
+  document.getElementById("compareView").classList.add("hidden");
+  document.getElementById("drawView").classList.remove("hidden");
+
+  document.getElementById("mapViewBtn").classList.remove("active");
+  document.getElementById("prototypeViewBtn").classList.remove("active");
+  document.getElementById("drawViewBtn").classList.add("active");
+
+  initializeDrawMap();
+
+  setTimeout(() => {
+    if (drawMap) {
+      drawMap.invalidateSize();
+    }
+  }, 100);
+}
+
+function initializeDrawMap() {
+  if (drawMap) return;
+
+  drawMap = L.map("drawMap").setView([42.5190, -71.0325], 16);
+
+  const drawCartoLight = L.tileLayer(
+    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    {
+      attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+      maxZoom: 20
+    }
+  );
+
+  const drawEsriSatellite = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {
+      attribution: "Tiles &copy; Esri",
+      maxZoom: 20
+    }
+  );
+
+  drawCartoLight.addTo(drawMap);
+
+  L.control.layers(
+    {
+      "Light Map": drawCartoLight,
+      "Satellite": drawEsriSatellite
+    },
+    null,
+    {
+      collapsed: false
+    }
+  ).addTo(drawMap);
+
+  document.getElementById("drawSummary").innerHTML =
+    "<p>Draw Your Own page loaded. Next step: connect drawing and analysis tools.</p>";
 }
