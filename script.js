@@ -3,6 +3,19 @@ let tenants = [];
 let projectMarkers = [];
 let markerByProjectId = {};
 let highlightedMarker = null;
+let traderJoePrototypes = [];
+
+const prototypeOrder = [
+  "Urban",
+  "Convenience",
+  "Lifestyle",
+  "Branch",
+  "Spine",
+  "C-Shape",
+  "Cluster"
+];
+
+let selectedPrototypeTypes = [...prototypeOrder];
 
 
 let compareProjects = [];
@@ -59,10 +72,12 @@ legend.addTo(map);
 // Load data
 Promise.all([
   loadCSV("data/project_metrics_website.csv"),
-  loadCSV("data/tenants_classified_v6.csv")
-]).then(([projectData, tenantData]) => {
+  loadCSV("data/tenants_classified_v6.csv"),
+  loadCSV("data/trader_joes_prototypes.csv")
+]).then(([projectData, tenantData, prototypeData]) => {
   projects = projectData;
   tenants = tenantData;
+  traderJoePrototypes = prototypeData;
 
   buildOwnerFilter(projects);
   buildStateFilter(projects);
@@ -1104,4 +1119,189 @@ function checkAllOwners() {
 function uncheckAllOwners() {
   document.querySelectorAll("#ownerFilter input[type='checkbox']")
     .forEach(cb => cb.checked = false);
+}
+
+
+function showMapView() {
+  document.body.classList.remove("prototype-mode");
+
+  document.getElementById("topNav").style.display = "flex";
+  document.getElementById("app").style.display = "flex";
+  document.getElementById("prototypeView").classList.add("hidden");
+  document.getElementById("compareView").classList.add("hidden");
+
+  document.getElementById("mapViewBtn").classList.add("active");
+  document.getElementById("prototypeViewBtn").classList.remove("active");
+
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 100);
+}
+
+function showPrototypeView() {
+  document.body.classList.add("prototype-mode");
+
+  document.getElementById("topNav").style.display = "flex";
+  document.getElementById("app").style.display = "none";
+  document.getElementById("compareView").classList.add("hidden");
+  document.getElementById("prototypeView").classList.remove("hidden");
+
+  document.getElementById("mapViewBtn").classList.remove("active");
+  document.getElementById("prototypeViewBtn").classList.add("active");
+
+  renderPrototypeTypeFilter();
+  renderPrototypeView();
+}
+
+function renderPrototypeView() {
+  const prototypeGrid = document.getElementById("prototypeGrid");
+  if (!prototypeGrid) return;
+
+  const visibleTypes = prototypeOrder.filter(type =>
+    selectedPrototypeTypes.includes(type)
+  );
+
+  prototypeGrid.style.setProperty("--prototype-column-count", visibleTypes.length);
+
+  prototypeGrid.innerHTML = visibleTypes.map(prototypeName => {
+    const items = traderJoePrototypes
+      .filter(item =>
+        normalizePrototypeName(item["Prototype"]) === normalizePrototypeName(prototypeName)
+      )
+      .sort((a, b) => Number(a["Sort Order"]) - Number(b["Sort Order"]));
+
+    const cardsHTML = items.map(item => prototypeProjectCardHTML(item)).join("");
+
+    return `
+      <div class="prototype-column">
+        <div class="prototype-column-header">
+          <h3>${prototypeName}</h3>
+          ${prototypeDiagramHTML(prototypeName)}
+        </div>
+
+        <div class="prototype-card-list">
+          ${cardsHTML || `<p class="prototype-empty">No projects yet.</p>`}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderPrototypeTypeFilter() {
+  const filter = document.getElementById("prototypeTypeFilter");
+  if (!filter) return;
+
+  filter.innerHTML = prototypeOrder.map(type => {
+    const checked = selectedPrototypeTypes.includes(type) ? "checked" : "";
+
+    return `
+      <label>
+        <input type="checkbox"
+               value="${type}"
+               ${checked}
+               onchange="togglePrototypeType('${type}', this.checked)">
+        ${type}
+      </label>
+    `;
+  }).join("");
+}
+
+function togglePrototypeType(type, isChecked) {
+  if (isChecked) {
+    if (!selectedPrototypeTypes.includes(type)) {
+      selectedPrototypeTypes.push(type);
+    }
+  } else {
+    selectedPrototypeTypes = selectedPrototypeTypes.filter(item => item !== type);
+  }
+
+  renderPrototypeView();
+}
+
+function prototypeProjectCardHTML(item) {
+  const projectId = String(item["Project ID"] || "");
+  const imagePath = item["DiagramPath"] || "";
+  const projectName = item["Project Name"] || "";
+  const address = item["Address"] || "";
+  const cityState = item["City/State"] || "";
+  const owner = item["Owner"] || "";
+
+  return `
+    <div class="prototype-project-card"
+         onclick="openProjectFromPrototype('${projectId}')">
+      ${imagePath ? `
+        <img class="prototype-project-image" src="${imagePath}" alt="${projectName}">
+      ` : `
+        <div class="prototype-no-image">No image</div>
+      `}
+
+      <div class="prototype-project-info">
+        <h4>${projectName}</h4>
+        <p>
+          ${owner ? `<strong>${owner}</strong><br>` : ""}
+          ${address ? `${address}<br>` : ""}
+          ${cityState || ""}
+        </p>
+      </div>
+    </div>
+  `;
+}
+
+function prototypeDiagramHTML(prototypeName) {
+  const diagramPaths = {
+    "Urban": "prototype_diagrams/urban.png",
+    "Convenience": "prototype_diagrams/convenience.png",
+    "Lifestyle": "prototype_diagrams/lifestyle.png",
+    "Branch": "prototype_diagrams/branch.png",
+    "Spine": "prototype_diagrams/spine.png",
+    "C-Shape": "prototype_diagrams/c-shape.png",
+    "Cluster": "prototype_diagrams/cluster.png"
+  };
+
+  const path = diagramPaths[prototypeName];
+
+  if (!path) return "";
+
+  return `
+    <img class="prototype-type-diagram" src="${path}" alt="${prototypeName} diagram">
+  `;
+}
+
+function normalizePrototypeName(value) {
+  const normalized = String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .replace(/-/g, " ");
+
+  if (normalized === "c shape" || normalized === "c spine") {
+    return "c shape";
+  }
+
+  return normalized;
+}
+
+function openProjectFromPrototype(projectId) {
+  showMapView();
+
+  const project = projects.find(p =>
+    String(p["Project ID"]) === String(projectId)
+  );
+
+  if (!project) {
+    alert("Project not found in project_metrics_website.csv.");
+    return;
+  }
+
+  showProjectDetail(project);
+
+  const marker = markerByProjectId[String(projectId)];
+
+  const lat = Number(project["Latitude"]);
+  const lng = Number(project["Longitude"]);
+
+  if (marker && lat && lng) {
+    map.setView([lat, lng], 17);
+    marker.openPopup();
+  }
 }
