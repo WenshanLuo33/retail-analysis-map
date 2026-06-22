@@ -748,12 +748,12 @@ body.prototype-mode #topNav {
 .prototype-type-filter input {
   margin: 0;
 }
-
+/*！！！！！！！*/
 /* Prototype view height */
 #prototypeView {
   width: 100vw;
   min-height: calc(100vh - 52px);
-  background: #f7f7f7;
+  background: #ffffff;
   box-sizing: border-box;
   overflow: auto;
 }
@@ -1021,4 +1021,489 @@ body.prototype-mode #drawView {
 .active-mode {
   background: #b00020 !important;
   color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*delete?*/
+
+/* =========================
+   Draw Your Own - Visual Polish
+   ========================= */
+
+#drawView {
+  background: #eef2f4;
+}
+
+/* Sidebar panel */
+#drawSidebar {
+  width: 320px;
+  padding: 18px;
+  background: #f8fafb;
+  border-right: 1px solid #d6dde2;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Map starts after wider sidebar */
+#drawMap {
+  left: 320px;
+}
+
+/* Sidebar typography */
+#drawSidebar h2 {
+  margin: 0 0 4px 0;
+  font-size: 21px;
+  line-height: 1.2;
+  color: #102a3a;
+}
+
+#drawSidebar h3 {
+  margin: 18px 0 8px 0;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #4b5f6b;
+}
+
+#drawSidebar label {
+  margin-top: 14px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #526773;
+}
+
+/* Inputs */
+#drawSidebar input {
+  height: 36px;
+  border: 1px solid #cfd8dd;
+  border-radius: 6px;
+  background: white;
+  font-size: 13px;
+}
+
+#drawSidebar input:focus {
+  outline: none;
+  border-color: #003b5c;
+  box-shadow: 0 0 0 2px rgba(0, 59, 92, 0.12);
+}
+
+/* Buttons */
+#drawSidebar button {
+  height: 36px;
+  margin-top: 8px;
+  border-radius: 6px;
+  background: #003b5c;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+  transition: 0.15s ease;
+}
+
+#drawSidebar button:hover {
+  background: #002d46;
+  transform: translateY(-1px);
+}
+
+/* Secondary buttons */
+#drawClearBtn,
+#drawClearManualParkingBtn,
+#drawClearMeasurementsBtn {
+  background: #7d8a91 !important;
+}
+
+#drawClearBtn:hover,
+#drawClearManualParkingBtn:hover,
+#drawClearMeasurementsBtn:hover {
+  background: #68767e !important;
+}
+
+/* Manual parking button */
+#drawManualParkingBtn {
+  background: #526773 !important;
+}
+
+#drawManualParkingBtn:hover {
+  background: #3f535e !important;
+}
+
+/* Active mode */
+.active-mode {
+  background: #b00020 !important;
+  color: white !important;
+}
+
+/* Instructions */
+.draw-instruction {
+  margin: 10px 0 14px 0;
+  padding: 10px 12px;
+  background: white;
+  border: 1px solid #e0e5e8;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #42535c;
+}
+
+/* Divider */
+#drawSidebar hr {
+  border: none;
+  border-top: 1px solid #dce3e7;
+  margin: 16px 0;
+}
+
+/* Summary block */
+#drawSummary {
+  margin-top: 16px;
+  padding: 12px;
+  background: white;
+  border: 1px solid #dce3e7;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #1f2f38;
+}
+
+#drawSummary p {
+  margin: 0 0 8px 0;
+}
+
+#drawSummary p:last-child {
+  margin-bottom: 0;
+}
+
+#drawSummary b {
+  color: #102a3a;
+}
+
+/* Legends */
+.draw-legend-item {
+  font-size: 12px;
+  color: #384b55;
+  margin: 6px 0;
+  display: flex;
+  align-items: center;
+}
+
+.draw-box,
+.draw-dot {
+  flex: 0 0 auto;
+}
+
+/* Leaflet controls softer */
+#drawView .leaflet-control-layers,
+#drawView .leaflet-bar {
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#drawView .leaflet-bar a {
+  color: #102a3a;
+}
+
+#drawView .leaflet-control-layers {
+  font-size: 12px;
+}
+
+/* Make the draw toolbar less harsh */
+#drawView .leaflet-draw-toolbar a {
+  background-color: white;
+}
+
+#drawView .leaflet-draw-toolbar a:hover {
+  background-color: #eef4f7;
+}
+
+
+/*new matrix*/
+/* =========================
+   Prototype Matrix - Architectural Pin-up Style
+   ========================= */
+
+/* Whole matrix background */
+#prototypeView {
+  background: #ffffff;
+}
+
+/* Header area: cleaner, lighter */
+.prototype-page-header {
+  background: #ffffff;
+  border-bottom: 1px solid #d8d8d8;
+  padding: 12px 16px;
+}
+
+.prototype-page-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: #111;
+}
+
+.prototype-page-header p {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Type checkbox filter: smaller and calmer */
+.prototype-type-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  justify-content: flex-end;
+  max-width: 760px;
+  font-size: 11px;
+}
+
+.prototype-type-filter label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 999px;
+  padding: 4px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  color: #333;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.prototype-type-filter label:hover {
+  background: #f0f3f4;
+  border-color: #bfc8cc;
+  transform: translateY(-1px);
+}
+
+.prototype-type-filter input {
+  margin: 0;
+}
+
+/* Matrix grid spacing */
+#prototypeGrid {
+  gap: 14px;
+  padding: 14px;
+  align-items: start;
+}
+
+/* Remove tall white column background */
+.prototype-column {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  min-width: 0;
+}
+
+/* Type header / diagram as an independent card */
+.prototype-column-header {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid #d7d7d7;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.prototype-column-header:hover {
+  transform: translateY(-2px);
+  border-color: #b9c4c9;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+}
+
+.prototype-column-header h3 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  color: #111;
+  letter-spacing: 0.1px;
+}
+
+/* Top prototype diagram */
+.prototype-type-diagram {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  background: #fff;
+  border: none;
+  filter: saturate(0.95);
+}
+
+/* Remove inner column padding/background feeling */
+.prototype-card-list {
+  padding: 0;
+  gap: 11px;
+}
+
+/* Project cards */
+.prototype-project-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.045);
+  transform: translateY(0) scale(1);
+  transform-origin: center center;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease,
+    background 0.22s ease;
+}
+
+/* Thin architectural accent line on hover */
+.prototype-project-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: #da635f;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  z-index: 2;
+}
+
+.prototype-project-card:hover {
+  transform: translateY(-5px) scale(1.012);
+  z-index: 10;
+  border-color: #d6d6d6;
+  background: #fff;
+  box-shadow:
+    0 20px 42px rgba(30, 35, 38, 0.16),
+    0 6px 14px rgba(30, 35, 38, 0.08);
+}
+
+/* Project image */
+.prototype-project-image {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid #e6e6e6;
+  filter: saturate(0.92) contrast(0.98);
+  transform: scale(1);
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.prototype-project-card:hover .prototype-project-image {
+  transform: scale(1.035);
+  filter: saturate(1.02) contrast(1.02);
+}
+
+/* If no image */
+.prototype-no-image {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  background: #eceeee;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+/* Project text */
+.prototype-project-info {
+  padding: 8px 9px 9px 9px;
+}
+
+.prototype-project-info h4 {
+  margin: 0 0 5px 0;
+  font-size: 12px;
+  line-height: 1.25;
+  font-weight: 600;
+  color: #111;
+  letter-spacing: -0.1px;
+}
+
+.prototype-project-info p {
+  margin: 0;
+  font-size: 10.8px;
+  color: #555;
+  line-height: 1.35;
+}
+
+/* Make owner slightly quieter if it appears as strong */
+.prototype-project-info strong {
+  color: #333333;
+  font-weight: 600;
+}
+
+/* Empty column text */
+.prototype-empty {
+  background: rgba(255,255,255,0.75);
+  border: 1px dashed #c8c8c8;
+  border-radius: 8px;
+  color: #777;
+  font-size: 11px;
+  text-align: center;
+  padding: 16px 8px;
+}
+
+/* Subtle entrance animation */
+.prototype-column {
+  animation: matrixFadeUp 0.32s ease both;
+}
+
+.prototype-column:nth-child(1) { animation-delay: 0.02s; }
+.prototype-column:nth-child(2) { animation-delay: 0.05s; }
+.prototype-column:nth-child(3) { animation-delay: 0.08s; }
+.prototype-column:nth-child(4) { animation-delay: 0.11s; }
+.prototype-column:nth-child(5) { animation-delay: 0.14s; }
+.prototype-column:nth-child(6) { animation-delay: 0.17s; }
+.prototype-column:nth-child(7) { animation-delay: 0.20s; }
+
+@keyframes matrixFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .prototype-column,
+  .prototype-column-header,
+  .prototype-project-card,
+  .prototype-project-image,
+  .prototype-type-filter label {
+    animation: none;
+    transition: none;
+  }
+
+  .prototype-project-card:hover,
+  .prototype-column-header:hover,
+  .prototype-type-filter label:hover {
+    transform: none;
+  }
+
+  .prototype-project-card:hover .prototype-project-image {
+    transform: none;
+  }
 }
