@@ -1367,3 +1367,189 @@ body.prototype-mode #drawView {
   background-color: #eef4f7;
 }
 
+
+
+
+
+
+
+
+/* =========================
+   Landing Page
+   ========================= */
+
+#landingPage {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255,255,255,0.13), transparent 30%),
+    linear-gradient(135deg, #f5333f 0%, #ee2f3b 48%, #d91f2d 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition:
+    opacity 0.55s ease,
+    visibility 0.55s ease;
+}
+
+#landingPage::before {
+  content: "";
+  position: absolute;
+  inset: 28px;
+  border: 1px solid rgba(255,255,255,0.24);
+  pointer-events: none;
+}
+
+#landingPage::after {
+  content: "";
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  right: -180px;
+  bottom: -180px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.16);
+  pointer-events: none;
+}
+
+.landing-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.landing-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* 关键：整体稍微上移 */
+  transform: translateY(-36px);
+
+  animation: landingFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.landing-logo {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 15px;
+  margin-bottom: 52px;
+  text-transform: uppercase;
+}
+
+.landing-logo-img {
+  height: 60px;
+  width: auto;
+  margin-bottom: 40px;
+  display: block;
+}
+
+.landing-kicker {
+  font-size: 11px;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  opacity: 0.78;
+  margin-bottom: 18px;
+}
+
+#landingPage h1 {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  font-size: clamp(38px, 4.2vw, 40px);
+  line-height: 1;
+  letter-spacing: -2.4px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+#landingPage p {
+  max-width: 620px;
+  margin: 24px 0 0 0;
+  font-size: 17px;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.82);
+}
+
+.landing-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 38px;
+}
+
+.landing-buttons button {
+  min-width: 180px;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid rgba(255,255,255,0.58);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.landing-buttons button:hover {
+  background: white;
+  color: #8f001a;
+  border-color: white;
+  transform: translateY(-2px);
+}
+
+@keyframes landingFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-36px);
+  }
+}
+
+@media (max-width: 720px) {
+  #landingPage {
+    padding: 28px;
+  }
+
+  #landingPage::before {
+    inset: 16px;
+  }
+
+  .landing-logo,
+.landing-logo-img {
+  height: 34px;
+  width: auto;
+  margin: 0 auto 64px auto;
+  display: block;
+}
+
+  .landing-buttons {
+    flex-direction: column;
+  }
+
+  .landing-buttons button {
+    width: 100%;
+  }
+}

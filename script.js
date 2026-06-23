@@ -1121,6 +1121,25 @@ function uncheckAllOwners() {
     .forEach(cb => cb.checked = false);
 }
 
+function enterFromLanding(viewName) {
+  const landingPage = document.getElementById("landingPage");
+
+  if (landingPage) {
+    landingPage.classList.add("landing-hidden");
+  }
+
+  if (viewName === "map") {
+    showMapView();
+  }
+
+  if (viewName === "matrix") {
+    showPrototypeView();
+  }
+
+  if (viewName === "draw") {
+    showDrawView();
+  }
+}
 
 function showMapView() {
   document.body.classList.remove("prototype-mode");
