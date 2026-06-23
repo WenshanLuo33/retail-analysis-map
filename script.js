@@ -1155,6 +1155,11 @@ function showPrototypeView() {
 
   renderPrototypeTypeFilter();
   renderPrototypeView();
+
+  // Trigger entrance / scroll animation after content is rendered
+  requestAnimationFrame(() => {
+    initPrototypeScrollReveal();
+  });
 }
 
 function renderPrototypeView() {
@@ -1165,30 +1170,55 @@ function renderPrototypeView() {
     selectedPrototypeTypes.includes(type)
   );
 
+  // Empty state when no prototype type is selected
+  if (!visibleTypes.length) {
+    prototypeGrid.style.setProperty("--prototype-column-count", 1);
+    prototypeGrid.innerHTML = `
+      <div class="prototype-empty-state reveal-on-scroll">
+        Select at least one prototype type to view the matrix.
+      </div>
+    `;
+
+    requestAnimationFrame(() => {
+      initPrototypeScrollReveal();
+    });
+
+    return;
+  }
+
   prototypeGrid.style.setProperty("--prototype-column-count", visibleTypes.length);
 
-  prototypeGrid.innerHTML = visibleTypes.map(prototypeName => {
+  let cardIndex = 0;
+
+  prototypeGrid.innerHTML = visibleTypes.map((prototypeName, columnIndex) => {
     const items = traderJoePrototypes
       .filter(item =>
         normalizePrototypeName(item["Prototype"]) === normalizePrototypeName(prototypeName)
       )
       .sort((a, b) => Number(a["Sort Order"]) - Number(b["Sort Order"]));
 
-    const cardsHTML = items.map(item => prototypeProjectCardHTML(item)).join("");
+    const cardsHTML = items
+      .map(item => prototypeProjectCardHTML(item, cardIndex++))
+      .join("");
 
     return `
-      <div class="prototype-column">
+      <div class="prototype-column reveal-on-scroll"
+           style="--reveal-delay: ${columnIndex * 70}ms;">
         <div class="prototype-column-header">
           <h3>${prototypeName}</h3>
           ${prototypeDiagramHTML(prototypeName)}
         </div>
 
         <div class="prototype-card-list">
-          ${cardsHTML || `<p class="prototype-empty">No projects yet.</p>`}
+          ${cardsHTML || `<p class="prototype-empty reveal-on-scroll">No projects yet.</p>`}
         </div>
       </div>
     `;
   }).join("");
+
+  requestAnimationFrame(() => {
+    initPrototypeScrollReveal();
+  });
 }
 
 function renderPrototypeTypeFilter() {
@@ -1222,7 +1252,7 @@ function togglePrototypeType(type, isChecked) {
   renderPrototypeView();
 }
 
-function prototypeProjectCardHTML(item) {
+function prototypeProjectCardHTML(item, cardIndex = 0) {
   const projectId = String(item["Project ID"] || "");
   const imagePath = item["DiagramPath"] || "";
   const projectName = item["Project Name"] || "";
@@ -1230,8 +1260,11 @@ function prototypeProjectCardHTML(item) {
   const cityState = item["City/State"] || "";
   const owner = item["Owner"] || "";
 
+  const delay = Math.min(cardIndex * 35, 420);
+
   return `
-    <div class="prototype-project-card"
+    <div class="prototype-project-card reveal-on-scroll"
+         style="--reveal-delay: ${delay}ms;"
          onclick="openProjectFromPrototype('${projectId}')">
       ${imagePath ? `
         <img class="prototype-project-image" src="${imagePath}" alt="${projectName}">
@@ -1250,6 +1283,46 @@ function prototypeProjectCardHTML(item) {
     </div>
   `;
 }
+
+function initPrototypeScrollReveal() {
+  const items = document.querySelectorAll(
+    "#prototypeView .reveal-on-scroll"
+  );
+
+  if (!items.length) return;
+
+  // Reset first, so animation replays when filtering prototype types
+  items.forEach(item => {
+    item.classList.remove("is-visible");
+  });
+
+  if (!("IntersectionObserver" in window)) {
+    items.forEach(item => item.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      root: document.getElementById("prototypeView"),
+      threshold: 0.12,
+      rootMargin: "0px 0px -8% 0px"
+    }
+  );
+
+  items.forEach(item => {
+    observer.observe(item);
+  });
+}
+
+
 
 function prototypeDiagramHTML(prototypeName) {
   const diagramPaths = {

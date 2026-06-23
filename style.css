@@ -958,6 +958,105 @@ body.prototype-mode #topNav {
   padding: 16px 8px;
 }
 
+/* =========================
+   Prototype Matrix - Entrance + Scroll Reveal
+   ========================= */
+
+#prototypeView {
+  scroll-behavior: smooth;
+}
+
+/* Softer page entrance */
+.prototype-page-header {
+  animation: prototypeHeaderIn 0.45s ease both;
+}
+
+@keyframes prototypeHeaderIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scroll reveal base state */
+#prototypeView .reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.65s ease,
+    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+/* Scroll reveal visible state */
+#prototypeView .reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Make cards feel more architectural / premium */
+.prototype-project-card {
+  backdrop-filter: blur(8px);
+}
+
+.prototype-project-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.18),
+      rgba(255,255,255,0)
+    );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.prototype-project-card:hover::after {
+  opacity: 1;
+}
+
+/* More refined hover movement */
+.prototype-project-card:hover {
+  transform: translateY(-7px) scale(1.015);
+  box-shadow:
+    0 26px 54px rgba(20, 28, 32, 0.18),
+    0 8px 18px rgba(20, 28, 32, 0.09);
+}
+
+/* Empty state when all filters are unchecked */
+.prototype-empty-state {
+  grid-column: 1 / -1;
+  min-height: 240px;
+  border: 1px dashed #c8c8c8;
+  border-radius: 12px;
+  background: #fafafa;
+  color: #777;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+/* Keep reduced motion accessible */
+@media (prefers-reduced-motion: reduce) {
+  .prototype-page-header,
+  #prototypeView .reveal-on-scroll {
+    animation: none;
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Subtle entrance animation */
 @keyframes matrixFadeUp {
   from {
