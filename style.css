@@ -701,10 +701,38 @@ body.prototype-mode #topNav {
   padding: 8px 16px;
 }
 
-/* Prototype page header */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   Prototype Matrix - Final Clean Version
+   ========================= */
+
+/* Prototype view container */
+#prototypeView {
+  width: 100vw;
+  min-height: calc(100vh - 52px);
+  background: #ffffff;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+/* Header area */
 .prototype-page-header {
-  background: white;
-  border-bottom: 1px solid #ddd;
+  background: #ffffff;
+  border-bottom: 1px solid #d8d8d8;
   padding: 12px 16px;
   display: flex;
   justify-content: space-between;
@@ -715,11 +743,14 @@ body.prototype-mode #topNav {
 .prototype-page-header h2 {
   margin: 0;
   font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: #111;
 }
 
 .prototype-page-header p {
   margin: 4px 0 0 0;
-  font-size: 13px;
+  font-size: 12px;
   color: #666;
 }
 
@@ -727,156 +758,263 @@ body.prototype-mode #topNav {
 .prototype-type-filter {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 12px;
+  gap: 6px 8px;
   justify-content: flex-end;
-  max-width: 720px;
-  font-size: 12px;
+  max-width: 760px;
+  font-size: 11px;
 }
 
 .prototype-type-filter label {
   display: flex;
   align-items: center;
   gap: 4px;
-  background: #f7f7f7;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 4px 7px;
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 999px;
+  padding: 4px 8px;
   cursor: pointer;
   white-space: nowrap;
+  color: #333;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.prototype-type-filter label:hover {
+  background: #f0f3f4;
+  border-color: #bfc8cc;
+  transform: translateY(-1px);
 }
 
 .prototype-type-filter input {
   margin: 0;
 }
-/*！！！！！！！*/
-/* Prototype view height */
-#prototypeView {
-  width: 100vw;
-  min-height: calc(100vh - 52px);
-  background: #ffffff;
-  box-sizing: border-box;
-  overflow: auto;
-}
 
-/* Make all visible type columns fill the full screen */
+/* Matrix grid */
 #prototypeGrid {
   display: grid;
   grid-template-columns: repeat(var(--prototype-column-count, 7), minmax(0, 1fr));
-  gap: 10px;
-  padding: 12px;
+  gap: 14px;
+  padding: 14px;
   box-sizing: border-box;
   align-items: start;
 }
 
-/* Smaller columns so 7 types fit in one row */
+/* Type columns */
 .prototype-column {
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  overflow: hidden;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
   min-width: 0;
+  animation: matrixFadeUp 0.32s ease both;
 }
 
+.prototype-column:nth-child(1) { animation-delay: 0.02s; }
+.prototype-column:nth-child(2) { animation-delay: 0.05s; }
+.prototype-column:nth-child(3) { animation-delay: 0.08s; }
+.prototype-column:nth-child(4) { animation-delay: 0.11s; }
+.prototype-column:nth-child(5) { animation-delay: 0.14s; }
+.prototype-column:nth-child(6) { animation-delay: 0.17s; }
+.prototype-column:nth-child(7) { animation-delay: 0.20s; }
+
+/* Type header / diagram card */
 .prototype-column-header {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid #d7d7d7;
+  border-radius: 8px;
   padding: 8px;
-  border-bottom: 1px solid #ddd;
-  background: #fafafa;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.prototype-column-header:hover {
+  transform: translateY(-2px);
+  border-color: #b9c4c9;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
 }
 
 .prototype-column-header h3 {
   margin: 0 0 8px 0;
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 600;
   text-align: center;
+  color: #111;
+  letter-spacing: 0.1px;
 }
 
-/* Top prototype diagram: 3:2 ratio */
+/* Top prototype diagram */
 .prototype-type-diagram {
   width: 100%;
   aspect-ratio: 3 / 2;
   height: auto;
   object-fit: contain;
   display: block;
-  background: white;
-  border: 1px solid #eee;
+  background: #fff;
+  border: none;
+  filter: saturate(0.95);
 }
 
-/* Project cards */
+/* Project card list */
 .prototype-card-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 8px;
+  gap: 11px;
+  padding: 0;
 }
 
+/* Project cards */
 .prototype-project-card {
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background: rgb(255, 255, 255);
+  position: relative;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
-  transition: 0.15s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.045);
+  transform: translateY(0) scale(1);
+  transform-origin: center center;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease,
+    background 0.22s ease;
 }
 
 .prototype-project-card:hover {
-  border-color: #003b5c;
-  background: #f2f8fb;
+  transform: translateY(-5px) scale(1.012);
+  z-index: 10;
+  border-color: #d6d6d6;
+  background: #fff;
+  box-shadow:
+    0 20px 42px rgba(30, 35, 38, 0.16),
+    0 6px 14px rgba(30, 35, 38, 0.08);
 }
 
+/* Project image */
 .prototype-project-image {
   width: 100%;
   aspect-ratio: 3 / 2;
   height: auto;
   object-fit: cover;
   display: block;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #e6e6e6;
+  filter: saturate(0.92) contrast(0.98);
+  transform: scale(1);
+  transition: transform 0.35s ease, filter 0.35s ease;
 }
 
+.prototype-project-card:hover .prototype-project-image {
+  transform: scale(1.035);
+  filter: saturate(1.02) contrast(1.02);
+}
+
+/* If no image */
 .prototype-no-image {
   width: 100%;
   aspect-ratio: 3 / 2;
-  background: #eee;
-  color: #777;
+  background: #eceeee;
+  color: #888;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  border-bottom: 1px solid #ddd;
+  font-size: 11px;
+  border-bottom: 1px solid #e6e6e6;
 }
 
+/* Project text */
 .prototype-project-info {
-  padding: 8px;
+  padding: 8px 9px 9px 9px;
 }
 
 .prototype-project-info h4 {
-  margin: 0 0 4px 0;
+  margin: 0 0 5px 0;
   font-size: 12px;
   line-height: 1.25;
+  font-weight: 600;
+  color: #111;
+  letter-spacing: -0.1px;
 }
 
 .prototype-project-info p {
   margin: 0;
-  font-size: 11px;
-  color: #666;
-  line-height: 1.3;
+  font-size: 10.8px;
+  color: #555;
+  line-height: 1.35;
 }
 
-.prototype-empty {
-  color: #777;
-  font-size: 12px;
-  text-align: center;
-  padding: 16px 0;
+.prototype-project-info strong {
+  color: #333333;
+  font-weight: 600;
 }
+
+/* Empty column text */
+.prototype-empty {
+  background: rgba(255,255,255,0.75);
+  border: 1px dashed #c8c8c8;
+  border-radius: 8px;
+  color: #777;
+  font-size: 11px;
+  text-align: center;
+  padding: 16px 8px;
+}
+
+/* Subtle entrance animation */
+@keyframes matrixFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .prototype-column,
+  .prototype-column-header,
+  .prototype-project-card,
+  .prototype-project-image,
+  .prototype-type-filter label {
+    animation: none;
+    transition: none;
+  }
+
+  .prototype-project-card:hover,
+  .prototype-column-header:hover,
+  .prototype-type-filter label:hover {
+    transform: none;
+  }
+
+  .prototype-project-card:hover .prototype-project-image {
+    transform: none;
+  }
+}
+
+
+
+
+
+
+
 
 
 
 
 
 /* Draw Your Own View */
+/* =========================
+   Draw Your Own View
+   Final Clean Version
+   ========================= */
+
 #drawView {
   width: 100vw;
   height: calc(100vh - 72px);
   position: relative;
-  background: #f7f7f7;
+  background: #eef2f4;
   overflow: hidden;
 }
 
@@ -884,180 +1022,29 @@ body.prototype-mode #drawView {
   height: calc(100vh - 52px);
 }
 
+/* Sidebar panel */
 #drawSidebar {
   position: absolute;
   left: 0;
   top: 0;
-  width: 300px;
+  width: 320px;
   height: 100%;
-  padding: 16px;
-  background: white;
-  box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+  padding: 18px;
+  background: #f8fafb;
+  border-right: 1px solid #d6dde2;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
   z-index: 1000;
   overflow-y: auto;
   box-sizing: border-box;
 }
 
-#drawSidebar h2 {
-  margin: 0 0 12px 0;
-  font-size: 21px;
-}
-
-#drawSidebar h3 {
-  margin: 16px 0 8px 0;
-  font-size: 15px;
-}
-
-#drawSidebar label {
-  display: block;
-  margin-top: 12px;
-  font-size: 12px;
-  font-weight: bold;
-  color: #555;
-}
-
-#drawSidebar input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 8px;
-  margin-top: 4px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-#drawSidebar button {
-  margin-top: 10px;
-  width: 100%;
-  padding: 9px 10px;
-  border: none;
-  border-radius: 4px;
-  background: #003b5c;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-#drawSidebar button:hover {
-  background: #002a42;
-}
-
-#drawManualParkingBtn {
-  background: #666 !important;
-}
-
-#drawClearManualParkingBtn {
-  background: #999 !important;
-}
-
-#drawSummary {
-  margin-top: 16px;
-  font-size: 13px;
-  line-height: 1.4;
-}
-
-.draw-instruction {
-  font-size: 13px;
-  line-height: 1.4;
-  color: #444;
-}
-
+/* Map starts after sidebar */
 #drawMap {
   position: absolute;
-  left: 300px;
+  left: 320px;
   right: 0;
   top: 0;
   bottom: 0;
-}
-
-.draw-legend-item {
-  font-size: 13px;
-  margin: 7px 0;
-}
-
-.draw-box {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  margin-right: 6px;
-  vertical-align: middle;
-  border: 1px solid rgba(0,0,0,0.25);
-}
-
-.draw-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin-right: 6px;
-  border-radius: 50%;
-  vertical-align: middle;
-}
-
-.retail { background: #e45756; }
-.residential { background: #4c78a8; }
-.hotel { background: #f2cf5b; }
-.office { background: #b279a2; }
-.parking { background: #d9d9d9; }
-.manual-parking { background: #bfbfbf; }
-.unknown { background: #8f8f8f; }
-
-.draw-polygon-symbol {
-  display: inline-block;
-  width: 22px;
-  border-top: 2px dashed #4a4a4a;
-  margin-right: 6px;
-  vertical-align: middle;
-}
-
-.food { background: red; }
-.grocery { background: green; }
-.fashion { background: purple; }
-.home { background: orange; }
-.beauty { background: pink; }
-.service { background: blue; }
-.fitness { background: cadetblue; }
-.office-dot { background: darkviolet; }
-.other { background: gray; }
-
-.active-mode {
-  background: #b00020 !important;
-  color: white;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*delete?*/
-
-/* =========================
-   Draw Your Own - Visual Polish
-   ========================= */
-
-#drawView {
-  background: #eef2f4;
-}
-
-/* Sidebar panel */
-#drawSidebar {
-  width: 320px;
-  padding: 18px;
-  background: #f8fafb;
-  border-right: 1px solid #d6dde2;
-  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
-}
-
-/* Map starts after wider sidebar */
-#drawMap {
-  left: 320px;
 }
 
 /* Sidebar typography */
@@ -1077,8 +1064,10 @@ body.prototype-mode #drawView {
 }
 
 #drawSidebar label {
+  display: block;
   margin-top: 14px;
   font-size: 11px;
+  font-weight: bold;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   color: #526773;
@@ -1086,7 +1075,11 @@ body.prototype-mode #drawView {
 
 /* Inputs */
 #drawSidebar input {
+  width: 100%;
   height: 36px;
+  box-sizing: border-box;
+  padding: 8px;
+  margin-top: 4px;
   border: 1px solid #cfd8dd;
   border-radius: 6px;
   background: white;
@@ -1101,11 +1094,17 @@ body.prototype-mode #drawView {
 
 /* Buttons */
 #drawSidebar button {
+  width: 100%;
   height: 36px;
   margin-top: 8px;
+  padding: 9px 10px;
+  border: none;
   border-radius: 6px;
   background: #003b5c;
+  color: white;
+  cursor: pointer;
   font-size: 12px;
+  font-weight: bold;
   letter-spacing: 0.2px;
   transition: 0.15s ease;
 }
@@ -1195,10 +1194,53 @@ body.prototype-mode #drawView {
   align-items: center;
 }
 
-.draw-box,
-.draw-dot {
+.draw-box {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  border: 1px solid rgba(0,0,0,0.25);
   flex: 0 0 auto;
 }
+
+.draw-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 50%;
+  vertical-align: middle;
+  flex: 0 0 auto;
+}
+
+.draw-polygon-symbol {
+  display: inline-block;
+  width: 22px;
+  border-top: 2px dashed #4a4a4a;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* Draw area type colors */
+.retail { background: #e45756; }
+.residential { background: #4c78a8; }
+.hotel { background: #f2cf5b; }
+.office { background: #b279a2; }
+.parking { background: #d9d9d9; }
+.manual-parking { background: #bfbfbf; }
+.unknown { background: #8f8f8f; }
+
+/* Tenant / point category colors */
+.food { background: red; }
+.grocery { background: green; }
+.fashion { background: purple; }
+.home { background: orange; }
+.beauty { background: pink; }
+.service { background: blue; }
+.fitness { background: cadetblue; }
+.office-dot { background: darkviolet; }
+.other { background: gray; }
 
 /* Leaflet controls softer */
 #drawView .leaflet-control-layers,
@@ -1226,284 +1268,3 @@ body.prototype-mode #drawView {
   background-color: #eef4f7;
 }
 
-
-/*new matrix*/
-/* =========================
-   Prototype Matrix - Architectural Pin-up Style
-   ========================= */
-
-/* Whole matrix background */
-#prototypeView {
-  background: #ffffff;
-}
-
-/* Header area: cleaner, lighter */
-.prototype-page-header {
-  background: #ffffff;
-  border-bottom: 1px solid #d8d8d8;
-  padding: 12px 16px;
-}
-
-.prototype-page-header h2 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.3px;
-  color: #111;
-}
-
-.prototype-page-header p {
-  margin: 4px 0 0 0;
-  font-size: 12px;
-  color: #666;
-}
-
-/* Type checkbox filter: smaller and calmer */
-.prototype-type-filter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 8px;
-  justify-content: flex-end;
-  max-width: 760px;
-  font-size: 11px;
-}
-
-.prototype-type-filter label {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: #ffffff;
-  border: 1px solid #d8d8d8;
-  border-radius: 999px;
-  padding: 4px 8px;
-  cursor: pointer;
-  white-space: nowrap;
-  color: #333;
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
-}
-
-.prototype-type-filter label:hover {
-  background: #f0f3f4;
-  border-color: #bfc8cc;
-  transform: translateY(-1px);
-}
-
-.prototype-type-filter input {
-  margin: 0;
-}
-
-/* Matrix grid spacing */
-#prototypeGrid {
-  gap: 14px;
-  padding: 14px;
-  align-items: start;
-}
-
-/* Remove tall white column background */
-.prototype-column {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  overflow: visible;
-  min-width: 0;
-}
-
-/* Type header / diagram as an independent card */
-.prototype-column-header {
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid #d7d7d7;
-  border-radius: 8px;
-  padding: 8px;
-  margin-bottom: 12px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-}
-
-.prototype-column-header:hover {
-  transform: translateY(-2px);
-  border-color: #b9c4c9;
-  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
-}
-
-.prototype-column-header h3 {
-  margin: 0 0 8px 0;
-  font-size: 14px;
-  font-weight: 600;
-  text-align: center;
-  color: #111;
-  letter-spacing: 0.1px;
-}
-
-/* Top prototype diagram */
-.prototype-type-diagram {
-  width: 100%;
-  aspect-ratio: 3 / 2;
-  height: auto;
-  object-fit: contain;
-  display: block;
-  background: #fff;
-  border: none;
-  filter: saturate(0.95);
-}
-
-/* Remove inner column padding/background feeling */
-.prototype-card-list {
-  padding: 0;
-  gap: 11px;
-}
-
-/* Project cards */
-.prototype-project-card {
-  position: relative;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid #d9d9d9;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.045);
-  transform: translateY(0) scale(1);
-  transform-origin: center center;
-  transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease,
-    border-color 0.22s ease,
-    background 0.22s ease;
-}
-
-/* Thin architectural accent line on hover */
-.prototype-project-card::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 3px;
-  background: #da635f;
-  opacity: 0;
-  transition: opacity 0.22s ease;
-  z-index: 2;
-}
-
-.prototype-project-card:hover {
-  transform: translateY(-5px) scale(1.012);
-  z-index: 10;
-  border-color: #d6d6d6;
-  background: #fff;
-  box-shadow:
-    0 20px 42px rgba(30, 35, 38, 0.16),
-    0 6px 14px rgba(30, 35, 38, 0.08);
-}
-
-/* Project image */
-.prototype-project-image {
-  width: 100%;
-  aspect-ratio: 3 / 2;
-  height: auto;
-  object-fit: cover;
-  display: block;
-  border-bottom: 1px solid #e6e6e6;
-  filter: saturate(0.92) contrast(0.98);
-  transform: scale(1);
-  transition: transform 0.35s ease, filter 0.35s ease;
-}
-
-.prototype-project-card:hover .prototype-project-image {
-  transform: scale(1.035);
-  filter: saturate(1.02) contrast(1.02);
-}
-
-/* If no image */
-.prototype-no-image {
-  width: 100%;
-  aspect-ratio: 3 / 2;
-  background: #eceeee;
-  color: #888;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  border-bottom: 1px solid #e6e6e6;
-}
-
-/* Project text */
-.prototype-project-info {
-  padding: 8px 9px 9px 9px;
-}
-
-.prototype-project-info h4 {
-  margin: 0 0 5px 0;
-  font-size: 12px;
-  line-height: 1.25;
-  font-weight: 600;
-  color: #111;
-  letter-spacing: -0.1px;
-}
-
-.prototype-project-info p {
-  margin: 0;
-  font-size: 10.8px;
-  color: #555;
-  line-height: 1.35;
-}
-
-/* Make owner slightly quieter if it appears as strong */
-.prototype-project-info strong {
-  color: #333333;
-  font-weight: 600;
-}
-
-/* Empty column text */
-.prototype-empty {
-  background: rgba(255,255,255,0.75);
-  border: 1px dashed #c8c8c8;
-  border-radius: 8px;
-  color: #777;
-  font-size: 11px;
-  text-align: center;
-  padding: 16px 8px;
-}
-
-/* Subtle entrance animation */
-.prototype-column {
-  animation: matrixFadeUp 0.32s ease both;
-}
-
-.prototype-column:nth-child(1) { animation-delay: 0.02s; }
-.prototype-column:nth-child(2) { animation-delay: 0.05s; }
-.prototype-column:nth-child(3) { animation-delay: 0.08s; }
-.prototype-column:nth-child(4) { animation-delay: 0.11s; }
-.prototype-column:nth-child(5) { animation-delay: 0.14s; }
-.prototype-column:nth-child(6) { animation-delay: 0.17s; }
-.prototype-column:nth-child(7) { animation-delay: 0.20s; }
-
-@keyframes matrixFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Respect users who prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .prototype-column,
-  .prototype-column-header,
-  .prototype-project-card,
-  .prototype-project-image,
-  .prototype-type-filter label {
-    animation: none;
-    transition: none;
-  }
-
-  .prototype-project-card:hover,
-  .prototype-column-header:hover,
-  .prototype-type-filter label:hover {
-    transform: none;
-  }
-
-  .prototype-project-card:hover .prototype-project-image {
-    transform: none;
-  }
-}
