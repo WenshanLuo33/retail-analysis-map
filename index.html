@@ -15,34 +15,59 @@
   <!-- Landing Page -->
   <section id="landingPage">
     <div class="landing-content">
-      <img class="landing-logo-img" src="images/arrowstreet-logo-white.png" alt="Arrowstreet">
-      
+      <img
+        class="landing-logo-img"
+        src="images/arrowstreet-logo-white.png"
+        alt="Arrowstreet"
+      >
+
       <div class="landing-kicker">
-       Retail Research Platform
+        Retail Research Platform
       </div>
 
       <h1>Grocery-Anchored Retail Analysis</h1>
 
-     <p>
-       A research tool for comparing grocery-anchored retail centers through
-        site metrics, tenant mix, parking ratio, prototype patterns, and custom map analysis.
+      <p>
+        An internal research platform for studying grocery-anchored retail centers
+        through standardized site, tenant, parking, and layout data.
       </p>
 
-     <div class="landing-buttons">
-       <button onclick="enterFromLanding('map')">
-         Filter Map
-       </button>
-
-       <button onclick="enterFromLanding('matrix')">
-         Prototype Matrix
-       </button>
-
-       <button onclick="enterFromLanding('draw')">
-         Draw Your Own
+      <div class="landing-tool-grid">
+        <button class="landing-tool-card" onclick="enterFromLanding('map')">
+          <span class="tool-number">01</span>
+          <h3>Filter Map</h3>
+          <p>
+            Explore 132 grocery-anchored retail projects collected from major
+            property owners, including Kimco, Brixmor, Regency Centers, and
+            others. Review GLA, parking ratio, grocery share, tenant mix,
+            tenant table, site plans, and marketing package links.
+          </p>
         </button>
-     </div>
-   </div>
+
+        <button class="landing-tool-card" onclick="enterFromLanding('matrix')">
+          <span class="tool-number">02</span>
+          <h3>Prototype Matrix</h3>
+          <p>
+            Compare approximately 30 Trader Joe’s projects and study their
+            layout patterns. The matrix summarizes the projects into seven
+            prototype types based on store placement, parking organization,
+            visibility, access, and surrounding site context.
+          </p>
+        </button>
+
+        <button class="landing-tool-card" onclick="enterFromLanding('draw')">
+          <span class="tool-number">03</span>
+          <h3>Draw Your Own</h3>
+          <p>
+            Analyze a new project that is not included in the current database.
+            Search for a site, draw a custom boundary, and run a preliminary
+            study of building use, tenant locations, and parking areas.
+          </p>
+        </button>
+      </div>
+    </div>
   </section>
+
   <!-- Top Navigation -->
   <header id="topNav">
     <div class="top-nav-title">
@@ -54,9 +79,11 @@
       <button id="mapViewBtn" class="active" onclick="showMapView()">
         Search / Filter Map
       </button>
+
       <button id="prototypeViewBtn" onclick="showPrototypeView()">
         Prototype Matrix
       </button>
+
       <button id="drawViewBtn" onclick="showDrawView()">
         Draw Your Own
       </button>
@@ -76,6 +103,7 @@
       <div id="controls">
         <div class="filter-header">
           <label>PROPERTY OWNER</label>
+
           <div>
             <button class="mini-filter-btn" onclick="checkAllOwners()">All</button>
             <button class="mini-filter-btn" onclick="uncheckAllOwners()">None</button>
@@ -86,6 +114,7 @@
 
         <div class="filter-header">
           <label>STATE</label>
+
           <div>
             <button class="mini-filter-btn" onclick="checkAllStates()">All</button>
             <button class="mini-filter-btn" onclick="uncheckAllStates()">None</button>
@@ -133,7 +162,7 @@
   <!-- Prototype Matrix View -->
   <div id="prototypeView" class="hidden">
     <div class="prototype-page-header">
-     <div>
+      <div>
         <h2>Trader Joe’s Prototype Matrix</h2>
         <p>Massachusetts Trader Joe’s locations grouped by site layout pattern</p>
       </div>
@@ -141,10 +170,10 @@
       <div id="prototypeTypeFilter" class="prototype-type-filter"></div>
     </div>
 
-   <div id="prototypeGrid"></div>
+    <div id="prototypeGrid"></div>
   </div>
 
-    <!-- Draw Your Own View -->
+  <!-- Draw Your Own View -->
   <div id="drawView" class="hidden">
     <aside id="drawSidebar">
       <h2>Draw Your Own Analysis</h2>
@@ -191,28 +220,94 @@
 
       <h3>Building Use</h3>
 
-      <div class="draw-legend-item"><span class="draw-box retail"></span> Retail / Commercial</div>
-      <div class="draw-legend-item"><span class="draw-box residential"></span> Residential</div>
-      <div class="draw-legend-item"><span class="draw-box hotel"></span> Hotel</div>
-      <div class="draw-legend-item"><span class="draw-box office"></span> Office</div>
-      <div class="draw-legend-item"><span class="draw-box parking"></span> OSM Parking Lot</div>
-      <div class="draw-legend-item"><span class="draw-box manual-parking"></span> Manual Parking Lot</div>
-      <div class="draw-legend-item"><span class="draw-box unknown"></span> Unknown</div>
-      <div class="draw-legend-item"><span class="draw-polygon-symbol"></span> Analysis Boundary</div>
+      <div class="draw-legend-item">
+        <span class="draw-box retail"></span>
+        Retail / Commercial
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-box residential"></span>
+        Residential
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-box hotel"></span>
+        Hotel
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-box office"></span>
+        Office
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-box parking"></span>
+        OSM Parking Lot
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-box manual-parking"></span>
+        Manual Parking Lot
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-box unknown"></span>
+        Unknown
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-polygon-symbol"></span>
+        Analysis Boundary
+      </div>
 
       <hr />
 
       <h3>Tenant Categories</h3>
 
-      <div class="draw-legend-item"><span class="draw-dot food"></span> Food & Beverage</div>
-      <div class="draw-legend-item"><span class="draw-dot grocery"></span> Grocery / Food Retail</div>
-      <div class="draw-legend-item"><span class="draw-dot fashion"></span> Fashion / Apparel</div>
-      <div class="draw-legend-item"><span class="draw-dot home"></span> Home / Furniture</div>
-      <div class="draw-legend-item"><span class="draw-dot beauty"></span> Beauty / Personal Care</div>
-      <div class="draw-legend-item"><span class="draw-dot service"></span> Service / Health</div>
-      <div class="draw-legend-item"><span class="draw-dot fitness"></span> Fitness / Leisure</div>
-      <div class="draw-legend-item"><span class="draw-dot office-dot"></span> Office Tenant</div>
-      <div class="draw-legend-item"><span class="draw-dot other"></span> Other Retail / Amenity</div>
+      <div class="draw-legend-item">
+        <span class="draw-dot food"></span>
+        Food & Beverage
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-dot grocery"></span>
+        Grocery / Food Retail
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-dot fashion"></span>
+        Fashion / Apparel
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-dot home"></span>
+        Home / Furniture
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-dot beauty"></span>
+        Beauty / Personal Care
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-dot service"></span>
+        Service / Health
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-dot fitness"></span>
+        Fitness / Leisure
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-dot office-dot"></span>
+        Office Tenant
+      </div>
+
+      <div class="draw-legend-item">
+        <span class="draw-dot other"></span>
+        Other Retail / Amenity
+      </div>
     </aside>
 
     <div id="drawMap"></div>
