@@ -162,13 +162,28 @@
   <!-- Prototype Matrix View -->
   <div id="prototypeView" class="hidden">
     <div class="prototype-page-header">
-      <div>
-        <h2>Trader Joe’s Prototype Matrix</h2>
-        <p>Massachusetts Trader Joe’s locations grouped by site layout pattern</p>
-      </div>
+  <div>
+    <h2>Trader Joe’s Matrix</h2>
+    <p id="prototypeMatrixSubtitle">
+      Massachusetts Trader Joe’s locations grouped by site layout pattern
+    </p>
 
-      <div id="prototypeTypeFilter" class="prototype-type-filter"></div>
+    <div class="matrix-mode-toggle">
+      <button id="layoutPrototypeModeBtn"
+              class="active"
+              onclick="setMatrixMode('layout')">
+        Layout Prototype
+      </button>
+
+      <button id="centerTypologyModeBtn"
+              onclick="setMatrixMode('typology')">
+        Typology of Center
+      </button>
     </div>
+  </div>
+
+  <div id="prototypeTypeFilter" class="prototype-type-filter"></div>
+</div>
 
     <div id="prototypeGrid"></div>
   </div>

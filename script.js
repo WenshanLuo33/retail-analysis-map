@@ -5,17 +5,30 @@ let markerByProjectId = {};
 let highlightedMarker = null;
 let traderJoePrototypes = [];
 
-const prototypeOrder = [
-  "Urban",
-  "Convenience",
-  "Lifestyle",
+const layoutPrototypeOrder = [
+  "Urban Context",
+  "Standalone",
+  "Mall / Destination",
   "Branch",
   "Spine",
   "C-Shape",
   "Cluster"
 ];
 
-let selectedPrototypeTypes = [...prototypeOrder];
+const centerTypologyOrder = [
+  "Urban",
+  "Inner Suburban",
+  "Suburban",
+  "Lifestyle",
+  "Power",
+  "Town Center",
+  "Convenience / Neighborhood"
+];
+
+let matrixMode = "layout";
+
+let selectedLayoutPrototypeTypes = [...layoutPrototypeOrder];
+let selectedCenterTypologyTypes = [...centerTypologyOrder];
 
 
 let compareProjects = [];
@@ -1159,6 +1172,28 @@ function showMapView() {
   }, 100);
 }
 
+function setMatrixMode(mode) {
+  matrixMode = mode;
+
+  const layoutBtn = document.getElementById("layoutPrototypeModeBtn");
+  const typologyBtn = document.getElementById("centerTypologyModeBtn");
+  const subtitle = document.getElementById("prototypeMatrixSubtitle");
+
+  if (layoutBtn && typologyBtn) {
+    layoutBtn.classList.toggle("active", matrixMode === "layout");
+    typologyBtn.classList.toggle("active", matrixMode === "typology");
+  }
+
+  if (subtitle) {
+    subtitle.textContent = matrixMode === "layout"
+      ? "Massachusetts Trader Joe’s locations grouped by site layout pattern"
+      : "Trader Joe’s locations grouped by overall retail center typology";
+  }
+
+  renderPrototypeTypeFilter();
+  renderPrototypeView();
+}
+
 function showPrototypeView() {
   document.body.classList.add("prototype-mode");
 
@@ -1181,20 +1216,93 @@ function showPrototypeView() {
   });
 }
 
+function getLayoutPrototypeDescription(typeName) {
+  const descriptions = {
+    "Urban Context":
+      "Located in a denser urban block or mixed-use district. Trader Joe’s is often near a street corner or key intersection, but not always occupying the exact corner space.",
+
+    "Standalone":
+      "A small-format site with Trader Joe’s as the primary tenant, sometimes with only one or two small adjacent retailers. It functions as a quick in-and-out grocery stop rather than a larger shopping destination.",
+
+    "Mall / Destination":
+      "Located within or next to a mall, lifestyle destination, or larger retail center. Trader Joe’s benefits from surrounding destination traffic rather than operating as a standalone neighborhood store.",
+
+    "Branch":
+      "Organized around an internal drive aisle that branches into separate parking areas. Visitors enter the site, then navigate toward the specific tenant and its corresponding parking field.",
+
+    "Spine":
+      "Organized around a main internal spine between the buildings and the parking field. Larger anchors are often in the middle, with smaller shops toward the ends. Trader Joe’s is usually positioned between a big-box anchor and smaller retail spaces.",
+
+    "C-Shape":
+      "Buildings form a C-shaped layout around a central parking field. The main internal drive sits between the buildings and parking. Larger tenants often face the primary road, while smaller shops line the sides. Trader Joe’s is often aligned with the main entrance sequence.",
+
+    "Cluster":
+      "Multiple building clusters share a common central parking field, but additional parking is often placed behind the buildings to meet demand. Larger anchors usually face the main road, while smaller grocery or food tenants occupy side clusters. Trader Joe’s is often located deep within the left-side building group."
+  };
+
+  return descriptions[typeName] || "";
+}
+
+function getCenterTypologyDescription(typeName) {
+  const descriptions = {
+    "Urban":
+      "Dense city or downtown context, usually with smaller parking supply, walkable blocks, transit access, and stronger street-front retail conditions.",
+
+    "Inner Suburban":
+      "Mature close-in suburb or urban-edge corridor. More auto-oriented than urban retail, but denser and more connected than typical suburban shopping centers.",
+
+    "Suburban":
+      "Auto-oriented suburban retail environment with surface parking, larger setbacks, lower surrounding density, and primary access by car.",
+
+    "Lifestyle":
+      "Walkable destination retail with restaurants, food, entertainment, public space, and an outdoor mall-like experience.",
+
+    "Power":
+      "Low-frequency big-box retail cluster, usually dominated by utilitarian anchors such as home improvement, furniture, electronics, sporting goods, or similar large-format stores.",
+
+    "Town Center":
+      "A main-street or village-center environment with a stronger civic, mixed-use, or community-center character.",
+
+    "Convenience / Neighborhood":
+      "Small daily-needs retail center serving nearby residents, often anchored by grocery, pharmacy, coffee, salon, small restaurants, or local services."
+  };
+
+  return descriptions[typeName] || "";
+}
+
+function getMatrixTypeDescription(typeName) {
+  if (matrixMode === "layout") {
+    return getLayoutPrototypeDescription(typeName);
+  }
+
+  if (matrixMode === "typology") {
+    return getCenterTypologyDescription(typeName);
+  }
+
+  return "";
+}
+
 function renderPrototypeView() {
   const prototypeGrid = document.getElementById("prototypeGrid");
   if (!prototypeGrid) return;
 
-  const visibleTypes = prototypeOrder.filter(type =>
-    selectedPrototypeTypes.includes(type)
+  const order = matrixMode === "layout"
+    ? layoutPrototypeOrder
+    : centerTypologyOrder;
+
+  const selectedTypes = matrixMode === "layout"
+    ? selectedLayoutPrototypeTypes
+    : selectedCenterTypologyTypes;
+
+  const visibleTypes = order.filter(type =>
+    selectedTypes.includes(type)
   );
 
-  // Empty state when no prototype type is selected
   if (!visibleTypes.length) {
     prototypeGrid.style.setProperty("--prototype-column-count", 1);
     prototypeGrid.innerHTML = `
       <div class="prototype-empty-state reveal-on-scroll">
-        Select at least one prototype type to view the matrix.
+        Select at least one type to view the matrix.
       </div>
     `;
 
@@ -1209,12 +1317,8 @@ function renderPrototypeView() {
 
   let cardIndex = 0;
 
-  prototypeGrid.innerHTML = visibleTypes.map((prototypeName, columnIndex) => {
-    const items = traderJoePrototypes
-      .filter(item =>
-        normalizePrototypeName(item["Prototype"]) === normalizePrototypeName(prototypeName)
-      )
-      .sort((a, b) => Number(a["Sort Order"]) - Number(b["Sort Order"]));
+  prototypeGrid.innerHTML = visibleTypes.map((typeName, columnIndex) => {
+    const items = getMatrixItemsByType(typeName);
 
     const cardsHTML = items
       .map(item => prototypeProjectCardHTML(item, cardIndex++))
@@ -1224,8 +1328,13 @@ function renderPrototypeView() {
       <div class="prototype-column reveal-on-scroll"
            style="--reveal-delay: ${columnIndex * 70}ms;">
         <div class="prototype-column-header">
-          <h3>${prototypeName}</h3>
-          ${prototypeDiagramHTML(prototypeName)}
+          <h3>${typeName}</h3>
+
+         ${matrixMode === "layout" ? prototypeDiagramHTML(typeName) : ""}
+
+          <p class="prototype-type-description">
+          ${getMatrixTypeDescription(typeName)}
+          </p>
         </div>
 
         <div class="prototype-card-list">
@@ -1240,12 +1349,41 @@ function renderPrototypeView() {
   });
 }
 
+function getMatrixItemsByType(typeName) {
+  if (matrixMode === "layout") {
+    return traderJoePrototypes
+      .filter(item =>
+        normalizePrototypeName(item["Prototype"]) === normalizePrototypeName(typeName)
+      )
+      .sort((a, b) => Number(a["Sort Order"]) - Number(b["Sort Order"]));
+  }
+
+  if (matrixMode === "typology") {
+    return traderJoePrototypes
+      .filter(item =>
+        normalizeCenterTypology(item["TypologyOfCenter"]) ===
+        normalizeCenterTypology(typeName)
+      )
+      .sort((a, b) => Number(a["Sort Order"]) - Number(b["Sort Order"]));
+  }
+
+  return [];
+}
+
 function renderPrototypeTypeFilter() {
   const filter = document.getElementById("prototypeTypeFilter");
   if (!filter) return;
 
-  filter.innerHTML = prototypeOrder.map(type => {
-    const checked = selectedPrototypeTypes.includes(type) ? "checked" : "";
+  const order = matrixMode === "layout"
+    ? layoutPrototypeOrder
+    : centerTypologyOrder;
+
+  const selectedTypes = matrixMode === "layout"
+    ? selectedLayoutPrototypeTypes
+    : selectedCenterTypologyTypes;
+
+  filter.innerHTML = order.map(type => {
+    const checked = selectedTypes.includes(type) ? "checked" : "";
 
     return `
       <label>
@@ -1260,12 +1398,24 @@ function renderPrototypeTypeFilter() {
 }
 
 function togglePrototypeType(type, isChecked) {
-  if (isChecked) {
-    if (!selectedPrototypeTypes.includes(type)) {
-      selectedPrototypeTypes.push(type);
+  if (matrixMode === "layout") {
+    if (isChecked) {
+      if (!selectedLayoutPrototypeTypes.includes(type)) {
+        selectedLayoutPrototypeTypes.push(type);
+      }
+    } else {
+      selectedLayoutPrototypeTypes = selectedLayoutPrototypeTypes.filter(item => item !== type);
     }
-  } else {
-    selectedPrototypeTypes = selectedPrototypeTypes.filter(item => item !== type);
+  }
+
+  if (matrixMode === "typology") {
+    if (isChecked) {
+      if (!selectedCenterTypologyTypes.includes(type)) {
+        selectedCenterTypologyTypes.push(type);
+      }
+    } else {
+      selectedCenterTypologyTypes = selectedCenterTypologyTypes.filter(item => item !== type);
+    }
   }
 
   renderPrototypeView();
@@ -1342,12 +1492,11 @@ function initPrototypeScrollReveal() {
 }
 
 
-
 function prototypeDiagramHTML(prototypeName) {
   const diagramPaths = {
-    "Urban": "prototype_diagrams/urban.png",
-    "Convenience": "prototype_diagrams/convenience.png",
-    "Lifestyle": "prototype_diagrams/lifestyle.png",
+    "Urban Context": "prototype_diagrams/urban.png",
+    "Standalone": "prototype_diagrams/convenience.png",
+    "Mall / Destination": "prototype_diagrams/lifestyle.png",
     "Branch": "prototype_diagrams/branch.png",
     "Spine": "prototype_diagrams/spine.png",
     "C-Shape": "prototype_diagrams/c-shape.png",
@@ -1364,17 +1513,40 @@ function prototypeDiagramHTML(prototypeName) {
 }
 
 function normalizePrototypeName(value) {
-  const normalized = String(value || "")
+  let normalized = String(value || "")
     .trim()
     .toLowerCase()
     .replace(/\s+/g, " ")
     .replace(/-/g, " ");
+
+  if (normalized === "urban") {
+    return "urban context";
+  }
+
+  if (normalized === "convenience") {
+    return "standalone";
+  }
+
+  if (normalized === "lifestyle") {
+    return "mall / destination";
+  }
+
+  if (normalized === "mall destination" || normalized === "mall/destination") {
+    return "mall / destination";
+  }
 
   if (normalized === "c shape" || normalized === "c spine") {
     return "c shape";
   }
 
   return normalized;
+}
+
+function normalizeCenterTypology(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
 }
 
 function openProjectFromPrototype(projectId) {

@@ -823,14 +823,14 @@ body.prototype-mode #topNav {
   border-radius: 8px;
   padding: 8px;
   margin-bottom: 12px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 4px rgba(255, 255, 255, 0.04);
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
 .prototype-column-header:hover {
   transform: translateY(-2px);
   border-color: #b9c4c9;
-  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 22px rgba(255, 250, 250, 0.08);
 }
 
 .prototype-column-header h3 {
@@ -842,6 +842,15 @@ body.prototype-mode #topNav {
   letter-spacing: 0.1px;
 }
 
+.prototype-type-description {
+  margin: 8px 2px 2px 2px;
+  font-size: 10.5px;
+  line-height: 1.42;
+  color: #666;
+  text-align: left;
+  font-weight: 400;
+}
+
 /* Top prototype diagram */
 .prototype-type-diagram {
   width: 100%;
@@ -849,9 +858,27 @@ body.prototype-mode #topNav {
   height: auto;
   object-fit: contain;
   display: block;
-  background: #fff;
+  background-color: #ffffff;
   border: none;
   filter: saturate(0.95);
+}
+
+/* Make the diagram card background white too */
+.prototype-column-header {
+  background: #ffffff;
+}
+
+/* If PNG has transparent edges, keep the image area white */
+.prototype-column-header img {
+  background-color: #ffffff;
+}
+
+.prototype-column-header {
+  background: #ffffff !important;
+}
+
+.prototype-type-diagram {
+  background: #ffffff !important;
 }
 
 /* Project card list */
@@ -886,7 +913,7 @@ body.prototype-mode #topNav {
   border-color: #d6d6d6;
   background: #fff;
   box-shadow:
-    0 20px 42px rgba(30, 35, 38, 0.16),
+    0 20px 42px rgba(255, 255, 255, 0.16),
     0 6px 14px rgba(30, 35, 38, 0.08);
 }
 
@@ -1092,7 +1119,36 @@ body.prototype-mode #topNav {
   }
 }
 
+.matrix-mode-toggle {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
 
+.matrix-mode-toggle button {
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid #003b5c;
+  border-radius: 999px;
+  background: white;
+  color: #003b5c;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    color 0.16s ease,
+    transform 0.16s ease;
+}
+
+.matrix-mode-toggle button:hover {
+  transform: translateY(-1px);
+}
+
+.matrix-mode-toggle button.active {
+  background: #003b5c;
+  color: white;
+}
 
 
 
