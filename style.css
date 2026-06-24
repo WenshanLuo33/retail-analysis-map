@@ -9,8 +9,8 @@ body {
 
 #app {
   display: flex;
-  height: 100vh;
   width: 100vw;
+  height: calc(100vh - 72px);
 }
 
 #map {
@@ -683,11 +683,6 @@ th {
   color: white;
 }
 
-/* Adjust main app height because top nav takes 72px */
-#app {
-  height: calc(100vh - 72px);
-}
-
 
 
 /* Prototype mode: hide the left title in top nav */
@@ -731,6 +726,10 @@ body.prototype-mode #topNav {
 
 /* Header area */
 .prototype-page-header {
+  position: relative;
+  z-index: 3000;
+  overflow: visible;
+
   background: #ffffff;
   border-bottom: 1px solid #d8d8d8;
   padding: 12px 16px;
@@ -790,6 +789,9 @@ body.prototype-mode #topNav {
 
 /* Matrix grid */
 #prototypeGrid {
+  position: relative;
+  z-index: 1;
+
   display: grid;
   grid-template-columns: repeat(var(--prototype-column-count, 7), minmax(0, 1fr));
   gap: 14px;
@@ -863,19 +865,13 @@ body.prototype-mode #topNav {
   filter: saturate(0.95);
 }
 
-/* Make the diagram card background white too */
-.prototype-column-header {
-  background: #ffffff;
-}
+
 
 /* If PNG has transparent edges, keep the image area white */
 .prototype-column-header img {
   background-color: #ffffff;
 }
 
-.prototype-column-header {
-  background: #ffffff !important;
-}
 
 .prototype-type-diagram {
   background: #ffffff !important;
@@ -1119,13 +1115,94 @@ body.prototype-mode #topNav {
   }
 }
 
-.matrix-mode-toggle {
+
+/* More detailed prototype cards */
+.prototype-card-address {
+  margin-bottom: 8px !important;
+}
+
+.prototype-card-meta {
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid #eeeeee;
   display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.prototype-meta-row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 6px;
+  font-size: 9.7px;
+  line-height: 1.25;
+}
+
+.prototype-meta-row span {
+  color: #7a7a7a;
+}
+
+.prototype-meta-row strong {
+  color: #333;
+  font-weight: 600;
+}
+
+/* Let long AltAnchor text wrap cleanly */
+.prototype-meta-row strong {
+  overflow-wrap: anywhere;
+}
+
+
+
+
+
+/* =========================
+   Matrix Controls - Clean Version
+   ========================= */
+
+/* Header layout:
+   left column = content width
+   right column = fills remaining page width
+   This keeps highlight panel left edge near the Size of TJ button,
+   while its right edge aligns with the page right edge.
+*/
+.prototype-page-header {
+  display: grid !important;
+  grid-template-columns: max-content minmax(360px, 1fr);
+  gap: 16px;
+  align-items: start;
+
+  position: relative;
+  z-index: 3000;
+  overflow: visible;
+
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.prototype-header-main {
+  width: 950px;
+  max-width: calc(100vw - 420px);
+  min-width: 0;
+}
+
+/* Matrix mode buttons */
+.matrix-mode-toggle {
+  position: relative;
+  z-index: 4000;
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 10px;
+  overflow: visible;
 }
 
 .matrix-mode-toggle button {
+  position: relative;
+  z-index: 4001;
   height: 28px;
   padding: 0 12px;
   border: 1px solid #003b5c;
@@ -1150,7 +1227,275 @@ body.prototype-mode #topNav {
   color: white;
 }
 
+/* Hover pop-up explanation */
+.matrix-mode-toggle button::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
 
+  width: 320px;
+  padding: 10px 12px;
+  border-radius: 8px;
+
+  background: #1f2a30;
+  color: white;
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 400;
+  text-align: left;
+  white-space: normal;
+
+  box-shadow: 0 12px 32px rgba(0,0,0,0.22);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+
+  z-index: 99999;
+}
+
+.matrix-mode-toggle button:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Tools row */
+.matrix-tools-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Collapse button: light gray pill */
+.matrix-tool-btn,
+#matrixCompactToggleBtn {
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid #b9c0c4;
+  border-radius: 999px;
+  background: #f3f4f5;
+  color: #33424a;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+  box-sizing: border-box;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease,
+    transform 0.16s ease;
+}
+
+.matrix-tool-btn:hover,
+#matrixCompactToggleBtn:hover {
+  background: #e5e8ea;
+  border-color: #8f9aa0;
+  transform: translateY(-1px);
+}
+
+.matrix-tool-btn.active,
+#matrixCompactToggleBtn.active {
+  background: #dfe3e5;
+  border-color: #7d888e;
+  color: #111;
+}
+
+/* Current-table category panel */
+.matrix-category-panel {
+  width: fit-content;
+  max-width: 720px;
+  margin-top: 10px;
+  padding: 9px 10px;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  background: #f9fafb;
+  box-sizing: border-box;
+}
+
+.matrix-category-panel-title {
+  margin-bottom: 7px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #5d666b;
+}
+
+.matrix-category-panel .prototype-type-filter {
+  width: fit-content;
+  max-width: 700px;
+  justify-content: flex-start;
+}
+
+/* Right highlight panel: left edge after Size of TJ, right edge to page right */
+.matrix-highlight-panel {
+  justify-self: stretch;
+  width: 100%;
+  box-sizing: border-box;
+
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+  background: #fbfbfb;
+  padding: 10px;
+  max-height: 190px;
+  overflow-y: auto;
+}
+
+.matrix-highlight-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.matrix-highlight-header h3 {
+  margin: 0;
+  font-size: 13px;
+  color: #111;
+}
+
+.matrix-highlight-header p {
+  margin: 3px 0 0 0;
+  font-size: 10.5px;
+  line-height: 1.35;
+  color: #777;
+}
+
+.matrix-highlight-header .matrix-tool-btn.secondary {
+  height: 24px;
+  padding: 0 9px;
+  font-size: 10.5px;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #555;
+  border-color: #bbb;
+}
+
+.matrix-highlight-header .matrix-tool-btn.secondary:hover {
+  background: #f1f1f1;
+  color: #111;
+}
+
+/* Highlight groups */
+.matrix-highlight-group {
+  padding-top: 8px;
+  margin-top: 8px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.matrix-highlight-group:first-child {
+  padding-top: 0;
+  margin-top: 0;
+  border-top: none;
+}
+
+.matrix-highlight-group-title {
+  margin-bottom: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
+  color: #5d666b;
+}
+
+.matrix-highlight-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 6px;
+}
+
+/* Pink highlight chips */
+.matrix-highlight-checkboxes label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff0f5;
+  border: 1px solid #f2a7bd;
+  border-radius: 999px;
+  padding: 4px 7px;
+  font-size: 10.5px;
+  cursor: pointer;
+  white-space: nowrap;
+  color: #5b2737;
+}
+
+.matrix-highlight-checkboxes label:hover {
+  background: #ffe4ed;
+  border-color: #e77fa1;
+}
+
+.matrix-highlight-checkboxes input {
+  margin: 0;
+}
+
+.matrix-highlight-checkboxes input[type="checkbox"] {
+  accent-color: #d84f7a;
+}
+
+/* Pink highlighted card */
+.prototype-project-card.matrix-highlighted-card {
+  border-color: #d84f7a;
+  background: #fff2f6;
+  box-shadow:
+    0 0 0 2px rgba(216, 79, 122, 0.32),
+    0 14px 32px rgba(80, 35, 50, 0.16);
+}
+
+/* Muted cards */
+.prototype-project-card.matrix-muted-card {
+  opacity: 0.32;
+  filter: grayscale(0.45);
+}
+
+.prototype-project-card.matrix-muted-card:hover {
+  opacity: 0.78;
+  filter: none;
+}
+
+/* Compact cards: image + name only */
+.prototype-project-card.matrix-card-compact .prototype-card-address,
+.prototype-project-card.matrix-card-compact .prototype-card-meta {
+  display: none;
+}
+
+.prototype-project-card.matrix-card-compact .prototype-project-info {
+  padding: 8px 9px;
+}
+
+.prototype-project-card.matrix-card-compact .prototype-project-info h4 {
+  margin-bottom: 0;
+}
+
+.prototype-project-card.matrix-card-compact .prototype-project-image {
+  aspect-ratio: 3 / 1.75;
+}
+
+/* Responsive fallback */
+@media (max-width: 1100px) {
+  .prototype-page-header {
+    grid-template-columns: 1fr !important;
+  }
+
+  .prototype-header-main {
+    width: 100%;
+    max-width: none;
+  }
+
+  .matrix-category-panel,
+  .matrix-category-panel .prototype-type-filter {
+    width: 100%;
+    max-width: none;
+  }
+
+  .matrix-highlight-panel {
+    max-height: none;
+  }
+}
 
 
 

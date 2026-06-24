@@ -20,23 +20,11 @@ let drawAreaMeasureMode = false;
 let drawBuildingLayer = null;
 let drawPoiLayer = null;
 let drawParkingLayer = null;
-let drawTrafficExtentLayer = null;
 
 // =========================
 // Initialize after Draw View opens
 // =========================
 
-document.addEventListener("DOMContentLoaded", () => {
-  const drawBtn = document.getElementById("drawViewBtn");
-
-  if (drawBtn) {
-    drawBtn.addEventListener("click", () => {
-      setTimeout(() => {
-        initializeDrawTools();
-      }, 300);
-    });
-  }
-});
 
 function initializeDrawTools() {
   if (drawToolsInitialized) return;
@@ -373,39 +361,6 @@ function isDrawFeatureInsidePolygon(feature, polygon) {
   }
 }
 
-function createDrawFiveMileTrafficRectangle(polygon) {
-  const center = turf.centroid(polygon);
-  const lon = center.geometry.coordinates[0];
-  const lat = center.geometry.coordinates[1];
-
-  const halfMiles = 2.5;
-  const halfMeters = halfMiles * 1609.34;
-
-  const deltaLat = halfMeters / 111320;
-  const deltaLon = halfMeters / (111320 * Math.cos(lat * Math.PI / 180));
-
-  const south = lat - deltaLat;
-  const north = lat + deltaLat;
-  const west = lon - deltaLon;
-  const east = lon + deltaLon;
-
-  return {
-    type: "Feature",
-    properties: {
-      name: "5-mile Traffic Reference Area"
-    },
-    geometry: {
-      type: "Polygon",
-      coordinates: [[
-        [west, south],
-        [east, south],
-        [east, north],
-        [west, north],
-        [west, south]
-      ]]
-    }
-  };
-}
 
 // =========================
 // Overpass query
@@ -863,20 +818,6 @@ async function runDrawAnalysis() {
 
   const bbox = drawPolygonToBbox(drawSelectedPolygon);
 
-  if (drawTrafficExtentLayer) {
-    drawMap.removeLayer(drawTrafficExtentLayer);
-  }
-
-  const trafficRectangle = createDrawFiveMileTrafficRectangle(drawSelectedPolygon);
-
-  drawTrafficExtentLayer = L.geoJSON(trafficRectangle, {
-    style: {
-      color: "#ff8800",
-      weight: 2,
-      dashArray: "8,6",
-      fillOpacity: 0
-    }
-  }).addTo(drawMap);
 
   try {
     const rawGeojson = await fetchDrawOSMData(bbox);
@@ -1152,11 +1093,6 @@ function clearDrawAll() {
   drawBuildingLayer = null;
   drawPoiLayer = null;
   drawParkingLayer = null;
-
-  if (drawTrafficExtentLayer) {
-    drawMap.removeLayer(drawTrafficExtentLayer);
-    drawTrafficExtentLayer = null;
-  }
 
   const parkingBtn = document.getElementById("drawManualParkingBtn");
   if (parkingBtn) {

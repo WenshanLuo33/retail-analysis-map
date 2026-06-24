@@ -160,33 +160,55 @@
   </div>
 
   <!-- Prototype Matrix View -->
-  <div id="prototypeView" class="hidden">
-    <div class="prototype-page-header">
-  <div>
-    <h2>Trader Joe’s Matrix</h2>
-    <p id="prototypeMatrixSubtitle">
-      Massachusetts Trader Joe’s locations grouped by site layout pattern
-    </p>
+  <!-- Prototype Matrix View -->
+<!-- Prototype Matrix View -->
+<div id="prototypeView" class="hidden">
+  <div class="prototype-page-header">
+    <div class="prototype-header-main">
+      <h2>Trader Joe’s Matrix</h2>
 
-    <div class="matrix-mode-toggle">
-      <button id="layoutPrototypeModeBtn"
-              class="active"
-              onclick="setMatrixMode('layout')">
-        Layout Prototype
-      </button>
+      <p id="prototypeMatrixSubtitle">
+        Trader Joe’s locations grouped by site layout pattern
+      </p>
 
-      <button id="centerTypologyModeBtn"
-              onclick="setMatrixMode('typology')">
-        Typology of Center
-      </button>
+      <div id="matrixModeToggle" class="matrix-mode-toggle"></div>
+
+      <div class="matrix-tools-row">
+        <button id="matrixCompactToggleBtn"
+                class="matrix-tool-btn"
+                onclick="toggleMatrixCardCompact()">
+          Collapse Cards
+        </button>
+      </div>
+
+      <div class="matrix-category-panel">
+        <div class="matrix-category-panel-title">
+          <span id="matrixCategoryPanelTitle">Layout Prototype Categories</span>
+        </div>
+
+        <div id="prototypeTypeFilter" class="prototype-type-filter"></div>
+      </div>
     </div>
+
+    <aside class="matrix-highlight-panel">
+      <div class="matrix-highlight-header">
+        <div>
+          <h3>Highlight Tool</h3>
+          <p>Highlight cards matching all selected conditions.</p>
+        </div>
+
+        <button class="matrix-tool-btn secondary"
+                onclick="clearMatrixHighlight()">
+          Clear
+        </button>
+      </div>
+
+      <div id="matrixHighlightOptions"></div>
+    </aside>
   </div>
 
-  <div id="prototypeTypeFilter" class="prototype-type-filter"></div>
+  <div id="prototypeGrid"></div>
 </div>
-
-    <div id="prototypeGrid"></div>
-  </div>
 
   <!-- Draw Your Own View -->
   <div id="drawView" class="hidden">

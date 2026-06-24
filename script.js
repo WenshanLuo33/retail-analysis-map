@@ -5,30 +5,119 @@ let markerByProjectId = {};
 let highlightedMarker = null;
 let traderJoePrototypes = [];
 
-const layoutPrototypeOrder = [
-  "Urban Context",
-  "Standalone",
-  "Mall / Destination",
-  "Branch",
-  "Spine",
-  "C-Shape",
-  "Cluster"
-];
+const matrixModeConfig = {
+  layout: {
+    label: "Layout Prototype",
+    subtitle: "Trader Joe’s locations grouped by site layout pattern",
+    field: "Prototype",
+    showDiagram: true,
+    order: [
+      "Urban Context",
+      "Standalone",
+      "Mall / Destination",
+      "Branch",
+      "Spine",
+      "C-Shape",
+      "Cluster"
+    ],
+    tooltip:
+      "Groups projects by Trader Joe’s site layout pattern. In the diagrams, dark red shows Trader Joe’s, pink shows other buildings, gray shows parking, blue dashed lines show major urban roads, and black lines show main internal circulation."
+  },
 
-const centerTypologyOrder = [
-  "Urban",
-  "Inner Suburban",
-  "Suburban",
-  "Lifestyle",
-  "Power",
-  "Town Center",
-  "Convenience / Neighborhood"
-];
+  typology: {
+    label: "Typology of Center",
+    subtitle: "Trader Joe’s locations grouped by overall retail center typology",
+    field: "TypologyOfCenter",
+    showDiagram: false,
+    order: [
+      "Urban",
+      "Inner Suburban",
+      "Suburban",
+      "Lifestyle",
+      "Power",
+      "Town Center",
+      "Convenience / Neighborhood"
+    ],
+    tooltip:
+      "Groups projects by the overall type of retail center, based on urban context, tenant mix, parking pattern, walkability, and whether the center functions as a neighborhood, suburban, power, lifestyle, or town-center environment."
+  },
+
+  position: {
+    label: "TJ Position in Center",
+    subtitle: "Trader Joe’s locations grouped by position within the retail center",
+    field: "TraderJoesPosition",
+    showDiagram: false,
+    order: [
+      "Urban Block",
+      "Freestanding / Pad",
+      "Major Anchor",
+      "Junior Anchor",
+      "End Cap",
+      "Inline"
+    ],
+    tooltip:
+      "Groups projects by where Trader Joe’s sits within the center, such as an urban block, freestanding pad, major anchor, junior anchor, end cap, or inline tenant."
+  },
+
+  parking: {
+    label: "Parking Location",
+    subtitle: "Trader Joe’s locations grouped by the location and format of customer parking",
+    field: "ParkingLocation",
+    showDiagram: false,
+    order: [
+      "Front Field",
+      "Side Field",
+      "Shared Field",
+      "Structured",
+      "Rear / Integrated"
+    ],
+    tooltip:
+      "Groups projects by the parking condition closest to Trader Joe’s, including front field, side field, shared surface parking, structured garage parking, or rear/integrated parking."
+  },
+
+  visibility: {
+    label: "Visibility to Main Road",
+    subtitle: "Trader Joe’s locations grouped by visibility from the main road",
+    field: "TJVisibilityToMainRoad",
+    showDiagram: false,
+    order: [
+      "Yes",
+      "No"
+    ],
+    tooltip:
+      "Groups projects by whether Trader Joe’s facade, entrance, or signage is clearly visible from the main road. Yes means visible from the road; No means it is hidden until entering the site."
+  },
+
+  size: {
+    label: "Size of TJ",
+    subtitle: "Trader Joe’s locations grouped by store size",
+    field: "TJSize",
+    showDiagram: false,
+    order: [
+      "Under 10k",
+      "10k–12k",
+      "12k–15k",
+      "15k–18k",
+      "18k+"
+    ],
+    tooltip:
+      "Groups projects by the size of Trader Joe’s. Buckets are based on TJSize: under 10k SF, 10k–12k SF, 12k–15k SF, 15k–18k SF, and 18k+ SF."
+  }
+};
 
 let matrixMode = "layout";
 
-let selectedLayoutPrototypeTypes = [...layoutPrototypeOrder];
-let selectedCenterTypologyTypes = [...centerTypologyOrder];
+let matrixCardsCompact = false;
+
+let matrixHighlightSelections = {};
+Object.keys(matrixModeConfig).forEach(mode => {
+  matrixHighlightSelections[mode] = [];
+});
+
+let selectedMatrixTypes = {};
+Object.keys(matrixModeConfig).forEach(mode => {
+  selectedMatrixTypes[mode] = [...matrixModeConfig[mode].order];
+});
 
 
 let compareProjects = [];
@@ -1173,25 +1262,186 @@ function showMapView() {
 }
 
 function setMatrixMode(mode) {
+  if (!matrixModeConfig[mode]) return;
+
   matrixMode = mode;
 
-  const layoutBtn = document.getElementById("layoutPrototypeModeBtn");
-  const typologyBtn = document.getElementById("centerTypologyModeBtn");
   const subtitle = document.getElementById("prototypeMatrixSubtitle");
-
-  if (layoutBtn && typologyBtn) {
-    layoutBtn.classList.toggle("active", matrixMode === "layout");
-    typologyBtn.classList.toggle("active", matrixMode === "typology");
-  }
-
   if (subtitle) {
-    subtitle.textContent = matrixMode === "layout"
-      ? "Massachusetts Trader Joe’s locations grouped by site layout pattern"
-      : "Trader Joe’s locations grouped by overall retail center typology";
+    subtitle.textContent = matrixModeConfig[matrixMode].subtitle;
   }
 
+  const panelTitle = document.getElementById("matrixCategoryPanelTitle");
+  if (panelTitle) {
+    panelTitle.textContent = `${matrixModeConfig[matrixMode].label} Categories`;
+  }
+
+  renderMatrixModeToggle();
   renderPrototypeTypeFilter();
+  renderMatrixHighlightOptions();
   renderPrototypeView();
+}
+
+function renderMatrixModeToggle() {
+  const toggle = document.getElementById("matrixModeToggle");
+  if (!toggle) return;
+
+  toggle.innerHTML = Object.entries(matrixModeConfig).map(([mode, config]) => {
+    const active = matrixMode === mode ? "active" : "";
+
+    return `
+      <button class="${active}"
+              data-tooltip="${escapeAttribute(config.tooltip)}"
+              onclick="setMatrixMode('${mode}')">
+        ${config.label}
+      </button>
+    `;
+  }).join("");
+}
+
+function toggleMatrixCardCompact() {
+  matrixCardsCompact = !matrixCardsCompact;
+
+  const btn = document.getElementById("matrixCompactToggleBtn");
+
+  if (btn) {
+    btn.textContent = matrixCardsCompact ? "Expand Cards" : "Collapse Cards";
+    btn.classList.toggle("active", matrixCardsCompact);
+  }
+
+  renderPrototypeView();
+}
+
+
+function toggleMatrixHighlightValue(field, value, checked) {
+  if (!matrixHighlightSelections[field]) {
+    matrixHighlightSelections[field] = [];
+  }
+
+  if (checked) {
+    if (!matrixHighlightSelections[field].includes(value)) {
+      matrixHighlightSelections[field].push(value);
+    }
+  } else {
+    matrixHighlightSelections[field] = matrixHighlightSelections[field].filter(item =>
+      item !== value
+    );
+  }
+
+  renderPrototypeView();
+}
+
+function clearMatrixHighlight() {
+  Object.keys(matrixHighlightSelections).forEach(field => {
+    matrixHighlightSelections[field] = [];
+  });
+
+  renderMatrixHighlightOptions();
+  renderPrototypeView();
+}
+
+function renderMatrixHighlightOptions() {
+  const container = document.getElementById("matrixHighlightOptions");
+  if (!container) return;
+
+  const highlightModes = [
+    "layout",
+    "typology",
+    "position",
+    "parking",
+    "visibility",
+    "size"
+  ];
+
+  container.innerHTML = highlightModes.map(mode => {
+    const config = matrixModeConfig[mode];
+    const selectedValues = matrixHighlightSelections[mode] || [];
+
+    return `
+      <div class="matrix-highlight-group">
+        <div class="matrix-highlight-group-title">
+          ${config.label}
+        </div>
+
+        <div class="matrix-highlight-checkboxes">
+          ${config.order.map(value => `
+            <label>
+              <input
+                type="checkbox"
+                value="${value}"
+                ${selectedValues.includes(value) ? "checked" : ""}
+                onchange="toggleMatrixHighlightValue('${mode}', '${escapeAttribute(value)}', this.checked)"
+              >
+              ${value}
+            </label>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function isMatrixHighlightActive() {
+  return Object.values(matrixHighlightSelections).some(values =>
+    values && values.length > 0
+  );
+}
+
+function cardMatchesMatrixHighlight(item) {
+  if (!isMatrixHighlightActive()) return false;
+
+  return Object.entries(matrixHighlightSelections).every(([field, selectedValues]) => {
+    if (!selectedValues || selectedValues.length === 0) {
+      return true;
+    }
+
+    const itemValue = getItemValueForMatrixField(item, field);
+
+    return selectedValues.some(value =>
+      normalizeMatrixValue(itemValue) === normalizeMatrixValue(value)
+    );
+  });
+}
+
+function getItemValueForMatrixField(item, field) {
+  if (field === "layout") {
+    return item["Prototype"] || "";
+  }
+
+  if (field === "typology") {
+    return item["TypologyOfCenter"] || "";
+  }
+
+  if (field === "position") {
+    return item["TraderJoesPosition"] || "";
+  }
+
+  if (field === "parking") {
+    return item["ParkingLocation"] || "";
+  }
+
+  if (field === "visibility") {
+    return item["TJVisibilityToMainRoad"] || "";
+  }
+
+  if (field === "size") {
+    return getTJSizeBucket(item["TJSize"]);
+  }
+
+  return "";
+}
+
+
+
+
+
+
+function escapeAttribute(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 }
 
 function showPrototypeView() {
@@ -1207,7 +1457,9 @@ function showPrototypeView() {
   document.getElementById("prototypeViewBtn").classList.add("active");
   document.getElementById("drawViewBtn").classList.remove("active");
 
+  renderMatrixModeToggle();
   renderPrototypeTypeFilter();
+  renderMatrixHighlightOptions();
   renderPrototypeView();
 
   // Trigger entrance / scroll animation after content is rendered
@@ -1279,20 +1531,110 @@ function getMatrixTypeDescription(typeName) {
     return getCenterTypologyDescription(typeName);
   }
 
+  if (matrixMode === "position") {
+    return getTJPositionDescription(typeName);
+  }
+
+  if (matrixMode === "parking") {
+    return getParkingLocationDescription(typeName);
+  }
+
+  if (matrixMode === "visibility") {
+    return getVisibilityDescription(typeName);
+  }
+
+  if (matrixMode === "size") {
+    return getTJSizeDescription(typeName);
+  }
+
   return "";
+}
+
+function getTJPositionDescription(typeName) {
+  const descriptions = {
+    "Urban Block":
+      "Trader Joe’s is located within an urban block or mixed-use building rather than a conventional shopping center layout.",
+
+    "Freestanding / Pad":
+      "Trader Joe’s occupies a freestanding building or pad-like building separated from the main retail block.",
+
+    "Major Anchor":
+      "Trader Joe’s functions as one of the main traffic-driving anchors in the center.",
+
+    "Junior Anchor":
+      "Trader Joe’s has anchor-like size or importance, but sits alongside larger or more dominant anchors.",
+
+    "End Cap":
+      "Trader Joe’s is located at the end of a continuous retail row or strip.",
+
+    "Inline":
+      "Trader Joe’s is inserted within a continuous storefront line, with other tenants on both sides."
+  };
+
+  return descriptions[typeName] || "";
+}
+
+function getParkingLocationDescription(typeName) {
+  const descriptions = {
+    "Front Field":
+      "Customer parking is directly in front of Trader Joe’s entrance.",
+
+    "Side Field":
+      "The closest parking is mainly located to the side of Trader Joe’s.",
+
+    "Shared Field":
+      "Trader Joe’s faces or uses a common surface parking field shared with multiple tenants.",
+
+    "Structured":
+      "Customer parking is primarily provided in a garage or structured parking facility.",
+
+    "Rear / Integrated":
+      "Parking is located behind, underneath, integrated with, or distributed around the building/site."
+  };
+
+  return descriptions[typeName] || "";
+}
+
+function getVisibilityDescription(typeName) {
+  const descriptions = {
+    "Yes":
+      "Trader Joe’s facade, entrance, or signage is clearly visible from the main road.",
+
+    "No":
+      "Trader Joe’s is not clearly visible from the main road and is only seen after entering the site or internal circulation."
+  };
+
+  return descriptions[typeName] || "";
+}
+
+function getTJSizeDescription(typeName) {
+  const descriptions = {
+    "Under 10k":
+      "Trader Joe’s store area is below 10,000 SF.",
+
+    "10k–12k":
+      "Trader Joe’s store area is between 10,000 and 12,000 SF.",
+
+    "12k–15k":
+      "Trader Joe’s store area is between 12,000 and 15,000 SF.",
+
+    "15k–18k":
+      "Trader Joe’s store area is between 15,000 and 18,000 SF.",
+
+    "18k+":
+      "Trader Joe’s store area is 18,000 SF or larger."
+  };
+
+  return descriptions[typeName] || "";
 }
 
 function renderPrototypeView() {
   const prototypeGrid = document.getElementById("prototypeGrid");
   if (!prototypeGrid) return;
 
-  const order = matrixMode === "layout"
-    ? layoutPrototypeOrder
-    : centerTypologyOrder;
-
-  const selectedTypes = matrixMode === "layout"
-    ? selectedLayoutPrototypeTypes
-    : selectedCenterTypologyTypes;
+  const config = matrixModeConfig[matrixMode];
+  const order = config.order;
+  const selectedTypes = selectedMatrixTypes[matrixMode];
 
   const visibleTypes = order.filter(type =>
     selectedTypes.includes(type)
@@ -1330,10 +1672,10 @@ function renderPrototypeView() {
         <div class="prototype-column-header">
           <h3>${typeName}</h3>
 
-         ${matrixMode === "layout" ? prototypeDiagramHTML(typeName) : ""}
+          ${config.showDiagram ? prototypeDiagramHTML(typeName) : ""}
 
           <p class="prototype-type-description">
-          ${getMatrixTypeDescription(typeName)}
+            ${getMatrixTypeDescription(typeName)}
           </p>
         </div>
 
@@ -1350,47 +1692,77 @@ function renderPrototypeView() {
 }
 
 function getMatrixItemsByType(typeName) {
+  return traderJoePrototypes
+    .filter(item => {
+      if (matrixMode === "layout") {
+        return normalizePrototypeName(item["Prototype"]) ===
+               normalizePrototypeName(typeName);
+      }
+
+      const itemType = getMatrixItemType(item);
+      return normalizeMatrixValue(itemType) === normalizeMatrixValue(typeName);
+    })
+    .sort((a, b) => Number(a["Sort Order"]) - Number(b["Sort Order"]));
+}
+
+function getMatrixItemType(item) {
+  const config = matrixModeConfig[matrixMode];
+
   if (matrixMode === "layout") {
-    return traderJoePrototypes
-      .filter(item =>
-        normalizePrototypeName(item["Prototype"]) === normalizePrototypeName(typeName)
-      )
-      .sort((a, b) => Number(a["Sort Order"]) - Number(b["Sort Order"]));
+    return normalizePrototypeName(item["Prototype"]);
   }
 
-  if (matrixMode === "typology") {
-    return traderJoePrototypes
-      .filter(item =>
-        normalizeCenterTypology(item["TypologyOfCenter"]) ===
-        normalizeCenterTypology(typeName)
-      )
-      .sort((a, b) => Number(a["Sort Order"]) - Number(b["Sort Order"]));
+  if (matrixMode === "size") {
+    return getTJSizeBucket(item["TJSize"]);
   }
 
-  return [];
+  return item[config.field] || "";
+}
+
+function getTJSizeBucket(value) {
+  const size = Number(value);
+
+  if (!size || isNaN(size)) return "";
+
+  if (size < 10000) return "Under 10k";
+  if (size < 12000) return "10k–12k";
+  if (size < 15000) return "12k–15k";
+  if (size < 18000) return "15k–18k";
+
+  return "18k+";
+}
+
+function normalizeMatrixValue(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[–—-]/g, " ")
+    .replace(/\s+/g, " ");
 }
 
 function renderPrototypeTypeFilter() {
   const filter = document.getElementById("prototypeTypeFilter");
   if (!filter) return;
 
-  const order = matrixMode === "layout"
-    ? layoutPrototypeOrder
-    : centerTypologyOrder;
+  const config = matrixModeConfig[matrixMode];
+  const selectedTypes = selectedMatrixTypes[matrixMode];
 
-  const selectedTypes = matrixMode === "layout"
-    ? selectedLayoutPrototypeTypes
-    : selectedCenterTypologyTypes;
+  const panelTitle = document.getElementById("matrixCategoryPanelTitle");
+  if (panelTitle) {
+    panelTitle.textContent = `${config.label} Categories`;
+  }
 
-  filter.innerHTML = order.map(type => {
+  filter.innerHTML = config.order.map(type => {
     const checked = selectedTypes.includes(type) ? "checked" : "";
 
     return `
       <label>
-        <input type="checkbox"
-               value="${type}"
-               ${checked}
-               onchange="togglePrototypeType('${type}', this.checked)">
+        <input
+          type="checkbox"
+          value="${type}"
+          ${checked}
+          onchange="togglePrototypeType('${type}', this.checked)"
+        >
         ${type}
       </label>
     `;
@@ -1398,24 +1770,14 @@ function renderPrototypeTypeFilter() {
 }
 
 function togglePrototypeType(type, isChecked) {
-  if (matrixMode === "layout") {
-    if (isChecked) {
-      if (!selectedLayoutPrototypeTypes.includes(type)) {
-        selectedLayoutPrototypeTypes.push(type);
-      }
-    } else {
-      selectedLayoutPrototypeTypes = selectedLayoutPrototypeTypes.filter(item => item !== type);
+  if (isChecked) {
+    if (!selectedMatrixTypes[matrixMode].includes(type)) {
+      selectedMatrixTypes[matrixMode].push(type);
     }
-  }
-
-  if (matrixMode === "typology") {
-    if (isChecked) {
-      if (!selectedCenterTypologyTypes.includes(type)) {
-        selectedCenterTypologyTypes.push(type);
-      }
-    } else {
-      selectedCenterTypologyTypes = selectedCenterTypologyTypes.filter(item => item !== type);
-    }
+  } else {
+    selectedMatrixTypes[matrixMode] = selectedMatrixTypes[matrixMode].filter(item =>
+      item !== type
+    );
   }
 
   renderPrototypeView();
@@ -1431,26 +1793,85 @@ function prototypeProjectCardHTML(item, cardIndex = 0) {
 
   const delay = Math.min(cardIndex * 35, 420);
 
+  const highlightActive = isMatrixHighlightActive();
+  const isHighlighted = cardMatchesMatrixHighlight(item);
+
+  const highlightClass = highlightActive
+    ? (isHighlighted ? "matrix-highlighted-card" : "matrix-muted-card")
+    : "";
+
+  const compactClass = matrixCardsCompact ? "matrix-card-compact" : "";
+
   return `
-    <div class="prototype-project-card reveal-on-scroll"
+    <div class="prototype-project-card reveal-on-scroll ${highlightClass} ${compactClass}"
          style="--reveal-delay: ${delay}ms;"
-         onclick="openProjectFromPrototype('${projectId}')">
+         onclick="openProjectFromPrototype('${escapeJS(projectId)}')">
+
       ${imagePath ? `
-        <img class="prototype-project-image" src="${imagePath}" alt="${projectName}">
+        <img class="prototype-project-image"
+             src="${imagePath}"
+             alt="${escapeAttribute(projectName)}">
       ` : `
         <div class="prototype-no-image">No image</div>
       `}
 
       <div class="prototype-project-info">
         <h4>${projectName}</h4>
-        <p>
+
+        <p class="prototype-card-address">
           ${owner ? `<strong>${owner}</strong><br>` : ""}
           ${address ? `${address}<br>` : ""}
           ${cityState || ""}
         </p>
+
+        <div class="prototype-card-meta">
+          ${prototypeMetaRow("Layout", item["Prototype"])}
+          ${prototypeMetaRow("Typology", item["TypologyOfCenter"])}
+          ${prototypeMetaRow("TJ Position", item["TraderJoesPosition"])}
+          ${prototypeMetaRow("Parking", item["ParkingLocation"])}
+          ${prototypeMetaRow("Distance", formatParkingDistance(item["ClosestParkingDistanceFt"]))}
+          ${prototypeMetaRow("Visibility", item["TJVisibilityToMainRoad"])}
+          ${prototypeMetaRow("TJ Size", formatTJSize(item["TJSize"]))}
+          ${prototypeMetaRow("Alt Anchor", item["AltAnchor"])}
+        </div>
       </div>
     </div>
   `;
+}
+
+function escapeJS(value) {
+  return String(value || "")
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'");
+}
+
+function prototypeMetaRow(label, value) {
+  const cleanValue = value === undefined || value === null || value === ""
+    ? "N/A"
+    : value;
+
+  return `
+    <div class="prototype-meta-row">
+      <span>${label}</span>
+      <strong>${cleanValue}</strong>
+    </div>
+  `;
+}
+
+function formatParkingDistance(value) {
+  if (value === undefined || value === null || value === "" || isNaN(value)) {
+    return "";
+  }
+
+  return `${Number(value).toLocaleString()} ft`;
+}
+
+function formatTJSize(value) {
+  if (value === undefined || value === null || value === "" || isNaN(value)) {
+    return "";
+  }
+
+  return `${Number(value).toLocaleString()} SF`;
 }
 
 function initPrototypeScrollReveal() {
@@ -1460,10 +1881,8 @@ function initPrototypeScrollReveal() {
 
   if (!items.length) return;
 
-  // Reset first, so animation replays when filtering prototype types
-  items.forEach(item => {
-    item.classList.remove("is-visible");
-  });
+  // Do not reset visibility after filtering.
+  // This prevents cards from replaying entrance animation every time filters change.
 
   if (!("IntersectionObserver" in window)) {
     items.forEach(item => item.classList.add("is-visible"));
@@ -1600,7 +2019,11 @@ function showDrawView() {
     if (drawMap) {
       drawMap.invalidateSize();
     }
-  }, 100);
+
+    if (typeof initializeDrawTools === "function") {
+      initializeDrawTools();
+    }
+  }, 300);
 }
 
 function initializeDrawMap() {
