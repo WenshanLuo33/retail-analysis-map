@@ -1660,32 +1660,46 @@ function renderPrototypeView() {
 
   let cardIndex = 0;
 
-  prototypeGrid.innerHTML = visibleTypes.map((typeName, columnIndex) => {
-    const items = getMatrixItemsByType(typeName);
-
-    const cardsHTML = items
-      .map(item => prototypeProjectCardHTML(item, cardIndex++))
-      .join("");
-
-    return `
-      <div class="prototype-column reveal-on-scroll"
-           style="--reveal-delay: ${columnIndex * 70}ms;">
-        <div class="prototype-column-header">
-          <h3>${typeName}</h3>
-
-          ${config.showDiagram ? prototypeDiagramHTML(typeName) : ""}
-
-          <p class="prototype-type-description">
-            ${getMatrixTypeDescription(typeName)}
-          </p>
+  const stickyTitlesHTML = `
+    <div class="matrix-sticky-title-row">
+      ${visibleTypes.map(typeName => `
+        <div class="matrix-sticky-title-cell">
+          ${typeName}
         </div>
+      `).join("")}
+    </div>
+  `;
 
-        <div class="prototype-card-list">
-          ${cardsHTML || `<p class="prototype-empty reveal-on-scroll">No projects yet.</p>`}
-        </div>
-      </div>
-    `;
-  }).join("");
+  const columnsHTML = `
+    <div class="matrix-columns-grid">
+      ${visibleTypes.map((typeName, columnIndex) => {
+        const items = getMatrixItemsByType(typeName);
+
+        const cardsHTML = items
+          .map(item => prototypeProjectCardHTML(item, cardIndex++))
+          .join("");
+
+        return `
+          <div class="prototype-column"
+               style="--reveal-delay: ${columnIndex * 70}ms;">
+            <div class="prototype-column-header">
+              ${config.showDiagram ? prototypeDiagramHTML(typeName) : ""}
+
+              <p class="prototype-type-description">
+                ${getMatrixTypeDescription(typeName)}
+              </p>
+            </div>
+
+            <div class="prototype-card-list">
+              ${cardsHTML || `<p class="prototype-empty reveal-on-scroll">No projects yet.</p>`}
+            </div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+
+  prototypeGrid.innerHTML = stickyTitlesHTML + columnsHTML;
 
   requestAnimationFrame(() => {
     initPrototypeScrollReveal();
