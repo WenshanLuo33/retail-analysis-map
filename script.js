@@ -213,7 +213,8 @@ function getOwnerGroup(owner) {
     "Atlantic Development",
     "Linear Retail Properties",
     "Samuels & Associates",
-    "Wilder"
+    "Wilder",
+    "Phillips Edison & Company"
   ];
 
   if (majorOwners.includes(owner)) {
