@@ -121,6 +121,22 @@ const matrixModeConfig = {
     ],
     tooltip:
       "Groups Trader Joe’s locations by storefront design, including urban embedded storefronts, flat parapet facades, pitched-roof forms, decorative traditional facades, contemporary entrance towers, and customized storefronts."
+  },
+
+    residential: {
+    label: "Residential Relationship",
+    subtitle: "Trader Joe’s locations grouped by relationship to nearby residential uses",
+    field: "ResidentialRelationship",
+    showDiagram: false,
+    order: [
+      "No Residential Within 300 ft",
+      "Residential Nearby, Auto-Oriented Context",
+      "Residential Nearby, Functional Connection",
+      "Residential Nearby, Walkable Front-Door Connection",
+      "Residential Above / Integrated Mixed-Use"
+    ],
+    tooltip:
+      "Groups Trader Joe’s locations by whether residential uses are present within approximately 300 ft and how they connect to the store. Categories distinguish no nearby residential presence, auto-oriented adjacency, functional but low-quality connections, walkable front-door connections, and integrated mixed-use conditions."
   }
 };
 
@@ -1450,7 +1466,8 @@ function renderMatrixHighlightOptions() {
     "parking",
     "visibility",
     "size",
-    "storefront"
+    "storefront",
+    "residential"
   ];
 
   container.innerHTML = highlightModes.map(mode => {
@@ -1530,6 +1547,10 @@ function getItemValueForMatrixField(item, field) {
 
   if (field === "storefront") {
     return item["Storefront"] || "";
+  }
+
+  if (field === "residential") {
+    return item["ResidentialRelationship"] || "";
   }
 
   return "";
@@ -1664,6 +1685,10 @@ function getMatrixTypeDescription(typeName) {
     return getStorefrontDescription(typeName);
   }
 
+  if (matrixMode === "residential") {
+    return getResidentialRelationshipDescription(typeName);
+  }
+
   return "";
 }
 
@@ -1764,6 +1789,27 @@ function getStorefrontDescription(typeName) {
 
     "Custom Storefront":
       "A highly customized or themed storefront designed for a specific shopping village, historic setting, or unique project identity rather than following a standard Trader Joe’s facade pattern."
+  };
+
+  return descriptions[typeName] || "";
+}
+
+function getResidentialRelationshipDescription(typeName) {
+  const descriptions = {
+    "No Residential Within 300 ft":
+      "No clear residential use is located within approximately 300 ft of Trader Joe’s. The immediate context is more commercial, highway-oriented, industrial, office, mall, or parking-dominated.",
+
+    "Residential Nearby, Auto-Oriented Context":
+      "Residential uses are nearby, but the relationship to Trader Joe’s is primarily auto-oriented. Access generally depends on main roads, drive aisles, or parking fields rather than a direct designed connection.",
+
+    "Residential Nearby, Functional Connection":
+      "Residential areas have a physical connection to the retail center, but the route is mainly functional or utilitarian. It may pass through drive aisles, parking edges, service roads, loading areas, or back-of-house conditions.",
+
+    "Residential Nearby, Walkable Front-Door Connection":
+      "Residential areas connect to Trader Joe’s through a clearer and more comfortable customer-facing route, such as continuous sidewalks, marked crossings, plazas, internal pedestrian paths, or a street-front entrance sequence.",
+
+    "Residential Above / Integrated Mixed-Use":
+      "Trader Joe’s is located within a mixed-use building or integrated development where residential uses are above, directly attached, or physically integrated with the retail base."
   };
 
   return descriptions[typeName] || "";
@@ -2137,6 +2183,7 @@ function prototypeProjectCardHTML(item, cardIndex = 0) {
         <div class="prototype-card-meta">
           ${prototypeMetaRow("Layout", item["Prototype"])}
           ${prototypeMetaRow("Storefront", item["Storefront"])}
+          ${prototypeMetaRow("Residential", item["ResidentialRelationship"])}
           ${prototypeMetaRow("Typology", item["TypologyOfCenter"])}
           ${prototypeMetaRow("TJ Position", item["TraderJoesPosition"])}
           ${prototypeMetaRow("Parking", item["ParkingLocation"])}
