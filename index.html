@@ -175,9 +175,21 @@
 
       <div class="matrix-tools-row">
         <button id="matrixCompactToggleBtn"
-                class="matrix-tool-btn"
-                onclick="toggleMatrixCardCompact()">
+          class="matrix-tool-btn"
+          onclick="toggleMatrixCardCompact()">
           Collapse Cards
+        </button>
+
+        <button id="matrixImageToggleBtn"
+          class="matrix-tool-btn"
+          onclick="toggleMatrixImageMode()">
+          Show Storefront
+         </button>
+
+         <button id="coTenantTableBtn"
+          class="matrix-tool-btn"
+          onclick="toggleCoTenantTable()">
+          Show Co-Tenant Table
         </button>
       </div>
 
@@ -362,6 +374,18 @@
     </div>
 
     <div id="compareGrid"></div>
+  </div>
+
+  <!-- Image Lightbox -->
+  <div id="imageLightbox" class="image-lightbox hidden" onclick="closeImageLightbox()">
+    <button class="image-lightbox-close" onclick="closeImageLightbox(event)">×</button>
+
+    <img
+      id="imageLightboxImg"
+      src=""
+      alt="Expanded image"
+      onclick="event.stopPropagation()"
+    >
   </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

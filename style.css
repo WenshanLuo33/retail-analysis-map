@@ -1187,7 +1187,7 @@ body.prototype-mode #topNav {
 
 .prototype-meta-row {
   display: grid;
-  grid-template-columns: 72px 1fr;
+  grid-template-columns: 88px 1fr;
   gap: 6px;
   font-size: 9.7px;
   line-height: 1.25;
@@ -1570,7 +1570,107 @@ body.prototype-mode #topNav {
 }
 
 
+/* =========================
+   Co-Tenant Frequency Table
+   ========================= */
 
+.co-tenant-table-wrap {
+  width: calc(100vw - 56px);
+  min-width: 960px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 20px 22px 28px 22px;
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(20, 28, 32, 0.08);
+}
+
+.co-tenant-table-header {
+  margin-bottom: 16px;
+}
+
+.co-tenant-table-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+}
+
+.co-tenant-table-header p {
+  margin: 6px 0 0 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.co-tenant-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  background: white;
+}
+
+.co-tenant-table th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #f1f3f4;
+  color: #333;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.co-tenant-table th,
+.co-tenant-table td {
+  border-bottom: 1px solid #e5e5e5;
+  padding: 10px 9px;
+  vertical-align: top;
+}
+
+.co-tenant-rank {
+  width: 52px;
+  font-weight: 700;
+  color: #003b5c;
+}
+
+.co-tenant-name {
+  width: 180px;
+  font-weight: 700;
+  color: #111;
+}
+
+.co-tenant-count {
+  width: 100px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.co-tenant-project-link {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 6px 6px 0;
+  padding: 5px 8px;
+  border: 1px solid #c9d2d8;
+  border-radius: 999px;
+  background: #f8fafb;
+  color: #003b5c;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.co-tenant-project-link:hover {
+  background: #003b5c;
+  color: white;
+  border-color: #003b5c;
+}
+
+.co-tenant-category {
+  width: 150px;
+  color: #444;
+  font-weight: 600;
+}
 
 
 
@@ -1839,6 +1939,60 @@ body.prototype-mode #drawView {
 #drawView .leaflet-draw-toolbar a:hover {
   background-color: #eef4f7;
 }
+
+/* =========================
+   Image Lightbox
+   ========================= */
+
+.clickable-image {
+  cursor: zoom-in;
+}
+
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(0, 0, 0, 0.82);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+.image-lightbox img {
+  max-width: 96vw;
+  max-height: 92vh;
+  object-fit: contain;
+  background: white;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+}
+
+.image-lightbox-close {
+  position: fixed;
+  top: 18px;
+  right: 22px;
+  z-index: 100001;
+
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.92);
+  color: #111;
+
+  font-size: 28px;
+  line-height: 34px;
+  cursor: pointer;
+}
+
+.image-lightbox-close:hover {
+  background: white;
+}
+
 
 
 

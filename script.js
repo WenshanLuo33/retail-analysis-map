@@ -4,6 +4,8 @@ let projectMarkers = [];
 let markerByProjectId = {};
 let highlightedMarker = null;
 let traderJoePrototypes = [];
+let tjCoTenants = [];
+let prototypeDisplayMode = "matrix"; // "matrix" or "cotenant"
 
 const matrixModeConfig = {
   layout: {
@@ -102,12 +104,30 @@ const matrixModeConfig = {
     ],
     tooltip:
       "Groups projects by the size of Trader Joe’s. Buckets are based on TJSize: under 10k SF, 10k–12k SF, 12k–15k SF, 15k–18k SF, and 18k+ SF."
+  },
+
+    storefront: {
+    label: "Storefront Type",
+    subtitle: "Trader Joe’s locations grouped by storefront architectural expression",
+    field: "Storefront",
+    showDiagram: false,
+    order: [
+      "Urban Storefront",
+      "Flat Parapet Storefront",
+      "Gabled / Pitched-Roof Storefront",
+      "Decorative Storefront",
+      "Contemporary Entrance Tower",
+      "Custom Storefront"
+    ],
+    tooltip:
+      "Groups Trader Joe’s locations by storefront design, including urban embedded storefronts, flat parapet facades, pitched-roof forms, decorative traditional facades, contemporary entrance towers, and customized storefronts."
   }
 };
 
 let matrixMode = "layout";
 
 let matrixCardsCompact = false;
+let matrixImageMode = "siteplan"; // "siteplan" or "storefront"
 
 let matrixHighlightSelections = {};
 Object.keys(matrixModeConfig).forEach(mode => {
@@ -175,11 +195,13 @@ legend.addTo(map);
 Promise.all([
   loadCSV("data/project_metrics_website.csv"),
   loadCSV("data/tenants_classified_v6.csv"),
-  loadCSV("data/trader_joes_prototypes.csv")
-]).then(([projectData, tenantData, prototypeData]) => {
+  loadCSV("data/trader_joes_prototypes.csv"),
+  loadCSV("data/tj_co_tenants_rechecked.csv")
+]).then(([projectData, tenantData, prototypeData, coTenantData]) => {
   projects = projectData;
   tenants = tenantData;
   traderJoePrototypes = prototypeData;
+  tjCoTenants = coTenantData;
 
   buildOwnerFilter(projects);
   buildStateFilter(projects);
@@ -419,6 +441,8 @@ function showProjectDetail(project) {
 
     ${sitePlanHTML(project)}
 
+    ${storefrontHTML(project)}
+
     <h3 class="section-title">Tenant Mix Summary</h3>
     ${tenantSummaryHTML(projectTenants)}
 
@@ -450,6 +474,54 @@ function sitePlanHTML(project) {
   return `
     <h3 class="section-title">Site Plan</h3>
     <img class="site-plan" src="${imagePath}" alt="Site Plan">
+  `;
+}
+
+function openImageLightbox(imagePath) {
+  const lightbox = document.getElementById("imageLightbox");
+  const lightboxImg = document.getElementById("imageLightboxImg");
+
+  if (!lightbox || !lightboxImg || !imagePath) return;
+
+  lightboxImg.src = imagePath;
+  lightbox.classList.remove("hidden");
+}
+
+function closeImageLightbox(event) {
+  if (event) {
+    event.stopPropagation();
+  }
+
+  const lightbox = document.getElementById("imageLightbox");
+  const lightboxImg = document.getElementById("imageLightboxImg");
+
+  if (!lightbox || !lightboxImg) return;
+
+  lightbox.classList.add("hidden");
+  lightboxImg.src = "";
+}
+
+function storefrontHTML(project) {
+  const projectId = String(project["Project ID"]);
+
+  const prototypeItem = traderJoePrototypes.find(item =>
+    String(item["Project ID"]) === projectId
+  );
+
+  if (!prototypeItem) return "";
+
+  const storefrontPath = prototypeItem["StorefrontPath"];
+
+  if (!storefrontPath || storefrontPath === 0) return "";
+
+  return `
+    <h3 class="section-title">Storefront</h3>
+    <img
+      class="site-plan clickable-image"
+      src="${storefrontPath}"
+      alt="Storefront"
+      onclick="openImageLightbox('${escapeJS(storefrontPath)}')"
+    >
   `;
 }
 
@@ -1165,19 +1237,21 @@ function initializeCompareMiniMaps() {
   });
 }
 
-function compareSitePlanHTML(project) {
+function sitePlanHTML(project) {
   const imagePath = project["Site Plan Image Path"];
 
   if (!imagePath || imagePath === 0) {
-    return `
-      <div class="compare-no-image">
-        No site plan image available
-      </div>
-    `;
+    return `<p>No site plan image available.</p>`;
   }
 
   return `
-    <img class="compare-site-plan" src="${imagePath}" alt="Site Plan">
+    <h3 class="section-title">Site Plan</h3>
+    <img
+      class="site-plan clickable-image"
+      src="${imagePath}"
+      alt="Site Plan"
+      onclick="openImageLightbox('${escapeJS(imagePath)}')"
+    >
   `;
 }
 
@@ -1265,6 +1339,15 @@ function showMapView() {
 function setMatrixMode(mode) {
   if (!matrixModeConfig[mode]) return;
 
+  prototypeDisplayMode = "matrix";
+  setPrototypePanelsVisible(true);
+
+  const coTenantBtn = document.getElementById("coTenantTableBtn");
+  if (coTenantBtn) {
+    coTenantBtn.textContent = "Show Co-Tenant Table";
+    coTenantBtn.classList.remove("active");
+  }
+
   matrixMode = mode;
 
   const subtitle = document.getElementById("prototypeMatrixSubtitle");
@@ -1313,6 +1396,21 @@ function toggleMatrixCardCompact() {
   renderPrototypeView();
 }
 
+function toggleMatrixImageMode() {
+  matrixImageMode = matrixImageMode === "siteplan" ? "storefront" : "siteplan";
+
+  const btn = document.getElementById("matrixImageToggleBtn");
+
+  if (btn) {
+    btn.textContent = matrixImageMode === "siteplan"
+      ? "Show Storefront"
+      : "Show Site Plan";
+
+    btn.classList.toggle("active", matrixImageMode === "storefront");
+  }
+
+  renderPrototypeView();
+}
 
 function toggleMatrixHighlightValue(field, value, checked) {
   if (!matrixHighlightSelections[field]) {
@@ -1351,7 +1449,8 @@ function renderMatrixHighlightOptions() {
     "position",
     "parking",
     "visibility",
-    "size"
+    "size",
+    "storefront"
   ];
 
   container.innerHTML = highlightModes.map(mode => {
@@ -1429,6 +1528,10 @@ function getItemValueForMatrixField(item, field) {
     return getTJSizeBucket(item["TJSize"]);
   }
 
+  if (field === "storefront") {
+    return item["Storefront"] || "";
+  }
+
   return "";
 }
 
@@ -1457,6 +1560,15 @@ function showPrototypeView() {
   document.getElementById("mapViewBtn").classList.remove("active");
   document.getElementById("prototypeViewBtn").classList.add("active");
   document.getElementById("drawViewBtn").classList.remove("active");
+
+  prototypeDisplayMode = "matrix";
+  setPrototypePanelsVisible(true);
+
+  const coTenantBtn = document.getElementById("coTenantTableBtn");
+  if (coTenantBtn) {
+    coTenantBtn.textContent = "Show Co-Tenant Table";
+    coTenantBtn.classList.remove("active");
+  }
 
   renderMatrixModeToggle();
   renderPrototypeTypeFilter();
@@ -1548,6 +1660,10 @@ function getMatrixTypeDescription(typeName) {
     return getTJSizeDescription(typeName);
   }
 
+  if (matrixMode === "storefront") {
+    return getStorefrontDescription(typeName);
+  }
+
   return "";
 }
 
@@ -1629,6 +1745,30 @@ function getTJSizeDescription(typeName) {
   return descriptions[typeName] || "";
 }
 
+function getStorefrontDescription(typeName) {
+  const descriptions = {
+    "Urban Storefront":
+      "Embedded in an urban block, mixed-use building, or street-front retail condition. The storefront is usually defined by signage and ground-floor entry rather than a full suburban facade.",
+
+    "Flat Parapet Storefront":
+      "A flat facade with a raised parapet or sign band, often paired with red awnings or canopy elements. This is the most typical suburban strip-center storefront expression.",
+
+    "Gabled / Pitched-Roof Storefront":
+      "A storefront with a pitched roof, gable, or triangular front element. The roof form gives the store a more neighborhood-scale or residential-like character.",
+
+    "Decorative Storefront":
+      "A storefront with added architectural expression such as arches, curved parapets, cornices, pilasters, towers, brick detailing, or other traditional decorative elements.",
+
+    "Contemporary Entrance Tower":
+      "A storefront where the main entrance is emphasized by a taller vertical tower or pavilion, often combined with contemporary materials such as glass, metal panels, and clean facade lines.",
+
+    "Custom Storefront":
+      "A highly customized or themed storefront designed for a specific shopping village, historic setting, or unique project identity rather than following a standard Trader Joe’s facade pattern."
+  };
+
+  return descriptions[typeName] || "";
+}
+
 function renderPrototypeView() {
   const prototypeGrid = document.getElementById("prototypeGrid");
   if (!prototypeGrid) return;
@@ -1704,6 +1844,150 @@ function renderPrototypeView() {
   requestAnimationFrame(() => {
     initPrototypeScrollReveal();
   });
+}
+
+function toggleCoTenantTable() {
+  if (prototypeDisplayMode === "cotenant") {
+    prototypeDisplayMode = "matrix";
+    setPrototypePanelsVisible(true);
+
+    const btn = document.getElementById("coTenantTableBtn");
+    if (btn) {
+      btn.textContent = "Show Co-Tenant Table";
+      btn.classList.remove("active");
+    }
+
+    const subtitle = document.getElementById("prototypeMatrixSubtitle");
+    if (subtitle) {
+      subtitle.textContent = matrixModeConfig[matrixMode].subtitle;
+    }
+
+    renderPrototypeView();
+    return;
+  }
+
+  prototypeDisplayMode = "cotenant";
+  setPrototypePanelsVisible(false);
+
+  const btn = document.getElementById("coTenantTableBtn");
+  if (btn) {
+    btn.textContent = "Back to Matrix";
+    btn.classList.add("active");
+  }
+
+  const subtitle = document.getElementById("prototypeMatrixSubtitle");
+  if (subtitle) {
+    subtitle.textContent =
+      "Tenants that most frequently appear together with Trader Joe’s across the prototype dataset";
+  }
+
+  renderCoTenantTable();
+}
+
+function setPrototypePanelsVisible(visible) {
+  const categoryPanel = document.querySelector(".matrix-category-panel");
+  const highlightPanel = document.querySelector(".matrix-highlight-panel");
+
+  if (categoryPanel) {
+    categoryPanel.style.display = visible ? "" : "none";
+  }
+
+  if (highlightPanel) {
+    highlightPanel.style.display = visible ? "" : "none";
+  }
+}
+
+function renderCoTenantTable() {
+  const prototypeGrid = document.getElementById("prototypeGrid");
+  if (!prototypeGrid) return;
+
+  if (!tjCoTenants || !tjCoTenants.length) {
+    prototypeGrid.innerHTML = `
+      <div class="co-tenant-table-wrap">
+        <p>No co-tenant data loaded. Check data/tj_co_tenants_rechecked.csv.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const rows = [...tjCoTenants]
+    .sort((a, b) => {
+      const rankA = Number(a["Rank"]) || 9999;
+      const rankB = Number(b["Rank"]) || 9999;
+      return rankA - rankB;
+    })
+    .map(row => `
+      <tr>
+        <td class="co-tenant-rank">${row["Rank"] || ""}</td>
+        <td class="co-tenant-name">${row["Tenant"] || ""}</td>
+        <td class="co-tenant-category">${getCoTenantPrimaryCategory(row)}</td>
+        <td class="co-tenant-count">${row["Appears in TJ Centers"] || ""}</td>
+        <td>${coTenantProjectLinksHTML(row)}</td>
+      </tr>
+    `)
+    .join("");
+
+  prototypeGrid.innerHTML = `
+    <div class="co-tenant-table-wrap">
+      <div class="co-tenant-table-header">
+        <h3>Trader Joe’s Co-Tenant Frequency</h3>
+        <p>
+          Ranked tenants that appear in the same retail centers as Trader Joe’s.
+          Click any project name to open it in the Filter Map.
+        </p>
+      </div>
+
+      <table class="co-tenant-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Tenant Name</th>
+            <th>Category</th>
+            <th>Appears Time</th>
+            <th>Project Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function coTenantProjectLinksHTML(row) {
+  const projectNames = splitSemicolonList(row["Example / Matching Centers"]);
+  const projectIds = splitSemicolonList(row["Project IDs"]);
+
+  if (!projectIds.length) return "";
+
+  return projectIds.map((projectId, index) => {
+    const cleanId = String(projectId || "").trim();
+    const projectName = projectNames[index] || cleanId;
+
+    if (!cleanId) return "";
+
+    return `
+      <button class="co-tenant-project-link"
+              onclick="openProjectFromPrototype('${escapeJS(cleanId)}')">
+        ${projectName}
+      </button>
+    `;
+  }).join("");
+}
+
+function splitSemicolonList(value) {
+  return String(value || "")
+    .split(";")
+    .map(item => item.trim())
+    .filter(Boolean);
+}
+
+function getCoTenantPrimaryCategory(row) {
+  return row["Primary Category"] ||
+         row["Primary Categoriey"] ||
+         row["PrimaryCategory"] ||
+         "";
 }
 
 function getMatrixItemsByType(typeName) {
@@ -1800,7 +2084,18 @@ function togglePrototypeType(type, isChecked) {
 
 function prototypeProjectCardHTML(item, cardIndex = 0) {
   const projectId = String(item["Project ID"] || "");
-  const imagePath = item["DiagramPath"] || "";
+
+  const sitePlanPath = item["DiagramPath"] || "";
+  const storefrontPath = item["StorefrontPath"] || "";
+
+  const imagePath = matrixImageMode === "storefront"
+    ? (storefrontPath || sitePlanPath)
+    : (sitePlanPath || storefrontPath);
+
+  const imageTypeLabel = matrixImageMode === "storefront"
+    ? "Storefront"
+    : "Site Plan";
+
   const projectName = item["Project Name"] || "";
   const address = item["Address"] || "";
   const cityState = item["City/State"] || "";
@@ -1825,7 +2120,7 @@ function prototypeProjectCardHTML(item, cardIndex = 0) {
       ${imagePath ? `
         <img class="prototype-project-image"
              src="${imagePath}"
-             alt="${escapeAttribute(projectName)}">
+             alt="${escapeAttribute(projectName + " " + imageTypeLabel)}">
       ` : `
         <div class="prototype-no-image">No image</div>
       `}
@@ -1841,10 +2136,11 @@ function prototypeProjectCardHTML(item, cardIndex = 0) {
 
         <div class="prototype-card-meta">
           ${prototypeMetaRow("Layout", item["Prototype"])}
+          ${prototypeMetaRow("Storefront", item["Storefront"])}
           ${prototypeMetaRow("Typology", item["TypologyOfCenter"])}
           ${prototypeMetaRow("TJ Position", item["TraderJoesPosition"])}
           ${prototypeMetaRow("Parking", item["ParkingLocation"])}
-          ${prototypeMetaRow("Distance", formatParkingDistance(item["ClosestParkingDistanceFt"]))}
+          ${prototypeMetaRow("Closest Parking", formatParkingDistance(item["ClosestParkingDistanceFt"]))}
           ${prototypeMetaRow("Visibility", item["TJVisibilityToMainRoad"])}
           ${prototypeMetaRow("TJ Size", formatTJSize(item["TJSize"]))}
           ${prototypeMetaRow("Alt Anchor", item["AltAnchor"])}
@@ -1878,7 +2174,7 @@ function formatParkingDistance(value) {
     return "";
   }
 
-  return `${Number(value).toLocaleString()} ft`;
+  return `${Number(value).toLocaleString()} ft from door`;
 }
 
 function formatTJSize(value) {
