@@ -1,0 +1,388 @@
+﻿Rank,Tenant,Appears in TJ Centers,Tenant Rows Count,Primary Categoriey,All Categories,Project IDs,Projects
+1,Chipotle,8,8,Restaurant,Restaurant (3); Restaurant / Food & Beverage (3); Food (2),EDENS_ROCKLIN_COMMONS_CA; FRT_BRICK_PLAZA_NJ; KRG_EASTGATE_CROSSING_NC; KRG_EDDY_STREET_COMMONS_IN; TJ_CAMBRIDGE_FRESH_POND; TJ_MA_013; TJ_MA_014; TJ_SHREWSBURY,Rocklin Commons; Brick Plaza; Eastgate Crossing; Eddy Street Commons; Alewife Brook Parkway Shopping Center; Quincy Center Mixed-Use Development; The Crossing at Walkers Brook; 77 Boston Turnpike Retail / Medical Space
+2,J.Crew Factory,6,6,Apparel,Apparel (3); Other (1); Apparel / Soft Goods (1); Soft Goods / Apparel (1),125240; FRT_BRICK_PLAZA_NJ; KRG_EASTGATE_CROSSING_NC; PE_CORONADO_CENTER; TJ_ACTON; TJ_PEABODY,Highland Lakes Plaza; Brick Plaza; Eastgate Crossing; Coronado Center; Brookside Shops; Peabody Place
+2,Starbucks,6,6,Restaurant,Restaurant (3); Food (3),TJ_HYANNIS; TJ_MA_001; TJ_MA_002; TJ_MA_014; TJ_SAUGUS; TJ_SOMERVILLE,Christmas Tree Promenade / 655 Iyannough Rd Plaza; Continuum Allston; Trader Joe's Arlington Heights; The Crossing at Walkers Brook; Shops at Saugus; Assembly Square
+4,European Wax Center,5,5,Personal Service,Personal Service (2); Beauty / Personal Service (2); Beauty (1),EDENS_ROCKLIN_COMMONS_CA; FRT_BRICK_PLAZA_NJ; FRT_TYSONS_STATION_VA; TJ_NEWTON; TJ_SAUGUS,Rocklin Commons; Brick Plaza; Tysons Station; Newton Nexus; Shops at Saugus
+4,Supercuts,5,5,Personal Service,Personal Service (2); Service (1); Beauty / Personal Service (1); Beauty (1),EDENS_ROCKLIN_COMMONS_CA; FRT_BRICK_PLAZA_NJ; TJ_MA_014; TJ_SAUGUS; TJ_SHREWSBURY,Rocklin Commons; Brick Plaza; The Crossing at Walkers Brook; Shops at Saugus; 77 Boston Turnpike Retail / Medical Space
+6,AT&T,4,4,Telecom,Telecom (1); Office/Tech (1); Convenience / Bank / Telecom (1); Other (1),FRT_BRICK_PLAZA_NJ; KRG_FORT_EVANS_PLAZA_II_VA; PE_CORONADO_CENTER; TJ_NEWTON,Brick Plaza; Fort Evans Plaza II; Coronado Center; Newton Nexus
+6,Burlington,4,4,Discount Retail,Discount Retail (3); Apparel / Soft Goods (1),FRT_BRICK_PLAZA_NJ; TJ_MILFORD; TJ_PEABODY; TJ_SOMERVILLE,Brick Plaza; Granite Heights Marketplace; Peabody Place; Assembly Square
+6,HomeGoods,4,4,Retail,Retail (3); Hard Goods / Home / Specialty Retail (1),FRT_BRICK_PLAZA_NJ; KRG_FORT_EVANS_PLAZA_II_VA; KRG_JEFFERSON_COMMONS_VA; KRG_WOODINVILLE_PLAZA_WA,Brick Plaza; Fort Evans Plaza II; Jefferson Commons; Woodinville Plaza
+6,Petco,4,4,Pet Supply,Pet Supply (1); Hard Goods (1); Pet Stores (1); Retail (1),KRG_EASTGATE_CROSSING_NC; KRG_JEFFERSON_COMMONS_VA; TJ_BURLINGTON; TJ_MA_010,Eastgate Crossing; Jefferson Commons; Petco / Trader Joe's center; Hanover Crossing
+6,TJ Maxx,4,4,Discount Retail,Discount Retail (2); Apparel (2),KRG_JEFFERSON_COMMONS_VA; KRG_WOODINVILLE_PLAZA_WA; TJ_PEABODY; TJ_SOMERVILLE,Jefferson Commons; Woodinville Plaza; Peabody Place; Assembly Square
+11,Barnes & Noble,3,3,Books & Media,Books & Media (1); Hard Goods / Home / Specialty Retail (1); Retail (1),125240; FRT_BRICK_PLAZA_NJ; KRG_HUEBNER_OAKS_TX,Highland Lakes Plaza; Brick Plaza; Huebner Oaks
+11,Chase Bank,3,3,Service,Service (2); Financial (1),TJ_MA_001; TJ_MA_009; TJ_NEWTON,Continuum Allston; Hampshire Mall; Newton Nexus
+11,Crumbl Cookies,3,3,Restaurant,Restaurant (1); Restaurant / Food & Beverage (1); Coffee/Dessert (1),EDENS_ROCKLIN_COMMONS_CA; FRT_BRICK_PLAZA_NJ; TJ_SAUGUS,Rocklin Commons; Brick Plaza; Shops at Saugus
+11,Five Below,3,3,Discount Retail,Discount Retail (2); Other (1),EDENS_ROCKLIN_COMMONS_CA; KRG_JEFFERSON_COMMONS_VA; TJ_PEABODY,Rocklin Commons; Jefferson Commons; Peabody Place
+11,Five Guys Burgers and Fries,3,3,Restaurant,Restaurant (2); Restaurant / Food & Beverage (1),116710; KRG_EDDY_STREET_COMMONS_IN; TJ_NEWTON,Brennan Station; Eddy Street Commons; Newton Nexus
+11,PetSmart,3,3,Pet Supply,Pet Supply (1); Service (1); Pet Stores (1),FRT_BRICK_PLAZA_NJ; TJ_MA_009; TJ_SAUGUS,Brick Plaza; Hampshire Mall; Shops at Saugus
+11,Ross,3,3,Apparel,Apparel (3),EDENS_ROCKLIN_COMMONS_CA; KRG_HUEBNER_OAKS_TX; KRG_JEFFERSON_COMMONS_VA,Rocklin Commons; Huebner Oaks; Jefferson Commons
+18,Aldi,2,2,Grocery,Grocery (2),KRG_EASTGATE_CROSSING_NC; KRG_JEFFERSON_COMMONS_VA,Eastgate Crossing; Jefferson Commons
+18,Club Pilates,2,2,Fitness,Fitness (2),KRG_EASTGATE_CROSSING_NC; TJ_NEWTON,Eastgate Crossing; Newton Nexus
+18,CVS Pharmacy,2,2,Medical,Medical (2),TJ_CAMBRIDGE_FRESH_POND; TJ_NEWTON,Alewife Brook Parkway Shopping Center; Newton Nexus
+18,DICK'S Sporting Goods,2,2,Soft Goods,Soft Goods (1); Hard Goods (1),TJ_MA_009; TJ_MA_010,Hampshire Mall; Hanover Crossing
+18,Dollar Tree,2,2,Discount Retail,Discount Retail (2),116710; PE_CORONADO_CENTER,Brennan Station; Coronado Center
+18,GameStop,2,2,Electronics,Electronics (1); Hard Goods / Home / Specialty Retail (1),FRT_BRICK_PLAZA_NJ; TJ_PEABODY,Brick Plaza; Peabody Place
+18,Jersey Mike's Subs,2,2,Restaurant,Restaurant (1); Restaurant / Food & Beverage (1),116710; FRT_BRICK_PLAZA_NJ,Brennan Station; Brick Plaza
+18,Kohl's,2,2,Soft Goods / Apparel,Soft Goods / Apparel (1); Retail (1),KRG_JEFFERSON_COMMONS_VA; KRG_ROYAL_OAKS_VILLAGE_II_TX,Jefferson Commons; Royal Oaks Village II
+18,Marshalls,2,2,Discount Retail,Discount Retail (1); Apparel (1),KRG_FORT_EVANS_PLAZA_II_VA; TJ_NEWTON,Fort Evans Plaza II; Newton Nexus
+18,Massage Envy,2,2,Personal Service,Personal Service (2),117210; TJ_SAUGUS,Memorial Plaza; Shops at Saugus
+18,Michaels,2,2,Crafts,Crafts (1); Hard Goods / Home / Specialty Retail (1),125240; FRT_BRICK_PLAZA_NJ,Highland Lakes Plaza; Brick Plaza
+18,Old Navy,2,2,Soft Goods,Soft Goods (1); Apparel (1),KRG_WOODINVILLE_PLAZA_WA; TJ_MA_010,Woodinville Plaza; Hanover Crossing
+18,Orangetheory Fitness,2,2,Fitness,Fitness (2),125240; PE_CORONADO_CENTER,Highland Lakes Plaza; Coronado Center
+18,Pacific Dental,2,2,Medical / Health / Education,Medical / Health / Education (1); Medical (1),EDENS_ROCKLIN_COMMONS_CA; KRG_CHASTAIN_MARKET_GA,Rocklin Commons; Chastain Market
+18,Panera Bread,2,2,Food,Food (1); Restaurant (1),EDENS_ROCKLIN_COMMONS_CA; TJ_MA_010,Rocklin Commons; Hanover Crossing
+18,Restore Hyper Wellness,2,2,Personal Service,Personal Service (1); Medical / Health / Education (1),KRG_CHASTAIN_MARKET_GA; TJ_NEWTON,Chastain Market; Newton Nexus
+18,Sola Salon Studios,2,2,Beauty,Beauty (2),116710; PE_TRADER_JOES_CENTER,Brennan Station; Trader Joe's Center
+18,Staples,2,2,Office Supply,Office Supply (2),TJ_ACTON; TJ_SOMERVILLE,Brookside Shops; Assembly Square
+18,Subway,2,2,Restaurant,Restaurant (2),EDENS_ROCKLIN_COMMONS_CA; PE_CORONADO_CENTER,Rocklin Commons; Coronado Center
+18,T-Mobile,2,2,Telecom,Telecom (1); Office/Tech (1),EDENS_ROCKLIN_COMMONS_CA; TJ_CAMBRIDGE_FRESH_POND,Rocklin Commons; Alewife Brook Parkway Shopping Center
+18,Target,2,2,Hard Goods,Hard Goods (1); Discount Retail (1),EDENS_ROCKLIN_COMMONS_CA; TJ_MA_009,Rocklin Commons; Hampshire Mall
+18,The Joint,2,2,Medical,Medical (2),PE_CORONADO_CENTER; TJ_SAUGUS,Coronado Center; Shops at Saugus
+18,Total Wine & More,2,2,Wine / Liquor,Wine / Liquor (1); Retail (1),KRG_JEFFERSON_COMMONS_VA; TJ_SHREWSBURY,Jefferson Commons; 77 Boston Turnpike Retail / Medical Space
+18,Tropical Smoothie Cafe,2,2,Restaurant,Restaurant (2),116710; TJ_SAUGUS,Brennan Station; Shops at Saugus
+18,Ulta Beauty,2,2,Soft Goods / Apparel,Soft Goods / Apparel (1); Retail (1),KRG_EASTGATE_CROSSING_NC; KRG_WOODINVILLE_PLAZA_WA,Eastgate Crossing; Woodinville Plaza
+18,Walgreens,2,2,Soft Goods,Soft Goods (1); Retail (1),KRG_CENTENNIAL_GATEWAY_NV; TJ_MA_002,Centennial Gateway; Trader Joe's Arlington Heights
+18,Wingstop,2,2,Restaurant,Restaurant (1); Restaurant / Food & Beverage (1),FRT_SAN_ANTONIO_CENTER_CA; TJ_SAUGUS,San Antonio Center; Shops at Saugus
+18,Wonder,2,2,Restaurant,Restaurant (1); Restaurant / Food & Beverage (1),FRT_BRICK_PLAZA_NJ; TJ_ACTON,Brick Plaza; Brookside Shops
+18,Woof Gang Bakery & Grooming,2,2,Coffee / Dessert,Coffee / Dessert (1); Pet Stores (1),116710; FRT_TYSONS_STATION_VA,Brennan Station; Tysons Station
+18,xfinity,2,2,Convenience / Bank / Telecom,Convenience / Bank / Telecom (2),FRT_BRICK_PLAZA_NJ; FRT_SAN_ANTONIO_CENTER_CA,Brick Plaza; San Antonio Center
+48,Retail Tenant,1,3,Other,Other (3),KRG_EDDY_STREET_COMMONS_IN,Eddy Street Commons
+48,Treats Unleashed,1,2,Pet Stores,Pet Stores (2),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,110 Grill,1,1,Food,Food (1),TJ_MA_010,Hanover Crossing
+48,24 Hour Fitness,1,1,Fitness / Recreation,Fitness / Recreation (1),FRT_SAN_ANTONIO_CENTER_CA,San Antonio Center
+48,5.11 Tactical,1,1,Apparel,Apparel (1),TJ_SAUGUS,Shops at Saugus
+48,7-Eleven,1,1,Convenience / Bank / Telecom,Convenience / Bank / Telecom (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,99 Restaurant,1,1,Restaurant,Restaurant (1),TJ_FRAMINGHAM,Staples Plaza
+48,AAA Southern New England,1,1,Personal Service,Personal Service (1),TJ_PEABODY,Peabody Place
+48,Alcove Aesthetics,1,1,Beauty / Personal Service,Beauty / Personal Service (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Alloy Personal Training,1,1,Fitness,Fitness (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Allure Nails,1,1,Beauty / Personal Service,Beauty / Personal Service (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Amara Dental,1,1,Medical / Health / Education,Medical / Health / Education (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,AMC,1,1,Entertainment,Entertainment (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,America's Best Wings,1,1,Restaurant,Restaurant (1),KRG_JEFFERSON_COMMONS_VA,Jefferson Commons
+48,Anna's Massage Therapy,1,1,Medical,Medical (1),125240,Highland Lakes Plaza
+48,Anthony's Coal Fired Pizza,1,1,Food,Food (1),TJ_MA_014,The Crossing at Walkers Brook
+48,Apple Computer,1,1,Hard Goods / Home / Specialty Retail,Hard Goods / Home / Specialty Retail (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Applebee's Neighborhood Grill,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Aritzia,1,1,Apparel / Soft Goods,Apparel / Soft Goods (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Ashley Furniture HomeStore,1,1,Home Furnishing,Home Furnishing (1),TJ_SOMERVILLE,Assembly Square
+48,At Home (Shadow Anchor),1,1,Home Furnishing,Home Furnishing (1),TJ_PEABODY,Peabody Place
+48,Athletico Physical Therapy,1,1,Medical / Health / Education,Medical / Health / Education (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,AutoZone,1,1,Hard Goods / Home / Specialty Retail,Hard Goods / Home / Specialty Retail (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Barber Shop,1,1,Service,Service (1),KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza
+48,Bath & Body Works,1,1,Beauty,Beauty (1),EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons
+48,Beow's Books and Brews Café,1,1,Books & Media,Books & Media (1),116710,Brennan Station
+48,Best Buy,1,1,Electronics,Electronics (1),TJ_HYANNIS,Christmas Tree Promenade / 655 Iyannough Rd Plaza
+48,Bikanervala,1,1,Restaurant,Restaurant (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,BKBX fitness,1,1,Service,Service (1),TJ_MA_001,Continuum Allston
+48,Blazin,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,bluemercury,1,1,Beauty / Personal Service,Beauty / Personal Service (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Bob Discount Furniture,1,1,Home Furnishing,Home Furnishing (1),TJ_BURLINGTON,Petco / Trader Joe's center
+48,Bob's Discount Furniture,1,1,Home Furnishing,Home Furnishing (1),TJ_SOMERVILLE,Assembly Square
+48,Bobae Tea,1,1,Restaurant,Restaurant (1),KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza
+48,Bodybar Pilates,1,1,Fitness,Fitness (1),116710,Brennan Station
+48,Bollywood Grill,1,1,Restaurant,Restaurant (1),TJ_SHREWSBURY,77 Boston Turnpike Retail / Medical Space
+48,Books-A-Million,1,1,Bookstore,Bookstore (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Boot Barn,1,1,Apparel,Apparel (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,Border Cafe,1,1,Restaurant,Restaurant (1),TJ_SAUGUS,Shops at Saugus
+48,Bowlology,1,1,Other,Other (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,Brick Nails,1,1,Beauty / Personal Service,Beauty / Personal Service (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Brigs Great Beginninings,1,1,Other,Other (1),116710,Brennan Station
+48,Bru Burger Bar,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_EDDY_STREET_COMMONS_IN,Eddy Street Commons
+48,Bubbles Salon,1,1,Service,Service (1),KRG_FORT_EVANS_PLAZA_II_VA,Fort Evans Plaza II
+48,Bubbles07,1,1,Beauty / Personal Service,Beauty / Personal Service (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Cafe Rio,1,1,Restaurant,Restaurant (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,Caliente Cocina & Tequila,1,1,Restaurant,Restaurant (1),KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza
+48,Cambridge Savings Bank ATM,1,1,Financial,Financial (1),TJ_NEWTON,Newton Nexus
+48,Capital One,1,1,Office / Finance / Service,Office / Finance / Service (1),KRG_ROYAL_OAKS_VILLAGE_II_TX,Royal Oaks Village II
+48,Car Wash,1,1,Auto Service,Auto Service (1),TJ_PEABODY,Peabody Place
+48,Cardi's Furniture,1,1,Home Furnishing,Home Furnishing (1),TJ_HYANNIS,Christmas Tree Promenade / 655 Iyannough Rd Plaza
+48,Carewell Urgent Care,1,1,Service,Service (1),TJ_MA_012,Trader Joe's Needham Heights
+48,Carter's,1,1,Apparel,Apparel (1),TJ_PEABODY,Peabody Place
+48,CAVA,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_EDDY_STREET_COMMONS_IN,Eddy Street Commons
+48,CAVA / food tenant,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_EDDY_STREET_COMMONS_IN,Eddy Street Commons
+48,Cava Grill,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Cedar and Oak Salon,1,1,Beauty,Beauty (1),PE_VINEYARD_CENTER,Vineyard Center
+48,Chan's Place,1,1,Other,Other (1),KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza
+48,Chili's Grill & Bar,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_SAN_ANTONIO_CENTER_CA,San Antonio Center
+48,China King,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,Chuck E. Cheese,1,1,Entertainment,Entertainment (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Cinemark,1,1,Service,Service (1),TJ_MA_009,Hampshire Mall
+48,Citizens,1,1,Service,Service (1),TJ_MA_005,Trader Joe's Boston - West Roxbury
+48,Coach,1,1,Apparel / Soft Goods,Apparel / Soft Goods (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Code Ninjas,1,1,Other,Other (1),125240,Highland Lakes Plaza
+48,Cold Stone Creamery,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Comcast,1,1,Telecom,Telecom (1),TJ_SAUGUS,Shops at Saugus
+48,Comfort Dental,1,1,Medical,Medical (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,Compass,1,1,Real Estate / Office,Real Estate / Office (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Conte's Bike Shop,1,1,Other,Other (1),116710,Brennan Station
+48,Cookie Cutters,1,1,Restaurant,Restaurant (1),KRG_HUEBNER_OAKS_TX,Huebner Oaks
+48,Corks & Caps,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,CosmoProf,1,1,Beauty Supply,Beauty Supply (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,Costa Vida,1,1,Other,Other (1),125240,Highland Lakes Plaza
+48,Crate & Barrel,1,1,Hard Goods / Home / Specialty Retail,Hard Goods / Home / Specialty Retail (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Crisp & Juicy,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,Crunch Fitness,1,1,Service,Service (1),KRG_FORT_EVANS_PLAZA_II_VA,Fort Evans Plaza II
+48,Cuzin's Seafood & Steak House,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,CVS,1,1,Pharmacy,Pharmacy (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,DAE GEE,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,DANA FARBER,1,1,Service,Service (1),TJ_MA_008,Patriot Place
+48,Diamond & Jewelry Gallery,1,1,Retail,Retail (1),KRG_HUEBNER_OAKS_TX,Huebner Oaks
+48,Divine Threading,1,1,Service,Service (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,DMG MORI USA,1,1,Office Supply,Office Supply (1),TJ_SOMERVILLE,Assembly Square
+48,Dr. B's Children's Dentistry,1,1,Service,Service (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,Drybar,1,1,Beauty / Personal Service,Beauty / Personal Service (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,DSW,1,1,Apparel / Soft Goods,Apparel / Soft Goods (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Dunkin' Donuts,1,1,Coffee / Dessert,Coffee / Dessert (1),116710,Brennan Station
+48,Eighty-Eight Sushi & Ramen,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_SAN_ANTONIO_CENTER_CA,San Antonio Center
+48,El Dorado Mexican Restaurant,1,1,Restaurant,Restaurant (1),116710,Brennan Station
+48,Empire Sushi Buffet,1,1,Restaurant,Restaurant (1),PE_CORONADO_CENTER,Coronado Center
+48,Erik's Bike Shop,1,1,Sporting Goods,Sporting Goods (1),PE_APACHE_SHOPPES,Apache Shoppes
+48,Espresso Cafeto,1,1,Restaurant,Restaurant (1),BRX040,Village Square Shopping Center
+48,Evereve,1,1,Apparel / Soft Goods,Apparel / Soft Goods (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Everythings Hair Limited,1,1,Beauty,Beauty (1),BRX040,Village Square Shopping Center
+48,Evviva Trattoria,1,1,Food,Food (1),TJ_MA_010,Hanover Crossing
+48,Expedia Travel,1,1,Other,Other (1),116710,Brennan Station
+48,Fabletics,1,1,Apparel / Soft Goods,Apparel / Soft Goods (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Famous Footwear,1,1,Footwear,Footwear (1),125240,Highland Lakes Plaza
+48,FedEx Office,1,1,Office Supply,Office Supply (1),TJ_SHREWSBURY,77 Boston Turnpike Retail / Medical Space
+48,Fire Wok,1,1,Restaurant,Restaurant (1),KRG_HUEBNER_OAKS_TX,Huebner Oaks
+48,First National Bank of Santa Fe,1,1,Bank,Bank (1),PE_CORONADO_CENTER,Coronado Center
+48,Fish Joint,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Fitness Connection,1,1,Fitness,Fitness (1),KRG_ROYAL_OAKS_VILLAGE_II_TX,Royal Oaks Village II
+48,Fun Noodle Bar,1,1,Restaurant,Restaurant (1),PE_CORONADO_CENTER,Coronado Center
+48,Funky Scissors,1,1,Beauty,Beauty (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,GAP,1,1,Apparel,Apparel (1),KRG_SHOPPES_UNION_HILL_NJ,The Shoppes at Union Hill
+48,Gap Factory Store,1,1,Apparel / Soft Goods,Apparel / Soft Goods (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Gateway Pet Hospital,1,1,Other,Other (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,GEN Korean BBQ House,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_SAN_ANTONIO_CENTER_CA,San Antonio Center
+48,General Nutrition Center,1,1,Medical / Health / Education,Medical / Health / Education (1),FRT_SAN_ANTONIO_CENTER_CA,San Antonio Center
+48,Genesis Career Group,1,1,Office / Finance / Service,Office / Finance / Service (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Go Wireless by Verizon,1,1,Office/Tech,Office/Tech (1),EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons
+48,Golf Galaxy,1,1,Hard Goods,Hard Goods (1),TJ_MA_014,The Crossing at Walkers Brook
+48,Golf Kings,1,1,Fitness / Recreation,Fitness / Recreation (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Grateful Head,1,1,Other,Other (1),FRT_SAN_ANTONIO_CENTER_CA,San Antonio Center
+48,Gravity Vault Brick,1,1,Fitness / Recreation,Fitness / Recreation (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Great Clips,1,1,Beauty,Beauty (1),PE_CORONADO_CENTER,Coronado Center
+48,Gregorys Coffee,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,GT Nails,1,1,Service,Service (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,H&B Nail Spa,1,1,Beauty,Beauty (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,H&R Block,1,1,Financial/Tax Service,Financial/Tax Service (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,Hammes Bookstore / retail tenant,1,1,Bookstore,Bookstore (1),KRG_EDDY_STREET_COMMONS_IN,Eddy Street Commons
+48,Hammes Notre Dame Bookstore,1,1,Bookstore,Bookstore (1),KRG_EDDY_STREET_COMMONS_IN,Eddy Street Commons
+48,Hampshire Mall,1,1,Soft Goods,Soft Goods (1),TJ_MA_009,Hampshire Mall
+48,Hand & Stone Massage & Facial,1,1,Beauty / Personal Service,Beauty / Personal Service (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Harmony Heating & Air Conditioning,1,1,Service,Service (1),TJ_MA_012,Trader Joe's Needham Heights
+48,Harrow's Chicken Pies,1,1,Restaurant,Restaurant (1),TJ_SAUGUS,Shops at Saugus
+48,Hippie Hut,1,1,Other Retail,Other Retail (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,Hollywood Nails & Spa,1,1,Personal Service,Personal Service (1),TJ_NEWTON,Newton Nexus
+48,Hot Chip Burger Bar,1,1,Restaurant,Restaurant (1),PE_APACHE_SHOPPES,Apache Shoppes
+48,Hot Chip Burger Bar (Storage),1,1,Restaurant Storage,Restaurant Storage (1),PE_APACHE_SHOPPES,Apache Shoppes
+48,Hummus Republic,1,1,Other,Other (1),116710,Brennan Station
+48,Huntington Learning Center,1,1,Education,Education (1),116710,Brennan Station
+48,Ideal Image,1,1,Beauty,Beauty (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,Ikko Hibachi Steak House,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Image Salon Studios,1,1,Beauty / Personal Service,Beauty / Personal Service (1),KRG_ROYAL_OAKS_VILLAGE_II_TX,Royal Oaks Village II
+48,Immediate Care Medical Walk-In,1,1,Medical / Health / Education,Medical / Health / Education (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Instyle Nail Salon,1,1,Service,Service (1),KRG_FORT_EVANS_PLAZA_II_VA,Fort Evans Plaza II
+48,IVX Health,1,1,Medical,Medical (1),125240,Highland Lakes Plaza
+48,J.Crew,1,1,Apparel / Soft Goods,Apparel / Soft Goods (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Java Loco,1,1,Other,Other (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,JCPenney,1,1,Soft Goods,Soft Goods (1),TJ_MA_009,Hampshire Mall
+48,Jefferson Nails,1,1,Service,Service (1),KRG_JEFFERSON_COMMONS_VA,Jefferson Commons
+48,Jersey Juice Co.,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Jersey Mike's,1,1,Restaurant,Restaurant (1),EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons
+48,Jiffy Lube,1,1,Auto Service,Auto Service (1),116710,Brennan Station
+48,JINYA Ramen Bar,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_EDDY_STREET_COMMONS_IN,Eddy Street Commons
+48,Jordan's Furniture,1,1,Hard Goods,Hard Goods (1),TJ_MA_014,The Crossing at Walkers Brook
+48,JPMorgan Chase Bank,1,1,Financial,Financial (1),TJ_SOMERVILLE,Assembly Square
+48,Juan's Mexican Cafe & Cantina,1,1,Restaurant,Restaurant (1),KRG_JEFFERSON_COMMONS_VA,Jefferson Commons
+48,Juice Press,1,1,Food,Food (1),TJ_MA_006,Trader Joe's Boylston St
+48,Juice Time and Papa Kanafa,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,Kazu Hibachi,1,1,Other,Other (1),116710,Brennan Station
+48,Kendra Scott,1,1,Apparel / Soft Goods,Apparel / Soft Goods (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Kim Mama's Bento Box,1,1,Other,Other (1),KRG_JEFFERSON_COMMONS_VA,Jefferson Commons
+48,Koncept Nails Bar,1,1,Beauty / Personal Service,Beauty / Personal Service (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,L.L.Bean,1,1,Soft Goods,Soft Goods (1),TJ_MA_010,Hanover Crossing
+48,LA Fitness,1,1,Fitness / Recreation,Fitness / Recreation (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,LA-Z-Boy,1,1,Home Furnishing,Home Furnishing (1),TJ_SAUGUS,Shops at Saugus
+48,Lakeshore Learning Store,1,1,Education,Education (1),TJ_SAUGUS,Shops at Saugus
+48,Lakeside,1,1,Other,Other (1),TJ_SHREWSBURY,77 Boston Turnpike Retail / Medical Space
+48,Lash Studio,1,1,Beauty / Personal Service,Beauty / Personal Service (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Lasker Jewelers,1,1,Jewelry,Jewelry (1),PE_APACHE_SHOPPES,Apache Shoppes
+48,Law Office,1,1,Office / Finance / Service,Office / Finance / Service (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Leaver & Gardner Orthodontics,1,1,Service,Service (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,Ledo Pizza,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,LEGO,1,1,Hard Goods / Home / Specialty Retail,Hard Goods / Home / Specialty Retail (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Leslie's Pool Supplies,1,1,Other,Other (1),TJ_SHREWSBURY,77 Boston Turnpike Retail / Medical Space
+48,Linda's Nails,1,1,Beauty,Beauty (1),PE_CORONADO_CENTER,Coronado Center
+48,Little Diggers,1,1,Entertainment,Entertainment (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,Loft Office Suites,1,1,Service,Service (1),TJ_MA_015,Trader Joe's West Newton / 1121 Washington Street
+48,Lovesac,1,1,Hard Goods / Home / Specialty Retail,Hard Goods / Home / Specialty Retail (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,lululemon athletica,1,1,Apparel / Soft Goods,Apparel / Soft Goods (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Lux Bond & Green,1,1,Apparel,Apparel (1),TJ_NEWTON,Newton Nexus
+48,Lux Nails & Spa,1,1,Beauty,Beauty (1),116710,Brennan Station
+48,Macy's,1,1,Soft Goods,Soft Goods (1),TJ_MA_010,Hanover Crossing
+48,Maddie Mae's Pet Pantry,1,1,Pet Stores,Pet Stores (1),PE_VINEYARD_CENTER,Vineyard Center
+48,Mama Mia's,1,1,Restaurant,Restaurant (1),KRG_HUEBNER_OAKS_TX,Huebner Oaks
+48,Margaux's Restaurant,1,1,Restaurant,Restaurant (1),116710,Brennan Station
+48,Market Basket,1,1,Grocery,Grocery (1),TJ_MA_010,Hanover Crossing
+48,Marty's Meals,1,1,Restaurant,Restaurant (1),PE_CORONADO_CENTER,Coronado Center
+48,Mass General Brigham,1,1,Service,Service (1),TJ_MA_008,Patriot Place
+48,MassGeneral for Children,1,1,Service,Service (1),TJ_MA_008,Patriot Place
+48,Master Lee's Tae Kwon Do,1,1,Service,Service (1),KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza
+48,Mathnasium,1,1,Medical / Health / Education,Medical / Health / Education (1),FRT_SAN_ANTONIO_CENTER_CA,San Antonio Center
+48,Matsu Teriyaki,1,1,Restaurant,Restaurant (1),KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza
+48,Mattress Warehouse,1,1,Retail,Retail (1),KRG_FORT_EVANS_PLAZA_II_VA,Fort Evans Plaza II
+48,MBB / restaurant tenant,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,McPherson Cleaners,1,1,Other,Other (1),KRG_EASTGATE_CROSSING_NC,Eastgate Crossing
+48,MeeMoms,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Melt 'n Dip,1,1,Coffee/Dessert,Coffee/Dessert (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,Melt Well Sauna and [...],1,1,Other,Other (1),116710,Brennan Station
+48,Menchie's,1,1,Coffee/Dessert,Coffee/Dessert (1),EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons
+48,Micro Center,1,1,Other,Other (1),117210,Memorial Plaza
+48,Miel Dental Aesthetics,1,1,Medical,Medical (1),TJ_PEABODY,Peabody Place
+48,Moder Financial,1,1,Office / Finance / Service,Office / Finance / Service (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Moe's Southwest Grill,1,1,Restaurant,Restaurant (1),116710,Brennan Station
+48,Mooyah Burger,1,1,Restaurant,Restaurant (1),EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons
+48,Murphyâ€™s / restaurant tenant,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_EDDY_STREET_COMMONS_IN,Eddy Street Commons
+48,Music and Arts Centers,1,1,Education,Education (1),TJ_PEABODY,Peabody Place
+48,Nail House,1,1,Beauty,Beauty (1),BRX040,Village Square Shopping Center
+48,Nancy's Pizza,1,1,Restaurant,Restaurant (1),116710,Brennan Station
+48,Nash & Smashed,1,1,Other,Other (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,Needham Bank,1,1,Service,Service (1),TJ_MA_013,Quincy Center Mixed-Use Development
+48,New Mexico Bike N Sport,1,1,Sporting Goods,Sporting Goods (1),PE_CORONADO_CENTER,Coronado Center
+48,Newport News Nutrition Corner,1,1,Other,Other (1),KRG_JEFFERSON_COMMONS_VA,Jefferson Commons
+48,Newport News Smoke Shop,1,1,Other,Other (1),KRG_JEFFERSON_COMMONS_VA,Jefferson Commons
+48,Newton Centre Chiropractic,1,1,Medical,Medical (1),TJ_NEWTON,Newton Nexus
+48,Nissin Travel,1,1,Travel Service,Travel Service (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,Noodles & Company,1,1,Restaurant,Restaurant (1),EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons
+48,North Italia,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Nothing Bundt Cakes,1,1,Coffee/Dessert,Coffee/Dessert (1),PE_CORONADO_CENTER,Coronado Center
+48,NY Bagel Factory,1,1,Restaurant,Restaurant (1),TJ_ACTON,Brookside Shops
+48,O'Reilly Auto Parts,1,1,Auto Parts,Auto Parts (1),PE_CORONADO_CENTER,Coronado Center
+48,Office Depot,1,1,Office Supply,Office Supply (1),116710,Brennan Station
+48,Olivia Massage Spa,1,1,Beauty / Personal Service,Beauty / Personal Service (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,Olmaz Jewelers,1,1,Other,Other (1),KRG_EASTGATE_CROSSING_NC,Eastgate Crossing
+48,Optic Gallery,1,1,Other,Other (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,Options Medical Weight Loss,1,1,Medical,Medical (1),116710,Brennan Station
+48,Outback Steakhouse,1,1,Restaurant,Restaurant (1),TJ_PEABODY,Peabody Place
+48,Paper Source,1,1,Hard Goods / Home / Specialty Retail,Hard Goods / Home / Specialty Retail (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Parry Custom Homes,1,1,Home Services,Home Services (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,Pasta Nova,1,1,Other,Other (1),KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza
+48,Perspire Sauna Studio,1,1,Other,Other (1),125240,Highland Lakes Plaza
+48,Pho 79,1,1,Other,Other (1),KRG_JEFFERSON_COMMONS_VA,Jefferson Commons
+48,Pho Royal II,1,1,Other,Other (1),KRG_FORT_EVANS_PLAZA_II_VA,Fort Evans Plaza II
+48,Piedmont Healthcare,1,1,Medical / Health / Education,Medical / Health / Education (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Pier 46 Seafood,1,1,Specialty Food,Specialty Food (1),PE_VINEYARD_CENTER,Vineyard Center
+48,Pinot's Palette,1,1,Entertainment,Entertainment (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,Pinspits,1,1,Entertainment Retail,Entertainment Retail (1),TJ_PEABODY,Peabody Place
+48,PJ's Sports,1,1,Fitness / Recreation,Fitness / Recreation (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,PNC Bank,1,1,Convenience / Bank / Telecom,Convenience / Bank / Telecom (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Poke Sushi Bowl,1,1,Restaurant,Restaurant (1),KRG_JEFFERSON_COMMONS_VA,Jefferson Commons
+48,Pollo Inti II,1,1,Other,Other (1),KRG_FORT_EVANS_PLAZA_II_VA,Fort Evans Plaza II
+48,Pressed Café,1,1,Restaurant,Restaurant (1),TJ_NEWTON,Newton Nexus
+48,Pure Barre,1,1,Fitness,Fitness (1),TJ_NEWTON,Newton Nexus
+48,Purely Pressed,1,1,Other,Other (1),KRG_EDDY_STREET_COMMONS_IN,Eddy Street Commons
+48,Purple,1,1,Hard Goods / Home / Specialty Retail,Hard Goods / Home / Specialty Retail (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Pvolve,1,1,Fitness,Fitness (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Rainbow Cleaners,1,1,Service,Service (1),KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza
+48,Raising Cane's,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Raymour & Flanigan Furniture,1,1,Home Furnishing,Home Furnishing (1),TJ_SOMERVILLE,Assembly Square
+48,Red Robin Gourmet Burgers & Brews,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,REI,1,1,Apparel,Apparel (1),KRG_HUEBNER_OAKS_TX,Huebner Oaks
+48,Relax Foot Massage,1,1,Personal Service,Personal Service (1),116710,Brennan Station
+48,Rettig Music,1,1,Music Store,Music Store (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,RH Outlet,1,1,Other,Other (1),KRG_FORT_EVANS_PLAZA_II_VA,Fort Evans Plaza II
+48,Roasterie Cafe,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Romanoff's Classic Tuxedo,1,1,Apparel,Apparel (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,Rose Nails,1,1,Beauty / Personal Service,Beauty / Personal Service (1),KRG_EASTGATE_CROSSING_NC,Eastgate Crossing
+48,Rush Bowls,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Sally Beauty,1,1,Beauty / Personal Service,Beauty / Personal Service (1),FRT_SAN_ANTONIO_CENTER_CA,San Antonio Center
+48,Salon Lofts,1,1,Beauty / Personal Service,Beauty / Personal Service (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,SalonOne19 & Spa,1,1,Beauty / Personal Service,Beauty / Personal Service (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,San Antonio Dental,1,1,Medical / Health / Education,Medical / Health / Education (1),FRT_SAN_ANTONIO_CENTER_CA,San Antonio Center
+48,Santander Bank,1,1,Financial,Financial (1),TJ_PEABODY,Peabody Place
+48,Sassy Lashes,1,1,Other,Other (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,Sassy Nails,1,1,Beauty,Beauty (1),EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons
+48,Sav-Mor Spirits,1,1,Wine / Liquor,Wine / Liquor (1),TJ_CAMBRIDGE_FRESH_POND,Alewife Brook Parkway Shopping Center
+48,Seattle Sun Tan,1,1,Service,Service (1),KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza
+48,Secret of Siam,1,1,Restaurant,Restaurant (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,Sen Nails,1,1,Personal Service,Personal Service (1),TJ_SAUGUS,Shops at Saugus
+48,Shade Store,1,1,Hard Goods / Home / Specialty Retail,Hard Goods / Home / Specialty Retail (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Shake Shack,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_EASTGATE_CROSSING_NC,Eastgate Crossing
+48,Showcase Cinema,1,1,Other,Other (1),TJ_MA_010,Hanover Crossing
+48,Sierra,1,1,Apparel,Apparel (1),PE_APACHE_SHOPPES,Apache Shoppes
+48,Sinton & Sons - Local Meat and Provisions,1,1,Specialty Food,Specialty Food (1),PE_VINEYARD_CENTER,Vineyard Center
+48,Sleep & Dream,1,1,Furnishings,Furnishings (1),PE_CORONADO_CENTER,Coronado Center
+48,Sleepy's,1,1,Home Furnishing,Home Furnishing (1),TJ_CAMBRIDGE_FRESH_POND,Alewife Brook Parkway Shopping Center
+48,Sloane's Restaurant,1,1,Food,Food (1),TJ_MA_001,Continuum Allston
+48,Smashburger,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Sola Salons,1,1,Beauty / Personal Service,Beauty / Personal Service (1),FRT_SAN_ANTONIO_CENTER_CA,San Antonio Center
+48,SoulCycle,1,1,Service,Service (1),TJ_MA_006,Trader Joe's Boylston St
+48,Sourdough & Co.,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_SAN_ANTONIO_CENTER_CA,San Antonio Center
+48,Sportsman's Warehouse,1,1,Retail,Retail (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,Studio Movie Grill,1,1,Entertainment,Entertainment (1),EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons
+48,Studio Optics,1,1,Medical,Medical (1),TJ_FRAMINGHAM,Staples Plaza
+48,Studio Xfinity,1,1,Telecom,Telecom (1),TJ_SOMERVILLE,Assembly Square
+48,Sugar & Sweets Bakery,1,1,Restaurant,Restaurant (1),KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza
+48,Sullivan's,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Sunoco,1,1,Convenience / Bank / Telecom,Convenience / Bank / Telecom (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,SunTan City,1,1,Other,Other (1),116710,Brennan Station
+48,Sweetgreen,1,1,Restaurant,Restaurant (1),TJ_NEWTON,Newton Nexus
+48,Taka Sushi,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Talbots,1,1,Apparel,Apparel (1),TJ_ACTON,Brookside Shops
+48,Talbots Outlet,1,1,Soft Goods,Soft Goods (1),TJ_MA_011,Trader Joe's Hingham
+48,Tecovas,1,1,Apparel / Soft Goods,Apparel / Soft Goods (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Templeton Nails,1,1,Beauty,Beauty (1),PE_VINEYARD_CENTER,Vineyard Center
+48,Teriyaki Madness,1,1,Restaurant,Restaurant (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,TerraLoco Running & Yoga,1,1,Sporting Goods,Sporting Goods (1),PE_APACHE_SHOPPES,Apache Shoppes
+48,The Brass Tap,1,1,Restaurant,Restaurant (1),EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons
+48,The Gift Horse Saddlery,1,1,Retail,Retail (1),KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza
+48,The Good Feet Store,1,1,Hard Goods / Home / Specialty Retail,Hard Goods / Home / Specialty Retail (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,The Great Greek,1,1,Restaurant,Restaurant (1),EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons
+48,The Home Depot,1,1,Hard Goods,Hard Goods (1),TJ_MA_014,The Crossing at Walkers Brook
+48,The New Baking Company,1,1,Coffee/Dessert,Coffee/Dessert (1),PE_CORONADO_CENTER,Coronado Center
+48,The Paper Store,1,1,Soft Goods,Soft Goods (1),TJ_MA_014,The Crossing at Walkers Brook
+48,The Vitamin Shoppe,1,1,Personal Service,Personal Service (1),TJ_SHREWSBURY,77 Boston Turnpike Retail / Medical Space
+48,Thread Brow Studio & Salon,1,1,Service,Service (1),KRG_HUEBNER_OAKS_TX,Huebner Oaks
+48,Three Dog Bakery,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,Tokyo Steakhouse,1,1,Restaurant,Restaurant (1),TJ_PEABODY,Peabody Place
+48,Top Crepe,1,1,Other,Other (1),KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza
+48,Top Style Nails,1,1,Service,Service (1),KRG_SHOPPES_UNION_HILL_NJ,The Shoppes at Union Hill
+48,Topsail Steamer,1,1,Coffee / Dessert,Coffee / Dessert (1),116710,Brennan Station
+48,Touchstone Infusion,1,1,Medical / Health / Education,Medical / Health / Education (1),KRG_ROYAL_OAKS_VILLAGE_II_TX,Royal Oaks Village II
+48,Town and Country Hardware,1,1,Hardware,Hardware (1),116710,Brennan Station
+48,Trove Beauty - Alpha Bar,1,1,Beauty,Beauty (1),PE_CORONADO_CENTER,Coronado Center
+48,Tulip Interfaces,1,1,Office Supply,Office Supply (1),TJ_SOMERVILLE,Assembly Square
+48,Twisted Noodles,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_EASTGATE_CROSSING_NC,Eastgate Crossing
+48,Tyson's Barber,1,1,Beauty / Personal Service,Beauty / Personal Service (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,Tysons Dentist,1,1,Medical / Health / Education,Medical / Health / Education (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,UC Nails,1,1,Beauty,Beauty (1),PE_APACHE_SHOPPES,Apache Shoppes
+48,UFC Gym,1,1,Service,Service (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,ULTA,1,1,Beauty,Beauty (1),EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons
+48,ULTA Beauty,1,1,Beauty / Personal Service,Beauty / Personal Service (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Umi Sushi & Seafood Buffet,1,1,Restaurant / Food & Beverage,Restaurant / Food & Beverage (1),KRG_ROYAL_OAKS_VILLAGE_II_TX,Royal Oaks Village II
+48,Umiya Sushi Stadium 14,1,1,Restaurant,Restaurant (1),KRG_HUEBNER_OAKS_TX,Huebner Oaks
+48,Uniq Laser,1,1,Personal Service,Personal Service (1),TJ_SAUGUS,Shops at Saugus
+48,United Community Bank,1,1,Office / Finance / Service,Office / Finance / Service (1),KRG_CHASTAIN_MARKET_GA,Chastain Market
+48,UPS Store,1,1,Convenience / Bank / Telecom,Convenience / Bank / Telecom (1),FRT_SAN_ANTONIO_CENTER_CA,San Antonio Center
+48,Van's Nail Salon,1,1,Service,Service (1),KRG_HUEBNER_OAKS_TX,Huebner Oaks
+48,VEG ER for Pets,1,1,Medical / Health / Education,Medical / Health / Education (1),FRT_TYSONS_STATION_VA,Tysons Station
+48,Verizon,1,1,Office/Tech,Office/Tech (1),PE_APACHE_SHOPPES,Apache Shoppes
+48,Vincenzo's,1,1,Restaurant,Restaurant (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,Vineyard Vines,1,1,Apparel / Soft Goods,Apparel / Soft Goods (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Vitamin Shoppe,1,1,Personal Service,Personal Service (1),TJ_PEABODY,Peabody Place
+48,Vivi Bubble Tea,1,1,Coffee/Dessert,Coffee/Dessert (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,W. Salon Suites,1,1,Beauty,Beauty (1),EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons
+48,Walmart,1,1,Hard Goods / Home / Specialty Retail,Hard Goods / Home / Specialty Retail (1),FRT_SAN_ANTONIO_CENTER_CA,San Antonio Center
+48,Warby Parker,1,1,Apparel / Soft Goods,Apparel / Soft Goods (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Wendy's Bridal Shoppes,1,1,Apparel,Apparel (1),PE_TRADER_JOES_CENTER,Trader Joe's Center
+48,Wild Birds Unlimited,1,1,Pet Stores,Pet Stores (1),PE_CORONADO_CENTER,Coronado Center
+48,Wine Outlet,1,1,Wine / Liquor,Wine / Liquor (1),FRT_BRICK_PLAZA_NJ,Brick Plaza
+48,Woodhouse Day Spa,1,1,Beauty / Personal Service,Beauty / Personal Service (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,World Market,1,1,Home Furnishing,Home Furnishing (1),TJ_SOMERVILLE,Assembly Square
+48,X-Golf,1,1,Entertainment Retail,Entertainment Retail (1),TJ_ACTON,Brookside Shops
+48,Yeti,1,1,Hard Goods / Home / Specialty Retail,Hard Goods / Home / Specialty Retail (1),FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing
+48,Yogurtland,1,1,Other,Other (1),KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway
+48,Yummy Bakery,1,1,Coffee/Dessert,Coffee/Dessert (1),PE_TRADER_JOES_CENTER,Trader Joe's Center

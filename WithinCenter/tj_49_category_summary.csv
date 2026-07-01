@@ -1,0 +1,58 @@
+﻿Tenant Category,TJ Center Count,Rows Count,Distinct Tenant Count,Top Tenants,Project IDs
+Restaurant,19,56,49,Chipotle (3); Starbucks (3); Five Guys Burgers and Fries (2); Tropical Smoothie Cafe (2); Subway (2); Moe's Southwest Grill (1); Jersey Mike's Subs (1); Margaux's Restaurant (1); Nancy's Pizza (1); El Dorado Mexican Restaurant (1),116710; BRX040; EDENS_ROCKLIN_COMMONS_CA; KRG_CENTENNIAL_GATEWAY_NV; KRG_HUEBNER_OAKS_TX; KRG_JEFFERSON_COMMONS_VA; KRG_WOODINVILLE_PLAZA_WA; PE_APACHE_SHOPPES; PE_CORONADO_CENTER; PE_TRADER_JOES_CENTER; TJ_ACTON; TJ_CAMBRIDGE_FRESH_POND; TJ_FRAMINGHAM; TJ_HYANNIS; TJ_NEWTON; TJ_PEABODY; TJ_SAUGUS; TJ_SHREWSBURY; TJ_SOMERVILLE
+Service,15,31,30,Chase Bank (2); BKBX fitness (1); Citizens (1); SoulCycle (1); Mass General Brigham (1); DANA FARBER (1); MassGeneral for Children (1); PetSmart (1); Cinemark (1); Carewell Urgent Care (1),KRG_CENTENNIAL_GATEWAY_NV; KRG_FORT_EVANS_PLAZA_II_VA; KRG_HUEBNER_OAKS_TX; KRG_JEFFERSON_COMMONS_VA; KRG_SHOPPES_UNION_HILL_NJ; KRG_WOODINVILLE_PLAZA_WA; TJ_MA_001; TJ_MA_005; TJ_MA_006; TJ_MA_008; TJ_MA_009; TJ_MA_012; TJ_MA_013; TJ_MA_014; TJ_MA_015
+Apparel,14,20,15,J.Crew Factory (3); Ross (3); TJ Maxx (2); Talbots (1); Lux Bond & Green (1); Carter's (1); 5.11 Tactical (1); Sierra (1); Wendy's Bridal Shoppes (1); Romanoff's Classic Tuxedo (1),EDENS_ROCKLIN_COMMONS_CA; KRG_CENTENNIAL_GATEWAY_NV; KRG_FORT_EVANS_PLAZA_II_VA; KRG_HUEBNER_OAKS_TX; KRG_JEFFERSON_COMMONS_VA; KRG_SHOPPES_UNION_HILL_NJ; KRG_WOODINVILLE_PLAZA_WA; PE_APACHE_SHOPPES; PE_CORONADO_CENTER; PE_TRADER_JOES_CENTER; TJ_ACTON; TJ_NEWTON; TJ_PEABODY; TJ_SAUGUS
+Medical,10,12,10,CVS Pharmacy (2); The Joint (2); IVX Health (1); Anna's Massage Therapy (1); Options Medical Weight Loss (1); Newton Centre Chiropractic (1); Studio Optics (1); Miel Dental Aesthetics (1); Comfort Dental (1); Pacific Dental (1),116710; 125240; EDENS_ROCKLIN_COMMONS_CA; PE_CORONADO_CENTER; PE_TRADER_JOES_CENTER; TJ_CAMBRIDGE_FRESH_POND; TJ_FRAMINGHAM; TJ_NEWTON; TJ_PEABODY; TJ_SAUGUS
+Restaurant / Food & Beverage,8,46,44,Chipotle (3); Crisp & Juicy (1); Ledo Pizza (1); Juice Time and Papa Kanafa (1); Blazin (1); China King (1); Jersey Mike's Subs (1); DAE GEE (1); Wonder (1); Crumbl Cookies (1),FRT_BRICK_PLAZA_NJ; FRT_SAN_ANTONIO_CENTER_CA; FRT_TOWN_CENTER_CROSSING_KS; FRT_TYSONS_STATION_VA; KRG_CHASTAIN_MARKET_GA; KRG_EASTGATE_CROSSING_NC; KRG_EDDY_STREET_COMMONS_IN; KRG_ROYAL_OAKS_VILLAGE_II_TX
+Beauty / Personal Service,7,22,21,European Wax Center (2); Tyson's Barber (1); Olivia Massage Spa (1); Koncept Nails Bar (1); Brick Nails (1); Supercuts (1); Hand & Stone Massage & Facial (1); ULTA Beauty (1); Bubbles07 (1); Sally Beauty (1),FRT_BRICK_PLAZA_NJ; FRT_SAN_ANTONIO_CENTER_CA; FRT_TOWN_CENTER_CROSSING_KS; FRT_TYSONS_STATION_VA; KRG_CHASTAIN_MARKET_GA; KRG_EASTGATE_CROSSING_NC; KRG_ROYAL_OAKS_VILLAGE_II_TX
+Beauty,7,20,19,Sola Salon Studios (2); Lux Nails & Spa (1); Everythings Hair Limited (1); Nail House (1); UC Nails (1); Linda's Nails (1); Great Clips (1); Trove Beauty - Alpha Bar (1); Funky Scissors (1); H&B Nail Spa (1),116710; BRX040; EDENS_ROCKLIN_COMMONS_CA; PE_APACHE_SHOPPES; PE_CORONADO_CENTER; PE_TRADER_JOES_CENTER; PE_VINEYARD_CENTER
+Discount Retail,7,11,6,Burlington (3); Dollar Tree (2); TJ Maxx (2); Five Below (2); Marshalls (1); Target (1),116710; EDENS_ROCKLIN_COMMONS_CA; PE_CORONADO_CENTER; TJ_MILFORD; TJ_NEWTON; TJ_PEABODY; TJ_SOMERVILLE
+Fitness,7,9,7,Orangetheory Fitness (2); Club Pilates (2); Bodybar Pilates (1); Pure Barre (1); Alloy Personal Training (1); Pvolve (1); Fitness Connection (1),116710; 125240; KRG_CHASTAIN_MARKET_GA; KRG_EASTGATE_CROSSING_NC; KRG_ROYAL_OAKS_VILLAGE_II_TX; PE_CORONADO_CENTER; TJ_NEWTON
+Personal Service,6,14,11,Massage Envy (2); European Wax Center (2); Supercuts (2); Relax Foot Massage (1); Restore Hyper Wellness (1); Hollywood Nails & Spa (1); AAA Southern New England (1); Vitamin Shoppe (1); Sen Nails (1); Uniq Laser (1),116710; 117210; TJ_NEWTON; TJ_PEABODY; TJ_SAUGUS; TJ_SHREWSBURY
+Food,6,11,8,Starbucks (3); Chipotle (2); Sloane's Restaurant (1); Juice Press (1); Panera Bread (1); 110 Grill (1); Evviva Trattoria (1); Anthony's Coal Fired Pizza (1),TJ_MA_001; TJ_MA_002; TJ_MA_006; TJ_MA_010; TJ_MA_013; TJ_MA_014
+Home Furnishing,6,9,9,Bob Discount Furniture (1); Sleepy's (1); Cardi's Furniture (1); Ashley Furniture HomeStore (1); World Market (1); Bob's Discount Furniture (1); Raymour & Flanigan Furniture (1); At Home (Shadow Anchor) (1); LA-Z-Boy (1),TJ_BURLINGTON; TJ_CAMBRIDGE_FRESH_POND; TJ_HYANNIS; TJ_PEABODY; TJ_SAUGUS; TJ_SOMERVILLE
+Pet Stores,6,7,6,Treats Unleashed (1); Wild Birds Unlimited (1); Maddie Mae's Pet Pantry (1); Woof Gang Bakery & Grooming (1); PetSmart (1); Petco (1),FRT_BRICK_PLAZA_NJ; FRT_TOWN_CENTER_CROSSING_KS; FRT_TYSONS_STATION_VA; KRG_EASTGATE_CROSSING_NC; PE_CORONADO_CENTER; PE_VINEYARD_CENTER
+Retail,5,13,11,HomeGoods (3); Sportsman's Warehouse (1); Walgreens (1); Barnes & Noble (1); Diamond & Jewelry Gallery (1); Mattress Warehouse (1); Petco (1); Total Wine & More (1); Kohl's (1); Ulta Beauty (1),KRG_CENTENNIAL_GATEWAY_NV; KRG_FORT_EVANS_PLAZA_II_VA; KRG_HUEBNER_OAKS_TX; KRG_JEFFERSON_COMMONS_VA; KRG_WOODINVILLE_PLAZA_WA
+Medical / Health / Education,5,12,12,Tysons Dentist (1); VEG ER for Pets (1); Immediate Care Medical Walk-In (1); Amara Dental (1); San Antonio Dental (1); General Nutrition Center (1); Mathnasium (1); Restore Hyper Wellness (1); Athletico Physical Therapy (1); Pacific Dental (1),FRT_BRICK_PLAZA_NJ; FRT_SAN_ANTONIO_CENTER_CA; FRT_TYSONS_STATION_VA; KRG_CHASTAIN_MARKET_GA; KRG_ROYAL_OAKS_VILLAGE_II_TX
+Soft Goods,5,9,9,Walgreens (1); DICK'S Sporting Goods (1); JCPenney (1); Hampshire Mall (1); Macy's (1); L.L.Bean (1); Old Navy (1); Talbots Outlet (1); The Paper Store (1),TJ_MA_002; TJ_MA_009; TJ_MA_010; TJ_MA_011; TJ_MA_014
+Office Supply,4,6,5,Staples (2); Office Depot (1); Tulip Interfaces (1); DMG MORI USA (1); FedEx Office (1),116710; TJ_ACTON; TJ_SHREWSBURY; TJ_SOMERVILLE
+Telecom,4,4,4,AT&T (1); T-Mobile (1); Studio Xfinity (1); Comcast (1),TJ_CAMBRIDGE_FRESH_POND; TJ_NEWTON; TJ_SAUGUS; TJ_SOMERVILLE
+Hard Goods / Home / Specialty Retail,3,15,15,GameStop (1); Barnes & Noble (1); The Good Feet Store (1); HomeGoods (1); Michaels (1); AutoZone (1); Walmart (1); Shade Store (1); Lovesac (1); Purple (1),FRT_BRICK_PLAZA_NJ; FRT_SAN_ANTONIO_CENTER_CA; FRT_TOWN_CENTER_CROSSING_KS
+Coffee/Dessert,3,7,7,The New Baking Company (1); Nothing Bundt Cakes (1); Melt 'n Dip (1); Yummy Bakery (1); Vivi Bubble Tea (1); Menchie's (1); Crumbl Cookies (1),EDENS_ROCKLIN_COMMONS_CA; PE_CORONADO_CENTER; PE_TRADER_JOES_CENTER
+Convenience / Bank / Telecom,3,7,6,xfinity (2); 7-Eleven (1); Sunoco (1); PNC Bank (1); AT&T (1); UPS Store (1),FRT_BRICK_PLAZA_NJ; FRT_SAN_ANTONIO_CENTER_CA; FRT_TYSONS_STATION_VA
+Hard Goods,3,6,6,Target (1); DICK'S Sporting Goods (1); Petco (1); Jordan's Furniture (1); The Home Depot (1); Golf Galaxy (1),TJ_MA_009; TJ_MA_010; TJ_MA_014
+Entertainment,3,5,5,Little Diggers (1); Pinot's Palette (1); Chuck E. Cheese (1); AMC (1); Studio Movie Grill (1),EDENS_ROCKLIN_COMMONS_CA; FRT_BRICK_PLAZA_NJ; PE_TRADER_JOES_CENTER
+Fitness / Recreation,3,5,5,PJ's Sports (1); LA Fitness (1); Golf Kings (1); Gravity Vault Brick (1); 24 Hour Fitness (1),FRT_BRICK_PLAZA_NJ; FRT_SAN_ANTONIO_CENTER_CA; FRT_TYSONS_STATION_VA
+Financial,3,4,4,Chase Bank (1); Cambridge Savings Bank ATM (1); JPMorgan Chase Bank (1); Santander Bank (1),TJ_NEWTON; TJ_PEABODY; TJ_SOMERVILLE
+Office/Tech,3,4,4,Verizon (1); AT&T (1); Go Wireless by Verizon (1); T-Mobile (1),EDENS_ROCKLIN_COMMONS_CA; PE_APACHE_SHOPPES; PE_CORONADO_CENTER
+Education,3,3,3,Huntington Learning Center (1); Music and Arts Centers (1); Lakeshore Learning Store (1),116710; TJ_PEABODY; TJ_SAUGUS
+Grocery,3,3,2,Aldi (2); Market Basket (1),KRG_EASTGATE_CROSSING_NC; KRG_JEFFERSON_COMMONS_VA; TJ_MA_010
+Wine / Liquor,3,3,3,Sav-Mor Spirits (1); Total Wine & More (1); Wine Outlet (1),FRT_BRICK_PLAZA_NJ; TJ_CAMBRIDGE_FRESH_POND; TJ_SHREWSBURY
+Apparel / Soft Goods,2,14,14,Gap Factory Store (1); Burlington (1); DSW (1); J.Crew Factory (1); Warby Parker (1); Vineyard Vines (1); lululemon athletica (1); J.Crew (1); Kendra Scott (1); Tecovas (1),FRT_BRICK_PLAZA_NJ; FRT_TOWN_CENTER_CROSSING_KS
+Office / Finance / Service,2,5,5,Genesis Career Group (1); Law Office (1); Moder Financial (1); United Community Bank (1); Capital One (1),KRG_CHASTAIN_MARKET_GA; KRG_ROYAL_OAKS_VILLAGE_II_TX
+Bookstore,2,3,3,Books-A-Million (1); Hammes Notre Dame Bookstore (1); Hammes Bookstore / retail tenant (1),KRG_CHASTAIN_MARKET_GA; KRG_EDDY_STREET_COMMONS_IN
+Soft Goods / Apparel,2,3,3,Ulta Beauty (1); J.Crew Factory (1); Kohl's (1),KRG_EASTGATE_CROSSING_NC; KRG_ROYAL_OAKS_VILLAGE_II_TX
+Sporting Goods,2,3,3,TerraLoco Running & Yoga (1); Erik's Bike Shop (1); New Mexico Bike N Sport (1),PE_APACHE_SHOPPES; PE_CORONADO_CENTER
+Auto Service,2,2,2,Jiffy Lube (1); Car Wash (1),116710; TJ_PEABODY
+Books & Media,2,2,2,Barnes & Noble (1); Beow's Books and Brews Café (1),116710; 125240
+Electronics,2,2,2,Best Buy (1); GameStop (1),TJ_HYANNIS; TJ_PEABODY
+Entertainment Retail,2,2,2,X-Golf (1); Pinspits (1),TJ_ACTON; TJ_PEABODY
+Pet Supply,2,2,2,Petco (1); PetSmart (1),TJ_BURLINGTON; TJ_SAUGUS
+Coffee / Dessert,1,3,3,Woof Gang Bakery & Grooming (1); Topsail Steamer (1); Dunkin' Donuts (1),116710
+Specialty Food,1,2,2,Sinton & Sons - Local Meat and Provisions (1); Pier 46 Seafood (1),PE_VINEYARD_CENTER
+Auto Parts,1,1,1,O'Reilly Auto Parts (1),PE_CORONADO_CENTER
+Bank,1,1,1,First National Bank of Santa Fe (1),PE_CORONADO_CENTER
+Beauty Supply,1,1,1,CosmoProf (1),PE_TRADER_JOES_CENTER
+Crafts,1,1,1,Michaels (1),125240
+Financial/Tax Service,1,1,1,H&R Block (1),PE_TRADER_JOES_CENTER
+Footwear,1,1,1,Famous Footwear (1),125240
+Furnishings,1,1,1,Sleep & Dream (1),PE_CORONADO_CENTER
+Hardware,1,1,1,Town and Country Hardware (1),116710
+Home Services,1,1,1,Parry Custom Homes (1),PE_TRADER_JOES_CENTER
+Jewelry,1,1,1,Lasker Jewelers (1),PE_APACHE_SHOPPES
+Music Store,1,1,1,Rettig Music (1),PE_TRADER_JOES_CENTER
+Other Retail,1,1,1,Hippie Hut (1),PE_TRADER_JOES_CENTER
+Pharmacy,1,1,1,CVS (1),KRG_CHASTAIN_MARKET_GA
+Real Estate / Office,1,1,1,Compass (1),FRT_TOWN_CENTER_CROSSING_KS
+Restaurant Storage,1,1,1,Hot Chip Burger Bar (Storage) (1),PE_APACHE_SHOPPES
+Travel Service,1,1,1,Nissin Travel (1),PE_TRADER_JOES_CENTER

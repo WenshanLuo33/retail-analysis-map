@@ -5,7 +5,10 @@ let markerByProjectId = {};
 let highlightedMarker = null;
 let traderJoePrototypes = [];
 let tjCoTenants = [];
+let tjCategorySummary = [];
+
 let prototypeDisplayMode = "matrix"; // "matrix" or "cotenant"
+let coTenantTableMode = "frequency"; // "frequency" or "category"
 
 const matrixModeConfig = {
   layout: {
@@ -212,12 +215,14 @@ Promise.all([
   loadCSV("data/project_metrics_website.csv"),
   loadCSV("data/tenants_classified_v6.csv"),
   loadCSV("data/trader_joes_prototypes.csv"),
-  loadCSV("data/tj_co_tenants_rechecked.csv")
-]).then(([projectData, tenantData, prototypeData, coTenantData]) => {
+  loadCSV("WithinCenter/tj_co_tenants_rechecked.csv"),
+  loadCSV("WithinCenter/tj_49_category_summary.csv")
+]).then(([projectData, tenantData, prototypeData, coTenantData, categorySummaryData]) => {
   projects = projectData;
   tenants = tenantData;
   traderJoePrototypes = prototypeData;
   tjCoTenants = coTenantData;
+  tjCategorySummary = categorySummaryData;
 
   buildOwnerFilter(projects);
   buildStateFilter(projects);
@@ -1913,6 +1918,7 @@ function toggleCoTenantTable() {
   }
 
   prototypeDisplayMode = "cotenant";
+  coTenantTableMode = "frequency";
   setPrototypePanelsVisible(false);
 
   const btn = document.getElementById("coTenantTableBtn");
@@ -1947,10 +1953,15 @@ function renderCoTenantTable() {
   const prototypeGrid = document.getElementById("prototypeGrid");
   if (!prototypeGrid) return;
 
+  if (coTenantTableMode === "category") {
+    renderCategorySummaryTable();
+    return;
+  }
+
   if (!tjCoTenants || !tjCoTenants.length) {
     prototypeGrid.innerHTML = `
       <div class="co-tenant-table-wrap">
-        <p>No co-tenant data loaded. Check data/tj_co_tenants_rechecked.csv.</p>
+        <p>No co-tenant data loaded. Check WithinCenter/tj_co_tenants_rechecked.csv.</p>
       </div>
     `;
     return;
@@ -1975,6 +1986,8 @@ function renderCoTenantTable() {
 
   prototypeGrid.innerHTML = `
     <div class="co-tenant-table-wrap">
+      ${coTenantTableTabsHTML()}
+
       <div class="co-tenant-table-header">
         <h3>Trader Joe’s Co-Tenant Frequency</h3>
         <p>
@@ -1999,6 +2012,111 @@ function renderCoTenantTable() {
       </table>
     </div>
   `;
+}
+
+function coTenantTableTabsHTML() {
+  return `
+    <div class="co-tenant-tabs">
+      <button
+        class="${coTenantTableMode === "frequency" ? "active" : ""}"
+        onclick="setCoTenantTableMode('frequency')">
+        Co-Tenant Frequency
+      </button>
+
+      <button
+        class="${coTenantTableMode === "category" ? "active" : ""}"
+        onclick="setCoTenantTableMode('category')">
+        Category Summary
+      </button>
+    </div>
+  `;
+}
+
+function setCoTenantTableMode(mode) {
+  coTenantTableMode = mode;
+  renderCoTenantTable();
+}
+
+function renderCategorySummaryTable() {
+  const prototypeGrid = document.getElementById("prototypeGrid");
+  if (!prototypeGrid) return;
+
+  if (!tjCategorySummary || !tjCategorySummary.length) {
+    prototypeGrid.innerHTML = `
+      <div class="co-tenant-table-wrap">
+        ${coTenantTableTabsHTML()}
+        <p>No category summary data loaded. Check WithinCenter/tj_49_category_summary.csv.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const rows = [...tjCategorySummary]
+    .sort((a, b) => {
+      const countA = Number(a["TJ Center Count"]) || 0;
+      const countB = Number(b["TJ Center Count"]) || 0;
+      return countB - countA;
+    })
+    .map(row => `
+      <tr>
+        <td class="co-tenant-name">${row["Tenant Category"] || ""}</td>
+        <td class="co-tenant-count">${row["TJ Center Count"] || ""}</td>
+        <td class="co-tenant-count">${row["Rows Count"] || ""}</td>
+        <td class="co-tenant-count">${row["Distinct Tenant Count"] || ""}</td>
+        <td>${row["Top Tenants"] || ""}</td>
+        <td>${categorySummaryProjectLinksHTML(row)}</td>
+      </tr>
+    `)
+    .join("");
+
+  prototypeGrid.innerHTML = `
+    <div class="co-tenant-table-wrap">
+      ${coTenantTableTabsHTML()}
+
+      <div class="co-tenant-table-header">
+        <h3>Trader Joe’s Category Summary</h3>
+        <p>
+          Summary of tenant categories that appear across the Trader Joe’s center dataset.
+          Click any project ID to open it in the Filter Map.
+        </p>
+      </div>
+
+      <table class="co-tenant-table">
+        <thead>
+          <tr>
+            <th>Tenant Category</th>
+            <th>TJ Center Count</th>
+            <th>Rows Count</th>
+            <th>Distinct Tenant Count</th>
+            <th>Top Tenants</th>
+            <th>Project IDs</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function categorySummaryProjectLinksHTML(row) {
+  const projectIds = splitSemicolonList(row["Project IDs"]);
+
+  if (!projectIds.length) return "";
+
+  return projectIds.map(projectId => {
+    const cleanId = String(projectId || "").trim();
+
+    if (!cleanId) return "";
+
+    return `
+      <button class="co-tenant-project-link"
+              onclick="openProjectFromPrototype('${escapeJS(cleanId)}')">
+        ${cleanId}
+      </button>
+    `;
+  }).join("");
 }
 
 function coTenantProjectLinksHTML(row) {

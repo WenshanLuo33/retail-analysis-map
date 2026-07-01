@@ -1672,6 +1672,48 @@ body.prototype-mode #topNav {
   font-weight: 600;
 }
 
+/* =========================
+   Co-Tenant Table Tabs
+   ========================= */
+
+.co-tenant-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #d8d8d8;
+  padding-bottom: 8px;
+}
+
+.co-tenant-tabs button {
+  height: 30px;
+  padding: 0 14px;
+  border: 1px solid #c7d2d8;
+  border-radius: 999px;
+  background: #f8fafb;
+  color: #003b5c;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.co-tenant-tabs button:hover {
+  background: #eef4f7;
+  border-color: #003b5c;
+}
+
+.co-tenant-tabs button.active {
+  background: #003b5c;
+  color: white;
+  border-color: #003b5c;
+}
+
+
+
+
+
+
+
+
 
 
 
