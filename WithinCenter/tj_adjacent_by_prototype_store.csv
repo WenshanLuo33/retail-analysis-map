@@ -1,0 +1,106 @@
+﻿Prototype,Rank Within Prototype,Adjacent Tenant,Adjacent Category,Count,Share Within Prototype
+Branch,1,Available,Vacancy,2,0.0667
+Branch,1,Ross,Apparel / Soft Goods,2,0.0667
+Branch,1,Ulta Beauty,Beauty / Personal Care,2,0.0667
+Branch,4,99 Restaurants,Food & Beverage,1,0.0333
+Branch,4,Barnes & Noble,Other Retail,1,0.0333
+Branch,4,Bath & Body Works,Beauty / Personal Care,1,0.0333
+Branch,4,BluePearl Pet Hospital Framingham,Pet,1,0.0333
+Branch,4,Books-A-Million,Other Retail,1,0.0333
+Branch,4,Burlington,Apparel / Soft Goods,1,0.0333
+Branch,4,CVS,Health / Pharmacy,1,0.0333
+Branch,4,Devinn Nail Bar,Beauty / Personal Care,1,0.0333
+Branch,4,Drybar Leawood,Beauty / Personal Care,1,0.0333
+Branch,4,Dunkin,Food & Beverage,1,0.0333
+Branch,4,Elizabeth Grady,Beauty / Personal Care,1,0.0333
+Branch,4,Gravity Vault Brick,Fitness / Recreation,1,0.0333
+Branch,4,HomeGoods,Furniture / Home,1,0.0333
+Branch,4,J.Crew Factory,Apparel / Soft Goods,1,0.0333
+Branch,4,Jos. A. Bank,Apparel / Soft Goods,1,0.0333
+Branch,4,Men's Wearhouse,Apparel / Soft Goods,1,0.0333
+Branch,4,Old Navy,Apparel / Soft Goods,1,0.0333
+Branch,4,Pier 1,Furniture / Home,1,0.0333
+Branch,4,Studio Optics,Health / Pharmacy,1,0.0333
+Branch,4,Torrid,Apparel / Soft Goods,1,0.0333
+Branch,4,Versona,Apparel / Soft Goods,1,0.0333
+Branch,4,Virginia ABC,Food & Beverage,1,0.0333
+Branch,4,Wine Outlet,Food & Beverage,1,0.0333
+Branch,4,bkd Bagels,Food & Beverage,1,0.0333
+C-Shape,1,5.11 Tactical,Apparel / Soft Goods,1,0.0667
+C-Shape,1,AAA Southern New England,Service / Bank,1,0.0667
+C-Shape,1,Barnes & Noble,Other Retail,1,0.0667
+C-Shape,1,Burlington,Apparel / Soft Goods,1,0.0667
+C-Shape,1,Dollar Tree,Other Retail,1,0.0667
+C-Shape,1,Five Below,Other Retail,1,0.0667
+C-Shape,1,J.Crew Factory,Apparel / Soft Goods,1,0.0667
+C-Shape,1,LA-Z-Boy,Furniture / Home,1,0.0667
+C-Shape,1,Michaels,Hard Goods,1,0.0667
+C-Shape,1,Music and Arts Centers,Hard Goods,1,0.0667
+C-Shape,1,Nancy's Pizza,Food & Beverage,1,0.0667
+C-Shape,1,Orangetheory Fitness,Fitness / Recreation,1,0.0667
+C-Shape,1,PetSmart,Pet,1,0.0667
+C-Shape,1,Town and Country Hardware,Hard Goods,1,0.0667
+C-Shape,1,Woof Gang Bakery & Grooming,Pet,1,0.0667
+Cluster,1,Available,Vacancy,2,0.5
+Cluster,2,AAA Newton,Service / Bank,1,0.25
+Cluster,2,FedEx Office,Service / Bank,1,0.25
+Mall / Destination,1,Mattress Firm Hanover Mall,Furniture / Home,1,0.5
+Mall / Destination,1,WorldMarket,Furniture / Home,1,0.5
+Spine,1,Available,Vacancy,3,0.0638
+Spine,2,Bob's Discount Furniture,Furniture / Home,2,0.0426
+Spine,3,028 Barber Shop,Beauty / Personal Care,1,0.0213
+Spine,3,AT&T,Service / Bank,1,0.0213
+Spine,3,Aronson Insurance,Service / Bank,1,0.0213
+Spine,3,Athleta,Apparel / Soft Goods,1,0.0213
+Spine,3,Best Buy,Hard Goods,1,0.0213
+Spine,3,Bowology,Food & Beverage,1,0.0213
+Spine,3,Burlington,Apparel / Soft Goods,1,0.0213
+Spine,3,CVS,Health / Pharmacy,1,0.0213
+Spine,3,Cardi's Furniture,Furniture / Home,1,0.0213
+Spine,3,Citizens,Service / Bank,1,0.0213
+Spine,3,Club Pilates,Fitness / Recreation,1,0.0213
+Spine,3,Credit Union 1,Service / Bank,1,0.0213
+Spine,3,Crisp & Juicy,Food & Beverage,1,0.0213
+Spine,3,ELEVENO Pickleball,Fitness / Recreation,1,0.0213
+Spine,3,ERIK'S Bike Board Ski,Fitness / Recreation,1,0.0213
+Spine,3,European Wax Center,Beauty / Personal Care,1,0.0213
+Spine,3,Five Guys,Food & Beverage,1,0.0213
+Spine,3,Golf Galaxy,Fitness / Recreation,1,0.0213
+Spine,3,Great Clips,Beauty / Personal Care,1,0.0213
+Spine,3,Hippie Hut,Other Retail,1,0.0213
+Spine,3,Ideal Image,Beauty / Personal Care,1,0.0213
+Spine,3,J.Crew Factory,Apparel / Soft Goods,1,0.0213
+Spine,3,Java Loco,Food & Beverage,1,0.0213
+Spine,3,LaserAway,Beauty / Personal Care,1,0.0213
+Spine,3,Ledo Pizza,Food & Beverage,1,0.0213
+Spine,3,Mass General Brigham,Health / Pharmacy,1,0.0213
+Spine,3,Oye's Restaurant & Bar,Food & Beverage,1,0.0213
+Spine,3,Parry Custom Homes,Service / Bank,1,0.0213
+Spine,3,Patriots ProShop,Apparel / Soft Goods,1,0.0213
+Spine,3,Petco,Pet,1,0.0213
+Spine,3,RH Outlet Foxborough,Furniture / Home,1,0.0213
+Spine,3,Raymour & Flanigan Furniture,Furniture / Home,1,0.0213
+Spine,3,Salty,Food & Beverage,1,0.0213
+Spine,3,Sherwin-Williams,Hard Goods,1,0.0213
+Spine,3,Sierra,Apparel / Soft Goods,1,0.0213
+Spine,3,Sola Salons,Beauty / Personal Care,1,0.0213
+Spine,3,Starbucks,Food & Beverage,1,0.0213
+Spine,3,The Paper Store,Other Retail,1,0.0213
+Spine,3,Verizon,Service / Bank,1,0.0213
+Spine,3,Visible Coffee Roasters,Food & Beverage,1,0.0213
+Spine,3,Xfinity,Service / Bank,1,0.0213
+Spine,3,YogaSix,Fitness / Recreation,1,0.0213
+Standalone,1,Everything's Hair Limited,Beauty / Personal Care,1,0.5
+Standalone,1,Nail House,Beauty / Personal Care,1,0.5
+Urban Context,1,A.T. O'Keeffe's,Food & Beverage,1,0.0833
+Urban Context,1,BKBX fitness,Fitness / Recreation,1,0.0833
+Urban Context,1,Bank of America,Service / Bank,1,0.0833
+Urban Context,1,Chase Bank,Service / Bank,1,0.0833
+Urban Context,1,Chipotle,Food & Beverage,1,0.0833
+Urban Context,1,Creative Office Resources,Furniture / Home,1,0.0833
+Urban Context,1,Dani’s Queer Bar,Food & Beverage,1,0.0833
+Urban Context,1,Dumpling Daughter Brookline,Food & Beverage,1,0.0833
+Urban Context,1,Free People,Apparel / Soft Goods,1,0.0833
+Urban Context,1,Mecha Noodle Bar,Food & Beverage,1,0.0833
+Urban Context,1,Needham Bank,Service / Bank,1,0.0833
+Urban Context,1,Sloane's Restaurant,Food & Beverage,1,0.0833

@@ -1,0 +1,113 @@
+﻿Project ID,Project Name,City/State,Prototype,TypologyOfCenter,TraderJoesPosition,ResidentialRelationship,Adjacent Column,Adjacent Side,Adjacent Position,Proximity Group,Adjacent Tenant Original,Adjacent Tenant,Adjacent Category,Is Vacancy
+TJ_NEWTON,Newton Nexus,"Newton, MA",Cluster,Lifestyle,Junior Anchor,Nice Connection,Adjacent_Left_2,Left,2,Secondary,AAA Newton (Insurance agency),AAA Newton,Service / Bank,No
+TJ_NEWTON,Newton Nexus,"Newton, MA",Cluster,Lifestyle,Junior Anchor,Nice Connection,Adjacent_Left_1,Left,1,Immediate,Available,Available,Vacancy,Yes
+TJ_SHREWSBURY,77 Boston Turnpike Retail / Medical Space,"Shrewsbury, MA",Cluster,Suburban,Junior Anchor,Acceptable Connection,Adjacent_Left_2,Left,2,Secondary,FedEx Office,FedEx Office,Service / Bank,No
+TJ_SHREWSBURY,77 Boston Turnpike Retail / Medical Space,"Shrewsbury, MA",Cluster,Suburban,Junior Anchor,Acceptable Connection,Adjacent_Left_1,Left,1,Immediate,Available,Available,Vacancy,Yes
+TJ_SAUGUS,Shops at Saugus,"Saugus, MA",C-Shape,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Left_1,Left,1,Immediate,LA-Z-Boy,LA-Z-Boy,Furniture / Home,No
+TJ_SAUGUS,Shops at Saugus,"Saugus, MA",C-Shape,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,PetSmart,PetSmart,Pet,No
+TJ_SAUGUS,Shops at Saugus,"Saugus, MA",C-Shape,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,5.11 Tactical,5.11 Tactical,Apparel / Soft Goods,No
+116710,Brennan Station,"Raleigh, NC",C-Shape,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Left_2,Left,2,Secondary,Dollar Tree,Dollar Tree,Other Retail,No
+116710,Brennan Station,"Raleigh, NC",C-Shape,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Left_1,Left,1,Immediate,Woof Gang Bakery & Grooming,Woof Gang Bakery & Grooming,Pet,No
+116710,Brennan Station,"Raleigh, NC",C-Shape,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Nancy's Pizza,Nancy's Pizza,Food & Beverage,No
+116710,Brennan Station,"Raleigh, NC",C-Shape,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,Town and Country Hardware,Town and Country Hardware,Hard Goods,No
+125240,Highland Lakes Plaza,"Palm Harbor, FL",C-Shape,Suburban,Major Anchor,Nice Connection,Adjacent_Left_2,Left,2,Secondary,Orangetheory Fitness,Orangetheory Fitness,Fitness / Recreation,No
+125240,Highland Lakes Plaza,"Palm Harbor, FL",C-Shape,Suburban,Major Anchor,Nice Connection,Adjacent_Left_1,Left,1,Immediate,J.Crew Factory,J.Crew Factory,Apparel / Soft Goods,No
+125240,Highland Lakes Plaza,"Palm Harbor, FL",C-Shape,Suburban,Major Anchor,Nice Connection,Adjacent_Right_1,Right,1,Immediate,Barnes & Noble,Barnes & Noble,Other Retail,No
+125240,Highland Lakes Plaza,"Palm Harbor, FL",C-Shape,Suburban,Major Anchor,Nice Connection,Adjacent_Right_2,Right,2,Secondary,Michaels,Michaels,Hard Goods,No
+TJ_PEABODY,Peabody Place,"Peabody, MA",C-Shape,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Left_2,Left,2,Secondary,AAA Southern New England,AAA Southern New England,Service / Bank,No
+TJ_PEABODY,Peabody Place,"Peabody, MA",C-Shape,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Left_1,Left,1,Immediate,Music and Arts Centers,Music and Arts Centers,Hard Goods,No
+TJ_PEABODY,Peabody Place,"Peabody, MA",C-Shape,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Five Below,Five Below,Other Retail,No
+TJ_PEABODY,Peabody Place,"Peabody, MA",C-Shape,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,Burlington,Burlington,Apparel / Soft Goods,No
+TJ_HYANNIS,Christmas Tree Promenade / 655 Iyannough Rd Plaza,"Hyannis, MA",Spine,Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Left_2,Left,2,Secondary,Starbucks,Starbucks,Food & Beverage,No
+TJ_HYANNIS,Christmas Tree Promenade / 655 Iyannough Rd Plaza,"Hyannis, MA",Spine,Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Left_1,Left,1,Immediate,Cardi’s Furniture,Cardi's Furniture,Furniture / Home,No
+TJ_HYANNIS,Christmas Tree Promenade / 655 Iyannough Rd Plaza,"Hyannis, MA",Spine,Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Best Buy,Best Buy,Hard Goods,No
+TJ_HYANNIS,Christmas Tree Promenade / 655 Iyannough Rd Plaza,"Hyannis, MA",Spine,Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,Available,Available,Vacancy,Yes
+TJ_SOMERVILLE,Assembly Square,"Somerville, MA",Spine,Inner Suburban,Inline,Nice Connection,Adjacent_Left_2,Left,2,Secondary,Raymour & Flanigan Furniture,Raymour & Flanigan Furniture,Furniture / Home,No
+TJ_SOMERVILLE,Assembly Square,"Somerville, MA",Spine,Inner Suburban,Inline,Nice Connection,Adjacent_Left_1,Left,1,Immediate,Xfinity,Xfinity,Service / Bank,No
+TJ_SOMERVILLE,Assembly Square,"Somerville, MA",Spine,Inner Suburban,Inline,Nice Connection,Adjacent_Right_1,Right,1,Immediate,Burlington,Burlington,Apparel / Soft Goods,No
+TJ_SOMERVILLE,Assembly Square,"Somerville, MA",Spine,Inner Suburban,Inline,Nice Connection,Adjacent_Right_2,Right,2,Secondary,Bob's Discount Furniture,Bob's Discount Furniture,Furniture / Home,No
+TJ_MA_012,Trader Joe's Needham Heights,"Needham, MA",Spine,Inner Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Left_1,Left,1,Immediate,Citizens,Citizens,Service / Bank,No
+TJ_MA_012,Trader Joe's Needham Heights,"Needham, MA",Spine,Inner Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Aronson Insurance,Aronson Insurance,Service / Bank,No
+TJ_MA_012,Trader Joe's Needham Heights,"Needham, MA",Spine,Inner Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,CVS,CVS,Health / Pharmacy,No
+TJ_MA_014,The Crossing at Walkers Brook,"Reading, MA",Spine,Power,Inline,No Multifamily Within 1000 ft,Adjacent_Left_2,Left,2,Secondary,Oye's Restaurant & Bar,Oye's Restaurant & Bar,Food & Beverage,No
+TJ_MA_014,The Crossing at Walkers Brook,"Reading, MA",Spine,Power,Inline,No Multifamily Within 1000 ft,Adjacent_Left_1,Left,1,Immediate,The Paper Store,The Paper Store,Other Retail,No
+TJ_MA_014,The Crossing at Walkers Brook,"Reading, MA",Spine,Power,Inline,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Golf Galaxy,Golf Galaxy,Fitness / Recreation,No
+TJ_MA_014,The Crossing at Walkers Brook,"Reading, MA",Spine,Power,Inline,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,Verizon,Verizon,Service / Bank,No
+TJ_BURLINGTON,Petco / Trader Joe's center,"Burlington, MA",Spine,Convenience / Neighborhood,End Cap,Acceptable Connection,Adjacent_Left_1,Left,1,Immediate,Bob’s Discount Furniture,Bob's Discount Furniture,Furniture / Home,No
+TJ_BURLINGTON,Petco / Trader Joe's center,"Burlington, MA",Spine,Convenience / Neighborhood,End Cap,Acceptable Connection,Adjacent_Right_1,Right,1,Immediate,Petco,Petco,Pet,No
+TJ_MA_008,Patriot Place,"Foxborough, MA",Spine,Lifestyle,Inline,No Multifamily Within 1000 ft,Adjacent_Left_2,Left,2,Secondary,Patriots ProShop,Patriots ProShop,Apparel / Soft Goods,No
+TJ_MA_008,Patriot Place,"Foxborough, MA",Spine,Lifestyle,Inline,No Multifamily Within 1000 ft,Adjacent_Left_1,Left,1,Immediate,Mass General Brigham,Mass General Brigham,Health / Pharmacy,No
+TJ_MA_008,Patriot Place,"Foxborough, MA",Spine,Lifestyle,Inline,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,ELEVENO Pickleball,ELEVENO Pickleball,Fitness / Recreation,No
+TJ_MA_008,Patriot Place,"Foxborough, MA",Spine,Lifestyle,Inline,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,RH Outlet Foxborough,RH Outlet Foxborough,Furniture / Home,No
+PE_APACHE_SHOPPES,Apache Shoppes,"Rochester, MN",Spine,Suburban,Junior Anchor,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,ERIK'S - Bike Board Ski,ERIK'S Bike Board Ski,Fitness / Recreation,No
+PE_APACHE_SHOPPES,Apache Shoppes,"Rochester, MN",Spine,Suburban,Junior Anchor,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,Sierra,Sierra,Apparel / Soft Goods,No
+PE_CORONADO_CENTER,Coronado Center,"Santa Fe, NM",Spine,Convenience / Neighborhood,Junior Anchor,Acceptable Connection,Adjacent_Left_2,Left,2,Secondary,Available,Available,Vacancy,Yes
+PE_CORONADO_CENTER,Coronado Center,"Santa Fe, NM",Spine,Convenience / Neighborhood,Junior Anchor,Acceptable Connection,Adjacent_Left_1,Left,1,Immediate,AT&T,AT&T,Service / Bank,No
+PE_CORONADO_CENTER,Coronado Center,"Santa Fe, NM",Spine,Convenience / Neighborhood,Junior Anchor,Acceptable Connection,Adjacent_Right_1,Right,1,Immediate,J. Crew Factory,J.Crew Factory,Apparel / Soft Goods,No
+PE_CORONADO_CENTER,Coronado Center,"Santa Fe, NM",Spine,Convenience / Neighborhood,Junior Anchor,Acceptable Connection,Adjacent_Right_2,Right,2,Secondary,Great Clips,Great Clips,Beauty / Personal Care,No
+PE_TRADER_JOES_CENTER,Trader Joe's Center,"Dublin, OH",Spine,Lifestyle,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Left_2,Left,2,Secondary,Ideal Image,Ideal Image,Beauty / Personal Care,No
+PE_TRADER_JOES_CENTER,Trader Joe's Center,"Dublin, OH",Spine,Lifestyle,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Left_1,Left,1,Immediate,Parry Custom Homes,Parry Custom Homes,Service / Bank,No
+PE_TRADER_JOES_CENTER,Trader Joe's Center,"Dublin, OH",Spine,Lifestyle,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Hippie Hut,Hippie Hut,Other Retail,No
+PE_TRADER_JOES_CENTER,Trader Joe's Center,"Dublin, OH",Spine,Lifestyle,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,Available,Available,Vacancy,Yes
+FRT_TYSONS_STATION_VA,Tysons Station,"Falls Church, VA",Spine,Inner Suburban,Inline,Nice Connection,Adjacent_Left_2,Left,2,Secondary,Crisp & Juicy,Crisp & Juicy,Food & Beverage,No
+FRT_TYSONS_STATION_VA,Tysons Station,"Falls Church, VA",Spine,Inner Suburban,Inline,Nice Connection,Adjacent_Left_1,Left,1,Immediate,Java Loco,Java Loco,Food & Beverage,No
+FRT_TYSONS_STATION_VA,Tysons Station,"Falls Church, VA",Spine,Inner Suburban,Inline,Nice Connection,Adjacent_Right_1,Right,1,Immediate,Ledo Pizza,Ledo Pizza,Food & Beverage,No
+FRT_TYSONS_STATION_VA,Tysons Station,"Falls Church, VA",Spine,Inner Suburban,Inline,Nice Connection,Adjacent_Right_2,Right,2,Secondary,European Wax Center,European Wax Center,Beauty / Personal Care,No
+KRG_EDDY_STREET_COMMONS_IN,Eddy Street Commons,"South Bend, IN",Spine,Convenience / Neighborhood,Major Anchor,Nice Connection,Adjacent_Left_2,Left,2,Secondary,Credit Union 1,Credit Union 1,Service / Bank,No
+KRG_EDDY_STREET_COMMONS_IN,Eddy Street Commons,"South Bend, IN",Spine,Convenience / Neighborhood,Major Anchor,Nice Connection,Adjacent_Left_1,Left,1,Immediate,Athleta,Athleta,Apparel / Soft Goods,No
+KRG_SHOPPES_UNION_HILL_NJ,The Shoppes at Union Hill,"Denville, NJ",Spine,Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Five Guys,Five Guys,Food & Beverage,No
+KRG_SHOPPES_UNION_HILL_NJ,The Shoppes at Union Hill,"Denville, NJ",Spine,Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,LaserAway,LaserAway,Beauty / Personal Care,No
+KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway,"Las Vegas, NV",Spine,Inner Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Left_2,Left,2,Secondary,YogaSix,YogaSix,Fitness / Recreation,No
+KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway,"Las Vegas, NV",Spine,Inner Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Left_1,Left,1,Immediate,Bowology,Bowology,Food & Beverage,No
+KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway,"Las Vegas, NV",Spine,Inner Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Salty,Salty,Food & Beverage,No
+KRG_CENTENNIAL_GATEWAY_NV,Centennial Gateway,"Las Vegas, NV",Spine,Inner Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,Sola Salons,Sola Salons,Beauty / Personal Care,No
+KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza,"Woodinville, WA",Spine,Inner Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Left_2,Left,2,Secondary,Sherwin-Williams,Sherwin-Williams,Hard Goods,No
+KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza,"Woodinville, WA",Spine,Inner Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Left_1,Left,1,Immediate,Club Pilates,Club Pilates,Fitness / Recreation,No
+KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza,"Woodinville, WA",Spine,Inner Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Visible Coffee Roasters,Visible Coffee Roasters,Food & Beverage,No
+KRG_WOODINVILLE_PLAZA_WA,Woodinville Plaza,"Woodinville, WA",Spine,Inner Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,028 Barber Shop,028 Barber Shop,Beauty / Personal Care,No
+TJ_MILFORD,Granite Heights Marketplace,"Milford, MA",Branch,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Burlington,Burlington,Apparel / Soft Goods,No
+TJ_FRAMINGHAM,Staples Plaza,"Framingham, MA",Branch,Suburban,Major Anchor,Acceptable Connection,Adjacent_Left_1,Left,1,Immediate,BluePearl Pet Hospital Framingham,BluePearl Pet Hospital Framingham,Pet,No
+TJ_FRAMINGHAM,Staples Plaza,"Framingham, MA",Branch,Suburban,Major Anchor,Acceptable Connection,Adjacent_Right_1,Right,1,Immediate,Studio Optics,Studio Optics,Health / Pharmacy,No
+TJ_FRAMINGHAM,Staples Plaza,"Framingham, MA",Branch,Suburban,Major Anchor,Acceptable Connection,Adjacent_Right_2,Right,2,Secondary,99 Restaurants,99 Restaurants,Food & Beverage,No
+TJ_ACTON,Brookside Shops,"Acton, MA",Branch,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Left_2,Left,2,Secondary,Jos. A. Bank,Jos. A. Bank,Apparel / Soft Goods,No
+TJ_ACTON,Brookside Shops,"Acton, MA",Branch,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Left_1,Left,1,Immediate,Elizabeth Grady,Elizabeth Grady,Beauty / Personal Care,No
+TJ_ACTON,Brookside Shops,"Acton, MA",Branch,Suburban,Major Anchor,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Pier 1,Pier 1,Furniture / Home,No
+TJ_CAMBRIDGE_FRESH_POND,Alewife Brook Parkway Shopping Center,"Cambridge, MA",Branch,Inner Suburban,Major Anchor,Nice Connection,Adjacent_Left_1,Left,1,Immediate,CVS,CVS,Health / Pharmacy,No
+TJ_CAMBRIDGE_FRESH_POND,Alewife Brook Parkway Shopping Center,"Cambridge, MA",Branch,Inner Suburban,Major Anchor,Nice Connection,Adjacent_Right_1,Right,1,Immediate,Dunkin,Dunkin,Food & Beverage,No
+FRT_BRICK_PLAZA_NJ,Brick Plaza,"Brick, NJ",Branch,Inner Suburban,End Cap,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Wine Outlet,Wine Outlet,Food & Beverage,No
+FRT_BRICK_PLAZA_NJ,Brick Plaza,"Brick, NJ",Branch,Inner Suburban,End Cap,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,Gravity Vault Brick,Gravity Vault Brick,Fitness / Recreation,No
+FRT_TOWN_CENTER_CROSSING_KS,Town Center Crossing,"Leawood, KS",Branch,Lifestyle,Freestanding / Pad,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Drybar Leawood,Drybar Leawood,Beauty / Personal Care,No
+KRG_CHASTAIN_MARKET_GA,Chastain Market,"Sandy Springs, GA",Branch,Convenience / Neighborhood,Major Anchor,Nice Connection,Adjacent_Left_1,Left,1,Immediate,Books-A-Million,Books-A-Million,Other Retail,No
+KRG_EASTGATE_CROSSING_NC,Eastgate Crossing,"Chapel Hill, NC",Branch,Suburban,Junior Anchor,Nice Connection,Adjacent_Left_1,Left,1,Immediate,Ulta Beauty,Ulta Beauty,Beauty / Personal Care,No
+KRG_HUEBNER_OAKS_TX,Huebner Oaks,"San Antonio, TX",Branch,Inner Suburban,Inline,Acceptable Connection,Adjacent_Left_2,Left,2,Secondary,MEN'S WAREHOUSE,Men's Wearhouse,Apparel / Soft Goods,No
+KRG_HUEBNER_OAKS_TX,Huebner Oaks,"San Antonio, TX",Branch,Inner Suburban,Inline,Acceptable Connection,Adjacent_Left_1,Left,1,Immediate,Barnes & Noble,Barnes & Noble,Other Retail,No
+KRG_HUEBNER_OAKS_TX,Huebner Oaks,"San Antonio, TX",Branch,Inner Suburban,Inline,Acceptable Connection,Adjacent_Right_1,Right,1,Immediate,Old Navy,Old Navy,Apparel / Soft Goods,No
+KRG_HUEBNER_OAKS_TX,Huebner Oaks,"San Antonio, TX",Branch,Inner Suburban,Inline,Acceptable Connection,Adjacent_Right_2,Right,2,Secondary,Ross,Ross,Apparel / Soft Goods,No
+KRG_FORT_EVANS_PLAZA_II_VA,Fort Evans Plaza II,"Leesburg, VA",Branch,Suburban,Inline,Acceptable Connection,Adjacent_Left_2,Left,2,Secondary,bkd Bagels,bkd Bagels,Food & Beverage,No
+KRG_FORT_EVANS_PLAZA_II_VA,Fort Evans Plaza II,"Leesburg, VA",Branch,Suburban,Inline,Acceptable Connection,Adjacent_Left_1,Left,1,Immediate,HomeGoods,HomeGoods,Furniture / Home,No
+KRG_FORT_EVANS_PLAZA_II_VA,Fort Evans Plaza II,"Leesburg, VA",Branch,Suburban,Inline,Acceptable Connection,Adjacent_Right_1,Right,1,Immediate,Virginia ABC,Virginia ABC,Food & Beverage,No
+KRG_FORT_EVANS_PLAZA_II_VA,Fort Evans Plaza II,"Leesburg, VA",Branch,Suburban,Inline,Acceptable Connection,Adjacent_Right_2,Right,2,Secondary,Available,Available,Vacancy,Yes
+KRG_JEFFERSON_COMMONS_VA,Jefferson Commons,"Newport News, VA",Branch,Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Left_2,Left,2,Secondary,Versona,Versona,Apparel / Soft Goods,No
+KRG_JEFFERSON_COMMONS_VA,Jefferson Commons,"Newport News, VA",Branch,Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Left_1,Left,1,Immediate,J.Crew Factory,J.Crew Factory,Apparel / Soft Goods,No
+KRG_JEFFERSON_COMMONS_VA,Jefferson Commons,"Newport News, VA",Branch,Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Right_1,Right,1,Immediate,Torrid,Torrid,Apparel / Soft Goods,No
+KRG_JEFFERSON_COMMONS_VA,Jefferson Commons,"Newport News, VA",Branch,Suburban,Inline,No Multifamily Within 1000 ft,Adjacent_Right_2,Right,2,Secondary,Devinn Nail Bar,Devinn Nail Bar,Beauty / Personal Care,No
+EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons,"Rocklin, CA",Branch,Inner Suburban,Inline,Acceptable Connection,Adjacent_Left_2,Left,2,Secondary,Ulta Beauty,Ulta Beauty,Beauty / Personal Care,No
+EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons,"Rocklin, CA",Branch,Inner Suburban,Inline,Acceptable Connection,Adjacent_Left_1,Left,1,Immediate,Available,Available,Vacancy,Yes
+EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons,"Rocklin, CA",Branch,Inner Suburban,Inline,Acceptable Connection,Adjacent_Right_1,Right,1,Immediate,Ross,Ross,Apparel / Soft Goods,No
+EDENS_ROCKLIN_COMMONS_CA,Rocklin Commons,"Rocklin, CA",Branch,Inner Suburban,Inline,Acceptable Connection,Adjacent_Right_2,Right,2,Secondary,Bath & Body Works,Bath & Body Works,Beauty / Personal Care,No
+TJ_MA_010,Hanover Crossing,"Hanover, MA",Mall / Destination,Suburban,Inline,Acceptable Connection,Adjacent_Left_1,Left,1,Immediate,Mattress Firm Hanover Mall,Mattress Firm Hanover Mall,Furniture / Home,No
+TJ_MA_010,Hanover Crossing,"Hanover, MA",Mall / Destination,Suburban,Inline,Acceptable Connection,Adjacent_Right_1,Right,1,Immediate,WorldMarket,WorldMarket,Furniture / Home,No
+BRX040,Village Square Shopping Center,"Larchmont, NY",Standalone,Convenience / Neighborhood,End Cap,Acceptable Connection,Adjacent_Right_1,Right,1,Immediate,Everythings Hair Limited,Everything's Hair Limited,Beauty / Personal Care,No
+BRX040,Village Square Shopping Center,"Larchmont, NY",Standalone,Convenience / Neighborhood,End Cap,Acceptable Connection,Adjacent_Right_2,Right,2,Secondary,Nail House,Nail House,Beauty / Personal Care,No
+TJ_MA_004,Trader Joe's Fort Point Seaport,"Boston, MA",Urban Context,Urban,Urban Block,Nice Connection,Adjacent_Left_2,Left,2,Secondary,Mecha Noodle Bar,Mecha Noodle Bar,Food & Beverage,No
+TJ_MA_004,Trader Joe's Fort Point Seaport,"Boston, MA",Urban Context,Urban,Urban Block,Nice Connection,Adjacent_Left_1,Left,1,Immediate,Creative Office Resources,Creative Office Resources,Furniture / Home,No
+TJ_MA_003,Trader Joe's Boston - Back Bay,"Boston, MA",Urban Context,Urban,Urban Block,Nice Connection,Adjacent_Left_2,Left,2,Secondary,A.T. O'Keeffe's,A.T. O'Keeffe's,Food & Beverage,No
+TJ_MA_003,Trader Joe's Boston - Back Bay,"Boston, MA",Urban Context,Urban,Urban Block,Nice Connection,Adjacent_Left_1,Left,1,Immediate,Dani’s Queer Bar,Dani’s Queer Bar,Food & Beverage,No
+TJ_MA_003,Trader Joe's Boston - Back Bay,"Boston, MA",Urban Context,Urban,Urban Block,Nice Connection,Adjacent_Right_1,Right,1,Immediate,Free People,Free People,Apparel / Soft Goods,No
+TJ_MA_007,Trader Joe's Brookline,"Brookline, MA",Urban Context,Urban,Urban Block,Nice Connection,Adjacent_Left_1,Left,1,Immediate,Dumpling Daughter Brookline,Dumpling Daughter Brookline,Food & Beverage,No
+TJ_MA_007,Trader Joe's Brookline,"Brookline, MA",Urban Context,Urban,Urban Block,Nice Connection,Adjacent_Right_1,Right,1,Immediate,Bank of America,Bank of America,Service / Bank,No
+TJ_MA_013,Quincy Center Mixed-Use Development,"Quincy, MA",Urban Context,Urban,Urban Block,Nice Connection,Adjacent_Left_2,Left,2,Secondary,Needham Bank,Needham Bank,Service / Bank,No
+TJ_MA_013,Quincy Center Mixed-Use Development,"Quincy, MA",Urban Context,Urban,Urban Block,Nice Connection,Adjacent_Left_1,Left,1,Immediate,Chipotle,Chipotle,Food & Beverage,No
+TJ_MA_001,Continuum Allston,"Allston, MA",Urban Context,Urban,Urban Block,Nice Connection,Adjacent_Left_2,Left,2,Secondary,BKBX fitness,BKBX fitness,Fitness / Recreation,No
+TJ_MA_001,Continuum Allston,"Allston, MA",Urban Context,Urban,Urban Block,Nice Connection,Adjacent_Left_1,Left,1,Immediate,Chase Bank,Chase Bank,Service / Bank,No
+TJ_MA_001,Continuum Allston,"Allston, MA",Urban Context,Urban,Urban Block,Nice Connection,Adjacent_Right_1,Right,1,Immediate,Sloane’s Restaurant,Sloane's Restaurant,Food & Beverage,No

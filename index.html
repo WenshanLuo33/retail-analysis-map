@@ -187,9 +187,15 @@
          </button>
 
          <button id="coTenantTableBtn"
-          class="matrix-tool-btn"
+          class="matrix-tool-btn table-tool-btn"
           onclick="toggleCoTenantTable()">
           Show Co-Tenant Table
+        </button>
+
+        <button id="adjacentTenantTableBtn"
+          class="matrix-tool-btn table-tool-btn"
+          onclick="toggleAdjacentTenantTable()">
+          Show Adjacent Tenant Table
         </button>
       </div>
 
@@ -392,6 +398,7 @@
   <script src="https://unpkg.com/leaflet-draw/dist/leaflet.draw.js"></script>
   <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
   <script src="draw.js"></script>
 </body>

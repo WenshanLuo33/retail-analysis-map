@@ -6,6 +6,17 @@ let highlightedMarker = null;
 let traderJoePrototypes = [];
 let tjCoTenants = [];
 let tjCategorySummary = [];
+let tjAdjacentCategoryFrequency = [];
+let tjAdjacentStoreFrequency = [];
+let tjAdjacentByPrototypeCategory = [];
+let tjAdjacentByPrototypeStore = [];
+let tjAdjacentImmediateCategoryFrequency = [];
+let tjAdjacentPrototypeTopSummary = [];
+let tjAdjacentTenantsLong = [];
+
+let adjacentCharts = [];
+
+let adjacentTenantTableMode = "summary";
 
 let prototypeDisplayMode = "matrix"; // "matrix" or "cotenant"
 let coTenantTableMode = "frequency"; // "frequency" or "category"
@@ -214,13 +225,44 @@ Promise.all([
   loadCSV("data/tenants_classified_v6.csv"),
   loadCSV("data/trader_joes_prototypes.csv"),
   loadCSV("WithinCenter/tj_co_tenants_rechecked.csv"),
-  loadCSV("WithinCenter/tj_49_category_summary.csv")
-]).then(([projectData, tenantData, prototypeData, coTenantData, categorySummaryData]) => {
+  loadCSV("WithinCenter/tj_49_category_summary.csv"),
+
+  // Adjacent tenant analysis CSVs
+  loadCSV("WithinCenter/tj_adjacent_category_frequency.csv"),
+  loadCSV("WithinCenter/tj_adjacent_store_frequency.csv"),
+  loadCSV("WithinCenter/tj_adjacent_by_prototype_category.csv"),
+  loadCSV("WithinCenter/tj_adjacent_by_prototype_store.csv"),
+  loadCSV("WithinCenter/tj_adjacent_immediate_category_frequency.csv"),
+  loadCSV("WithinCenter/tj_adjacent_prototype_top_summary.csv"),
+  loadCSV("WithinCenter/tj_adjacent_tenants_long.csv")
+]).then(([
+  projectData,
+  tenantData,
+  prototypeData,
+  coTenantData,
+  categorySummaryData,
+
+  adjacentCategoryFrequencyData,
+  adjacentStoreFrequencyData,
+  adjacentByPrototypeCategoryData,
+  adjacentByPrototypeStoreData,
+  adjacentImmediateCategoryFrequencyData,
+  adjacentPrototypeTopSummaryData,
+  adjacentTenantsLongData
+]) => {
   projects = projectData;
   tenants = tenantData;
   traderJoePrototypes = prototypeData;
   tjCoTenants = coTenantData;
   tjCategorySummary = categorySummaryData;
+
+  tjAdjacentCategoryFrequency = adjacentCategoryFrequencyData;
+  tjAdjacentStoreFrequency = adjacentStoreFrequencyData;
+  tjAdjacentByPrototypeCategory = adjacentByPrototypeCategoryData;
+  tjAdjacentByPrototypeStore = adjacentByPrototypeStoreData;
+  tjAdjacentImmediateCategoryFrequency = adjacentImmediateCategoryFrequencyData;
+  tjAdjacentPrototypeTopSummary = adjacentPrototypeTopSummaryData;
+  tjAdjacentTenantsLong = adjacentTenantsLongData;
 
   buildOwnerFilter(projects);
   buildStateFilter(projects);
@@ -1367,6 +1409,12 @@ function setMatrixMode(mode) {
     coTenantBtn.classList.remove("active");
   }
 
+  const adjacentTenantBtn = document.getElementById("adjacentTenantTableBtn");
+  if (adjacentTenantBtn) {
+   adjacentTenantBtn.textContent = "Show Adjacent Tenant Table";
+   adjacentTenantBtn.classList.remove("active");
+  }
+
   matrixMode = mode;
 
   const subtitle = document.getElementById("prototypeMatrixSubtitle");
@@ -1592,6 +1640,12 @@ function showPrototypeView() {
   if (coTenantBtn) {
     coTenantBtn.textContent = "Show Co-Tenant Table";
     coTenantBtn.classList.remove("active");
+  }
+
+  const adjacentTenantBtn = document.getElementById("adjacentTenantTableBtn");
+  if (adjacentTenantBtn) {
+    adjacentTenantBtn.textContent = "Show Adjacent Tenant Table";
+    adjacentTenantBtn.classList.remove("active");
   }
 
   renderMatrixModeToggle();
@@ -1919,6 +1973,12 @@ function toggleCoTenantTable() {
     btn.classList.add("active");
   }
 
+  const adjacentTenantBtn = document.getElementById("adjacentTenantTableBtn");
+  if (adjacentTenantBtn) {
+    adjacentTenantBtn.textContent = "Show Adjacent Tenant Table";
+    adjacentTenantBtn.classList.remove("active");
+  }
+
   const subtitle = document.getElementById("prototypeMatrixSubtitle");
   if (subtitle) {
     subtitle.textContent =
@@ -2004,6 +2064,635 @@ function renderCoTenantTable() {
       </table>
     </div>
   `;
+}
+
+function toggleAdjacentTenantTable() {
+  if (prototypeDisplayMode === "adjacent") {
+    prototypeDisplayMode = "matrix";
+    setPrototypePanelsVisible(true);
+
+    const btn = document.getElementById("adjacentTenantTableBtn");
+    if (btn) {
+      btn.textContent = "Show Adjacent Tenant Table";
+      btn.classList.remove("active");
+    }
+
+    const subtitle = document.getElementById("prototypeMatrixSubtitle");
+    if (subtitle) {
+      subtitle.textContent = matrixModeConfig[matrixMode].subtitle;
+    }
+
+    renderPrototypeView();
+    return;
+  }
+
+  prototypeDisplayMode = "adjacent";
+  adjacentTenantTableMode = "category";
+  setPrototypePanelsVisible(false);
+
+  const adjacentBtn = document.getElementById("adjacentTenantTableBtn");
+  if (adjacentBtn) {
+    adjacentBtn.textContent = "Back to Matrix";
+    adjacentBtn.classList.add("active");
+  }
+
+  const coTenantBtn = document.getElementById("coTenantTableBtn");
+  if (coTenantBtn) {
+    coTenantBtn.textContent = "Show Co-Tenant Table";
+    coTenantBtn.classList.remove("active");
+  }
+
+  const subtitle = document.getElementById("prototypeMatrixSubtitle");
+  if (subtitle) {
+    subtitle.textContent =
+      "Tenants directly adjacent to Trader Joe’s, summarized by store, category, and layout prototype";
+  }
+
+  renderAdjacentTenantTable();
+}
+
+function adjacentTenantTableTabsHTML() {
+  return `
+    <div class="co-tenant-tabs adjacent-tenant-tabs">
+      <button
+        class="${adjacentTenantTableMode === "category" ? "active" : ""}"
+        onclick="setAdjacentTenantTableMode('category')">
+        Category Ranking
+      </button>
+
+      <button
+        class="${adjacentTenantTableMode === "store" ? "active" : ""}"
+        onclick="setAdjacentTenantTableMode('store')">
+        Store Ranking
+      </button>
+
+      <button
+        class="${adjacentTenantTableMode === "immediate" ? "active" : ""}"
+        onclick="setAdjacentTenantTableMode('immediate')">
+        Immediate Only
+      </button>
+
+      <button
+        class="${adjacentTenantTableMode === "summary" ? "active" : ""}"
+        onclick="setAdjacentTenantTableMode('summary')">
+        Layout Summary
+      </button>
+
+      <button
+        class="${adjacentTenantTableMode === "layoutCategory" ? "active" : ""}"
+        onclick="setAdjacentTenantTableMode('layoutCategory')">
+        Layout × Category
+      </button>
+
+      <button
+        class="${adjacentTenantTableMode === "layoutStore" ? "active" : ""}"
+        onclick="setAdjacentTenantTableMode('layoutStore')">
+        Layout × Store
+      </button>
+    </div>
+  `;
+}
+
+function setAdjacentTenantTableMode(mode) {
+  adjacentTenantTableMode = mode;
+  renderAdjacentTenantTable();
+}
+
+function renderAdjacentPrototypeSummaryTable() {
+  const prototypeGrid = document.getElementById("prototypeGrid");
+  if (!prototypeGrid) return;
+
+  if (!tjAdjacentPrototypeTopSummary || !tjAdjacentPrototypeTopSummary.length) {
+    prototypeGrid.innerHTML = `
+      <div class="co-tenant-table-wrap adjacent-table-wrap">
+        ${adjacentTenantTableTabsHTML()}
+        <p>No adjacent tenant summary data loaded.</p>
+      </div>
+    `;
+    return;
+  }
+
+  function getPrototypeProjectCount(prototypeName) {
+    return traderJoePrototypes.filter(item =>
+      normalizePrototypeName(item["Prototype"]) === normalizePrototypeName(prototypeName)
+    ).length;
+  }
+
+  const rows = [...tjAdjacentPrototypeTopSummary]
+    .sort((a, b) =>
+      String(a["Prototype"] || "").localeCompare(String(b["Prototype"] || ""))
+    )
+    .map(row => `
+      <tr>
+        <td class="co-tenant-name">${row["Prototype"] || ""}</td>
+        <td class="co-tenant-count">${getPrototypeProjectCount(row["Prototype"])}</td>
+        <td class="co-tenant-count">${row["Adjacent Tenant Records"] || ""}</td>
+        <td>${row["Top Category"] || ""}</td>
+        <td class="co-tenant-count">${row["Top Category Count"] || ""}</td>
+        <td class="co-tenant-count">${formatPercent(row["Top Category Share"])}</td>
+        <td>${row["Top Store"] || ""}</td>
+      </tr>
+    `)
+    .join("");
+
+  prototypeGrid.innerHTML = `
+    <div class="co-tenant-table-wrap adjacent-table-wrap">
+      ${adjacentTenantTableTabsHTML()}
+
+      <div class="co-tenant-table-header">
+        <h3>Trader Joe’s Adjacent Tenant Summary by Layout</h3>
+        <p>
+          This table summarizes the most frequent adjacent tenant category and store within each layout prototype.
+          It helps test whether adjacent tenant patterns vary by layout type.
+        </p>
+      </div>
+
+      <div id="layoutPieChartGrid" class="layout-pie-chart-grid"></div>
+
+      <table class="co-tenant-table adjacent-tenant-table">
+        <thead>
+          <tr>
+            <th>Layout Prototype</th>
+            <th>Project Count</th>
+            <th>Adjacent Records</th>
+            <th>Top Category</th>
+            <th>Category Count</th>
+            <th>Category Share</th>
+            <th>Top Store</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  requestAnimationFrame(() => {
+    renderLayoutPieCharts();
+  });
+}
+
+function renderLayoutPieCharts() {
+  const container = document.getElementById("layoutPieChartGrid");
+  if (!container) return;
+
+  const prototypeOrder = [
+    "Urban Context",
+    "Standalone",
+    "Mall / Destination",
+    "Branch",
+    "Spine",
+    "C-Shape",
+    "Cluster"
+  ];
+
+  const prototypes = prototypeOrder.filter(prototypeName =>
+    tjAdjacentByPrototypeCategory.some(row =>
+      normalizePrototypeName(row["Prototype"]) === normalizePrototypeName(prototypeName)
+    )
+  );
+
+  container.innerHTML = prototypes.map(prototypeName => {
+    const canvasId = `layout-pie-${safeId(prototypeName)}`;
+
+    return `
+      <div class="layout-pie-card">
+        <div class="layout-pie-title">${prototypeName}</div>
+        <div class="layout-pie-frame">
+          <canvas id="${canvasId}"></canvas>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  prototypes.forEach(prototypeName => {
+    const rows = tjAdjacentByPrototypeCategory.filter(row =>
+      normalizePrototypeName(row["Prototype"]) === normalizePrototypeName(prototypeName)
+    );
+
+    const chartRows = getTopChartRows(
+      rows,
+      "Adjacent Category",
+      "Count",
+      5
+    );
+
+    createPieChart(
+      `layout-pie-${safeId(prototypeName)}`,
+      chartRows.map(row => row.label),
+      chartRows.map(row => row.count),
+      prototypeName
+    );
+  });
+}
+
+function renderAdjacentCategoryFrequencyTable() {
+  const prototypeGrid = document.getElementById("prototypeGrid");
+  if (!prototypeGrid) return;
+
+  const rows = [...tjAdjacentCategoryFrequency]
+    .sort((a, b) => (Number(a["Rank"]) || 9999) - (Number(b["Rank"]) || 9999))
+    .map(row => `
+      <tr>
+        <td class="co-tenant-rank">${row["Rank"] || ""}</td>
+        <td class="co-tenant-name">${row["Adjacent Category"] || ""}</td>
+        <td class="co-tenant-count">${row["Count"] || ""}</td>
+        <td class="co-tenant-count">${formatPercent(row["Share of Adjacent Tenants"])}</td>
+      </tr>
+    `)
+    .join("");
+
+  prototypeGrid.innerHTML = `
+    <div class="co-tenant-table-wrap adjacent-table-wrap">
+      ${adjacentTenantTableTabsHTML()}
+
+      <div class="co-tenant-table-header">
+        <h3>Adjacent Tenant Category Ranking</h3>
+        <p>
+          Overall frequency of tenant categories directly adjacent to Trader Joe’s.
+        </p>
+      </div>
+
+      <div class="adjacent-chart-card">
+        <div class="adjacent-chart-title">Adjacent Tenant Category Mix</div>
+        <div class="adjacent-chart-frame">
+          <canvas id="adjacentCategoryPie"></canvas>
+        </div>
+      </div>
+
+      <table class="co-tenant-table adjacent-tenant-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Adjacent Category</th>
+            <th>Count</th>
+            <th>Share</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  requestAnimationFrame(() => {
+    const chartRows = getTopChartRows(
+      tjAdjacentCategoryFrequency,
+      "Adjacent Category",
+      "Count",
+      6
+    );
+
+    createPieChart(
+      "adjacentCategoryPie",
+      chartRows.map(row => row.label),
+      chartRows.map(row => row.count),
+      "Overall adjacent tenant categories"
+    );
+  });
+}
+
+function renderAdjacentStoreFrequencyTable() {
+  const prototypeGrid = document.getElementById("prototypeGrid");
+  if (!prototypeGrid) return;
+
+  const rows = [...tjAdjacentStoreFrequency]
+    .sort((a, b) => (Number(a["Rank"]) || 9999) - (Number(b["Rank"]) || 9999))
+    .map(row => `
+      <tr>
+        <td class="co-tenant-rank">${row["Rank"] || ""}</td>
+        <td class="co-tenant-name">${row["Adjacent Tenant"] || ""}</td>
+        <td>${row["Adjacent Category"] || ""}</td>
+        <td class="co-tenant-count">${row["Count"] || ""}</td>
+        <td class="co-tenant-count">${formatPercent(row["Share of Adjacent Tenants"])}</td>
+      </tr>
+    `)
+    .join("");
+
+  prototypeGrid.innerHTML = `
+    <div class="co-tenant-table-wrap adjacent-table-wrap">
+      ${adjacentTenantTableTabsHTML()}
+
+      <div class="co-tenant-table-header">
+        <h3>Adjacent Tenant Store Ranking</h3>
+        <p>
+          Specific stores that appear most often directly adjacent to Trader Joe’s.
+        </p>
+      </div>
+
+      <table class="co-tenant-table adjacent-tenant-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Adjacent Store</th>
+            <th>Category</th>
+            <th>Count</th>
+            <th>Share</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderAdjacentImmediateCategoryTable() {
+  const prototypeGrid = document.getElementById("prototypeGrid");
+  if (!prototypeGrid) return;
+
+  const rows = [...tjAdjacentImmediateCategoryFrequency]
+    .sort((a, b) => (Number(a["Rank"]) || 9999) - (Number(b["Rank"]) || 9999))
+    .map(row => `
+      <tr>
+        <td class="co-tenant-rank">${row["Rank"] || ""}</td>
+        <td class="co-tenant-name">${row["Adjacent Category"] || ""}</td>
+        <td class="co-tenant-count">${row["Count"] || ""}</td>
+        <td class="co-tenant-count">${formatPercent(row["Share of Immediate Adjacent Tenants"])}</td>
+      </tr>
+    `)
+    .join("");
+
+  prototypeGrid.innerHTML = `
+    <div class="co-tenant-table-wrap adjacent-table-wrap">
+      ${adjacentTenantTableTabsHTML()}
+
+      <div class="co-tenant-table-header">
+        <h3>Immediate Adjacent Category Ranking</h3>
+        <p>
+          Category frequency using only the closest tenants on each side of Trader Joe’s:
+          Adjacent_Left_1 and Adjacent_Right_1.
+        </p>
+      </div>
+
+      <div class="adjacent-chart-card">
+        <div class="adjacent-chart-title">Immediate Adjacent Category Mix</div>
+        <div class="adjacent-chart-frame">
+          <canvas id="adjacentImmediatePie"></canvas>
+        </div>
+      </div>
+
+      <table class="co-tenant-table adjacent-tenant-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Adjacent Category</th>
+            <th>Count</th>
+            <th>Share</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  requestAnimationFrame(() => {
+    const chartRows = getTopChartRows(
+      tjAdjacentImmediateCategoryFrequency,
+      "Adjacent Category",
+      "Count",
+      6
+    );
+
+    createPieChart(
+      "adjacentImmediatePie",
+      chartRows.map(row => row.label),
+      chartRows.map(row => row.count),
+      "Immediate adjacent tenant categories"
+    );
+  });
+}
+
+function renderAdjacentByPrototypeCategoryTable() {
+  const prototypeGrid = document.getElementById("prototypeGrid");
+  if (!prototypeGrid) return;
+
+  const rows = [...tjAdjacentByPrototypeCategory]
+    .sort((a, b) => {
+      const p = String(a["Prototype"] || "").localeCompare(String(b["Prototype"] || ""));
+      if (p !== 0) return p;
+      return (Number(a["Rank Within Prototype"]) || 9999) - (Number(b["Rank Within Prototype"]) || 9999);
+    })
+    .map(row => `
+      <tr>
+        <td class="co-tenant-name">${row["Prototype"] || ""}</td>
+        <td class="co-tenant-rank">${row["Rank Within Prototype"] || ""}</td>
+        <td>${row["Adjacent Category"] || ""}</td>
+        <td class="co-tenant-count">${row["Count"] || ""}</td>
+        <td class="co-tenant-count">${formatPercent(row["Share Within Prototype"])}</td>
+      </tr>
+    `)
+    .join("");
+
+  prototypeGrid.innerHTML = `
+    <div class="co-tenant-table-wrap adjacent-table-wrap">
+      ${adjacentTenantTableTabsHTML()}
+
+      <div class="co-tenant-table-header">
+        <h3>Adjacent Category by Layout Prototype</h3>
+        <p>
+          Category ranking within each layout prototype.
+        </p>
+      </div>
+
+      <table class="co-tenant-table adjacent-tenant-table">
+        <thead>
+          <tr>
+            <th>Layout Prototype</th>
+            <th>Rank</th>
+            <th>Adjacent Category</th>
+            <th>Count</th>
+            <th>Share Within Layout</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderAdjacentByPrototypeStoreTable() {
+  const prototypeGrid = document.getElementById("prototypeGrid");
+  if (!prototypeGrid) return;
+
+  const rows = [...tjAdjacentByPrototypeStore]
+    .sort((a, b) => {
+      const p = String(a["Prototype"] || "").localeCompare(String(b["Prototype"] || ""));
+      if (p !== 0) return p;
+      return (Number(a["Rank Within Prototype"]) || 9999) - (Number(b["Rank Within Prototype"]) || 9999);
+    })
+    .map(row => `
+      <tr>
+        <td class="co-tenant-name">${row["Prototype"] || ""}</td>
+        <td class="co-tenant-rank">${row["Rank Within Prototype"] || ""}</td>
+        <td>${row["Adjacent Tenant"] || ""}</td>
+        <td>${row["Adjacent Category"] || ""}</td>
+        <td class="co-tenant-count">${row["Count"] || ""}</td>
+        <td class="co-tenant-count">${formatPercent(row["Share Within Prototype"])}</td>
+      </tr>
+    `)
+    .join("");
+
+  prototypeGrid.innerHTML = `
+    <div class="co-tenant-table-wrap adjacent-table-wrap">
+      ${adjacentTenantTableTabsHTML()}
+
+      <div class="co-tenant-table-header">
+        <h3>Adjacent Store by Layout Prototype</h3>
+        <p>
+          Store ranking within each layout prototype.
+        </p>
+      </div>
+
+      <table class="co-tenant-table adjacent-tenant-table">
+        <thead>
+          <tr>
+            <th>Layout Prototype</th>
+            <th>Rank</th>
+            <th>Adjacent Store</th>
+            <th>Category</th>
+            <th>Count</th>
+            <th>Share Within Layout</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function formatPercent(value) {
+  if (value === undefined || value === null || value === "" || isNaN(value)) {
+    return "";
+  }
+
+  return (Number(value) * 100).toFixed(1) + "%";
+}
+
+
+function renderAdjacentTenantTable() {
+  clearAdjacentCharts();
+
+  if (adjacentTenantTableMode === "summary") {
+    renderAdjacentPrototypeSummaryTable();
+    return;
+  }
+
+  if (adjacentTenantTableMode === "category") {
+    renderAdjacentCategoryFrequencyTable();
+    return;
+  }
+
+  if (adjacentTenantTableMode === "store") {
+    renderAdjacentStoreFrequencyTable();
+    return;
+  }
+
+  if (adjacentTenantTableMode === "immediate") {
+    renderAdjacentImmediateCategoryTable();
+    return;
+  }
+
+  if (adjacentTenantTableMode === "layoutCategory") {
+    renderAdjacentByPrototypeCategoryTable();
+    return;
+  }
+
+  if (adjacentTenantTableMode === "layoutStore") {
+    renderAdjacentByPrototypeStoreTable();
+    return;
+  }
+}
+
+function clearAdjacentCharts() {
+  adjacentCharts.forEach(chart => chart.destroy());
+  adjacentCharts = [];
+}
+
+function createPieChart(canvasId, labels, values, titleText = "") {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas || typeof Chart === "undefined") return;
+
+  const chart = new Chart(canvas, {
+    type: "pie",
+    data: {
+      labels: labels,
+      datasets: [{
+        data: values
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "right",
+          labels: {
+            boxWidth: 12,
+            font: {
+              size: 11
+            }
+          }
+        },
+        title: {
+          display: !!titleText,
+          text: titleText,
+          font: {
+            size: 13,
+            weight: "bold"
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const total = context.dataset.data.reduce((sum, value) => sum + value, 0);
+              const value = context.raw || 0;
+              const pct = total > 0 ? ((value / total) * 100).toFixed(1) : "0.0";
+              return `${context.label}: ${value} (${pct}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  adjacentCharts.push(chart);
+}
+
+function getTopChartRows(data, labelField, countField, maxSlices = 6) {
+  const cleanRows = [...data]
+    .filter(row => row[labelField] && Number(row[countField]) > 0)
+    .sort((a, b) => Number(b[countField]) - Number(a[countField]));
+
+  const topRows = cleanRows.slice(0, maxSlices);
+  const otherRows = cleanRows.slice(maxSlices);
+
+  const chartRows = topRows.map(row => ({
+    label: row[labelField],
+    count: Number(row[countField]) || 0
+  }));
+
+  const otherCount = otherRows.reduce((sum, row) => {
+    return sum + (Number(row[countField]) || 0);
+  }, 0);
+
+  if (otherCount > 0) {
+    chartRows.push({
+      label: "Other",
+      count: otherCount
+    });
+  }
+
+  return chartRows;
 }
 
 function coTenantTableTabsHTML() {

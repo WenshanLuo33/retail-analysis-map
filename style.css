@@ -1707,6 +1707,110 @@ body.prototype-mode #topNav {
   border-color: #003b5c;
 }
 
+/* Dark gray buttons for data tables */
+.matrix-tool-btn.table-tool-btn {
+  background: #e0e2e3;
+  border-color: #b8bec2;
+  color: #263238;
+}
+
+.matrix-tool-btn.table-tool-btn:hover {
+  background: #d4d7d9;
+  border-color: #9fa8ad;
+  color: #111;
+}
+
+.matrix-tool-btn.table-tool-btn.active {
+  background: #c7cbce;
+  border-color: #8f989e;
+  color: #111;
+}
+
+/* =========================
+   Adjacent Tenant Table
+   ========================= */
+
+.adjacent-table-wrap {
+  border-color: #c9c9c9;
+}
+
+.adjacent-tenant-table th {
+  background: #2f3437;
+  color: #ffffff;
+}
+
+.adjacent-tenant-table .co-tenant-rank {
+  color: #222;
+}
+
+.adjacent-tenant-tabs button {
+  border-color: #4a4f52;
+  color: #2f3437;
+}
+
+.adjacent-tenant-tabs button:hover {
+  background: #e6e8e9;
+  border-color: #2f3437;
+}
+
+.adjacent-tenant-tabs button.active {
+  background: #2f3437;
+  color: white;
+  border-color: #2f3437;
+}
+
+/* =========================
+   Adjacent Tenant Pie Charts
+   ========================= */
+
+.adjacent-chart-card {
+  margin: 12px 0 18px 0;
+  padding: 14px;
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+  background: #f8f9fa;
+}
+
+.adjacent-chart-title {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #222;
+}
+
+.adjacent-chart-frame {
+  height: 300px;
+  width: 100%;
+}
+
+.layout-pie-chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin: 12px 0 20px 0;
+}
+
+.layout-pie-card {
+  padding: 12px;
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+  background: #f8f9fa;
+}
+
+.layout-pie-title {
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #222;
+}
+
+.layout-pie-frame {
+  height: 230px;
+}
+
+
+
+
 
 
 

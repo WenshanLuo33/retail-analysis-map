@@ -1,0 +1,38 @@
+﻿Prototype,Rank Within Prototype,Adjacent Category,Count,Share Within Prototype
+Branch,1,Apparel / Soft Goods,9,0.3
+Branch,2,Beauty / Personal Care,6,0.2
+Branch,3,Food & Beverage,5,0.1667
+Branch,4,Furniture / Home,2,0.0667
+Branch,4,Health / Pharmacy,2,0.0667
+Branch,4,Other Retail,2,0.0667
+Branch,4,Vacancy,2,0.0667
+Branch,8,Fitness / Recreation,1,0.0333
+Branch,8,Pet,1,0.0333
+C-Shape,1,Apparel / Soft Goods,3,0.2
+C-Shape,1,Hard Goods,3,0.2
+C-Shape,1,Other Retail,3,0.2
+C-Shape,4,Pet,2,0.1333
+C-Shape,5,Fitness / Recreation,1,0.0667
+C-Shape,5,Food & Beverage,1,0.0667
+C-Shape,5,Furniture / Home,1,0.0667
+C-Shape,5,Service / Bank,1,0.0667
+Cluster,1,Service / Bank,2,0.5
+Cluster,1,Vacancy,2,0.5
+Mall / Destination,1,Furniture / Home,2,1.0
+Spine,1,Food & Beverage,9,0.1915
+Spine,2,Service / Bank,7,0.1489
+Spine,3,Beauty / Personal Care,6,0.1277
+Spine,4,Apparel / Soft Goods,5,0.1064
+Spine,4,Fitness / Recreation,5,0.1064
+Spine,4,Furniture / Home,5,0.1064
+Spine,7,Vacancy,3,0.0638
+Spine,8,Hard Goods,2,0.0426
+Spine,8,Health / Pharmacy,2,0.0426
+Spine,8,Other Retail,2,0.0426
+Spine,11,Pet,1,0.0213
+Standalone,1,Beauty / Personal Care,2,1.0
+Urban Context,1,Food & Beverage,6,0.5
+Urban Context,2,Service / Bank,3,0.25
+Urban Context,3,Apparel / Soft Goods,1,0.0833
+Urban Context,3,Fitness / Recreation,1,0.0833
+Urban Context,3,Furniture / Home,1,0.0833
