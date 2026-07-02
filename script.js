@@ -2358,17 +2358,49 @@ function renderAdjacentStoreFrequencyTable() {
   const prototypeGrid = document.getElementById("prototypeGrid");
   if (!prototypeGrid) return;
 
-  const rows = [...tjAdjacentStoreFrequency]
-    .sort((a, b) => (Number(a["Rank"]) || 9999) - (Number(b["Rank"]) || 9999))
-    .map(row => `
-      <tr>
-        <td class="co-tenant-rank">${row["Rank"] || ""}</td>
-        <td class="co-tenant-name">${row["Adjacent Tenant"] || ""}</td>
-        <td>${row["Adjacent Category"] || ""}</td>
-        <td class="co-tenant-count">${row["Count"] || ""}</td>
-        <td class="co-tenant-count">${formatPercent(row["Share of Adjacent Tenants"])}</td>
-      </tr>
-    `)
+  // Hide vacancy / available rows from Store Ranking display
+  const filteredStoreRows = [...tjAdjacentStoreFrequency]
+    .filter(row => {
+      const tenant = String(row["Adjacent Tenant"] || "").trim().toLowerCase();
+      const category = String(row["Adjacent Category"] || "").trim().toLowerCase();
+
+      return tenant !== "available" &&
+             tenant !== "vacant" &&
+             category !== "vacancy";
+    })
+    .sort((a, b) => {
+      const countA = Number(a["Count"]) || 0;
+      const countB = Number(b["Count"]) || 0;
+
+      if (countB !== countA) return countB - countA;
+
+      return String(a["Adjacent Tenant"] || "")
+        .localeCompare(String(b["Adjacent Tenant"] || ""));
+    });
+
+  // Re-rank after removing Available
+  let currentRank = 0;
+  let previousCount = null;
+
+  const rows = filteredStoreRows
+    .map((row, index) => {
+      const count = Number(row["Count"]) || 0;
+
+      if (count !== previousCount) {
+        currentRank = index + 1;
+        previousCount = count;
+      }
+
+      return `
+        <tr>
+          <td class="co-tenant-rank">${currentRank}</td>
+          <td class="co-tenant-name">${row["Adjacent Tenant"] || ""}</td>
+          <td>${row["Adjacent Category"] || ""}</td>
+          <td class="co-tenant-count">${row["Count"] || ""}</td>
+          <td class="co-tenant-count">${formatPercent(row["Share of Adjacent Tenants"])}</td>
+        </tr>
+      `;
+    })
     .join("");
 
   prototypeGrid.innerHTML = `
@@ -2379,6 +2411,7 @@ function renderAdjacentStoreFrequencyTable() {
         <h3>Adjacent Tenant Store Ranking</h3>
         <p>
           Specific stores that appear most often directly adjacent to Trader Joe’s.
+          Vacancy / available spaces are excluded from this ranking.
         </p>
       </div>
 
