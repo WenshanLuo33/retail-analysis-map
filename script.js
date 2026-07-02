@@ -2002,6 +2002,8 @@ function setPrototypePanelsVisible(visible) {
 }
 
 function renderCoTenantTable() {
+  clearAdjacentCharts();
+
   const prototypeGrid = document.getElementById("prototypeGrid");
   if (!prototypeGrid) return;
 
@@ -2144,11 +2146,6 @@ function adjacentTenantTableTabsHTML() {
         Layout × Category
       </button>
 
-      <button
-        class="${adjacentTenantTableMode === "layoutStore" ? "active" : ""}"
-        onclick="setAdjacentTenantTableMode('layoutStore')">
-        Layout × Store
-      </button>
     </div>
   `;
 }
@@ -2551,58 +2548,6 @@ function renderAdjacentByPrototypeCategoryTable() {
   `;
 }
 
-function renderAdjacentByPrototypeStoreTable() {
-  const prototypeGrid = document.getElementById("prototypeGrid");
-  if (!prototypeGrid) return;
-
-  const rows = [...tjAdjacentByPrototypeStore]
-    .sort((a, b) => {
-      const p = String(a["Prototype"] || "").localeCompare(String(b["Prototype"] || ""));
-      if (p !== 0) return p;
-      return (Number(a["Rank Within Prototype"]) || 9999) - (Number(b["Rank Within Prototype"]) || 9999);
-    })
-    .map(row => `
-      <tr>
-        <td class="co-tenant-name">${row["Prototype"] || ""}</td>
-        <td class="co-tenant-rank">${row["Rank Within Prototype"] || ""}</td>
-        <td>${row["Adjacent Tenant"] || ""}</td>
-        <td>${row["Adjacent Category"] || ""}</td>
-        <td class="co-tenant-count">${row["Count"] || ""}</td>
-        <td class="co-tenant-count">${formatPercent(row["Share Within Prototype"])}</td>
-      </tr>
-    `)
-    .join("");
-
-  prototypeGrid.innerHTML = `
-    <div class="co-tenant-table-wrap adjacent-table-wrap">
-      ${adjacentTenantTableTabsHTML()}
-
-      <div class="co-tenant-table-header">
-        <h3>Adjacent Store by Layout Prototype</h3>
-        <p>
-          Store ranking within each layout prototype.
-        </p>
-      </div>
-
-      <table class="co-tenant-table adjacent-tenant-table">
-        <thead>
-          <tr>
-            <th>Layout Prototype</th>
-            <th>Rank</th>
-            <th>Adjacent Store</th>
-            <th>Category</th>
-            <th>Count</th>
-            <th>Share Within Layout</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
 function formatPercent(value) {
   if (value === undefined || value === null || value === "" || isNaN(value)) {
     return "";
@@ -2640,10 +2585,6 @@ function renderAdjacentTenantTable() {
     return;
   }
 
-  if (adjacentTenantTableMode === "layoutStore") {
-    renderAdjacentByPrototypeStoreTable();
-    return;
-  }
 }
 
 function clearAdjacentCharts() {
@@ -2795,6 +2736,13 @@ function renderCategorySummaryTable() {
         </p>
       </div>
 
+      <div class="adjacent-chart-card">
+        <div class="adjacent-chart-title">Co-Tenant Category Mix</div>
+        <div class="adjacent-chart-frame">
+          <canvas id="coTenantCategoryPie"></canvas>
+        </div>
+      </div>
+
       <table class="co-tenant-table">
         <thead>
           <tr>
@@ -2812,8 +2760,23 @@ function renderCategorySummaryTable() {
       </table>
     </div>
   `;
-}
 
+  requestAnimationFrame(() => {
+    const chartRows = getTopChartRows(
+      tjCategorySummary,
+      "Tenant Category",
+      "Rows Count",
+      20
+    );
+
+    createPieChart(
+      "coTenantCategoryPie",
+      chartRows.map(row => row.label),
+      chartRows.map(row => row.count),
+      "Co-tenant category mix by tenant records"
+    );
+  });
+}
 function categorySummaryProjectLinksHTML(row) {
   const projectIds = splitSemicolonList(row["Project IDs"]);
 
