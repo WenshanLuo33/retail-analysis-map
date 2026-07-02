@@ -127,19 +127,17 @@ const matrixModeConfig = {
   },
 
     residential: {
-    label: "Residential Relationship",
-    subtitle: "Trader Joe’s locations grouped by relationship to nearby residential uses",
-    field: "ResidentialRelationship",
-    showDiagram: false,
-    order: [
-      "No Residential Within 300 ft",
-      "Residential Nearby, Auto-Oriented Context",
-      "Residential Nearby, Functional Connection",
-      "Residential Nearby, Walkable Front-Door Connection",
-      "Residential Above / Integrated Mixed-Use"
-    ],
-    tooltip:
-      "Groups Trader Joe’s locations by whether residential uses are present within approximately 300 ft and how they connect to the store. Categories distinguish no nearby residential presence, auto-oriented adjacency, functional but low-quality connections, walkable front-door connections, and integrated mixed-use conditions."
+     label: "Residential Relationship",
+     subtitle: "Trader Joe’s locations grouped by multifamily proximity and connection quality",
+     field: "ResidentialRelationship",
+     showDiagram: false,
+     order: [
+        "No Multifamily Within 1000 ft",
+       "Acceptable Connection",
+       "Nice Connection"
+     ],
+     tooltip:
+    "Groups Trader Joe’s locations by whether multifamily residential exists within 1,000 ft and the quality of the connection between nearby residential areas and Trader Joe’s."
   }
 };
 
@@ -1801,20 +1799,14 @@ function getStorefrontDescription(typeName) {
 
 function getResidentialRelationshipDescription(typeName) {
   const descriptions = {
-    "No Residential Within 300 ft":
-      "No clear residential use is located within approximately 300 ft of Trader Joe’s. The immediate context is more commercial, highway-oriented, industrial, office, mall, or parking-dominated.",
+    "No Multifamily Within 1000 ft":
+      "No multifamily residential use is located within approximately 1,000 ft of Trader Joe’s. The surrounding context is primarily commercial, office, industrial, highway-oriented, mall-oriented, or low-density residential.",
 
-    "Residential Nearby, Auto-Oriented Context":
-      "Residential uses are nearby, but the relationship to Trader Joe’s is primarily auto-oriented. Access generally depends on main roads, drive aisles, or parking fields rather than a direct designed connection.",
+    "Acceptable Connection":
+      "Multifamily residential is nearby, but the connection to Trader Joe’s is limited or not especially pedestrian-friendly. The route may rely on drive aisles, wide internal roads, parking fields, service edges, loading/back-of-house areas, or indirect circulation.",
 
-    "Residential Nearby, Functional Connection":
-      "Residential areas have a physical connection to the retail center, but the route is mainly functional or utilitarian. It may pass through drive aisles, parking edges, service roads, loading areas, or back-of-house conditions.",
-
-    "Residential Nearby, Walkable Front-Door Connection":
-      "Residential areas connect to Trader Joe’s through a clearer and more comfortable customer-facing route, such as continuous sidewalks, marked crossings, plazas, internal pedestrian paths, or a street-front entrance sequence.",
-
-    "Residential Above / Integrated Mixed-Use":
-      "Trader Joe’s is located within a mixed-use building or integrated development where residential uses are above, directly attached, or physically integrated with the retail base."
+    "Nice Connection":
+      "Multifamily residential is nearby and has a relatively comfortable connection to Trader Joe’s, such as a continuous sidewalk, pedestrian-friendly road, marked crossing, internal path, plaza, or clear front-door access sequence."
   };
 
   return descriptions[typeName] || "";
