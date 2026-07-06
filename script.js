@@ -2178,6 +2178,12 @@ function adjacentTenantTableTabsHTML() {
       </button>
 
       <button
+        class="${adjacentTenantTableMode === "summary" ? "active" : ""}"
+        onclick="setAdjacentTenantTableMode('summary')">
+        Adjacent Tenant × Layout Summary
+      </button>
+
+      <button
         class="${adjacentTenantTableMode === "immediate" ? "active" : ""}"
         onclick="setAdjacentTenantTableMode('immediate')">
         Immediate Only × Category Ranking
@@ -2190,9 +2196,9 @@ function adjacentTenantTableTabsHTML() {
       </button>
 
       <button
-        class="${adjacentTenantTableMode === "summary" ? "active" : ""}"
-        onclick="setAdjacentTenantTableMode('summary')">
-        Layout Summary
+        class="${adjacentTenantTableMode === "immediateSummary" ? "active" : ""}"
+        onclick="setAdjacentTenantTableMode('immediateSummary')">
+        Immediate Only × Layout Summary
       </button>
     </div>
   `;
@@ -2299,6 +2305,240 @@ function renderAdjacentPrototypeSummaryTable() {
 
   requestAnimationFrame(() => {
     renderLayoutPieCharts();
+  });
+}
+
+function getImmediateAdjacentByPrototypeCategoryRows() {
+  const layoutOrder = [
+    "Urban Context",
+    "Standalone",
+    "Mall / Destination",
+    "Branch",
+    "Spine",
+    "C-Shape",
+    "Cluster"
+  ];
+
+  const summary = {};
+
+  tjAdjacentTenantsLong.forEach(row => {
+    const prototype = String(row["Prototype"] || "").trim();
+    const adjacentColumn = String(row["Adjacent Column"] || "").trim();
+    const proximityGroup = String(row["Proximity Group"] || "").trim();
+    const position = Number(row["Adjacent Position"]);
+    const category = String(row["Adjacent Category"] || "").trim();
+
+    const isImmediate =
+      adjacentColumn === "Adjacent_Left_1" ||
+      adjacentColumn === "Adjacent_Right_1" ||
+      proximityGroup.toLowerCase() === "immediate" ||
+      position === 1;
+
+    if (!isImmediate) return;
+    if (!prototype || !category) return;
+
+    const normalizedPrototype = layoutOrder.find(layout =>
+      normalizePrototypeName(layout) === normalizePrototypeName(prototype)
+    ) || prototype;
+
+    const key = `${normalizedPrototype}||${category}`;
+
+    if (!summary[key]) {
+      summary[key] = {
+        prototype: normalizedPrototype,
+        category,
+        count: 0
+      };
+    }
+
+    summary[key].count += 1;
+  });
+
+  const rows = Object.values(summary);
+
+  const prototypeTotals = {};
+  rows.forEach(row => {
+    prototypeTotals[row.prototype] = (prototypeTotals[row.prototype] || 0) + row.count;
+  });
+
+  const grouped = {};
+
+  rows.forEach(row => {
+    if (!grouped[row.prototype]) grouped[row.prototype] = [];
+    grouped[row.prototype].push(row);
+  });
+
+  const finalRows = [];
+
+  Object.entries(grouped).forEach(([prototype, prototypeRows]) => {
+    prototypeRows.sort((a, b) => {
+      if (b.count !== a.count) return b.count - a.count;
+      return a.category.localeCompare(b.category);
+    });
+
+    let currentRank = 0;
+    let previousCount = null;
+
+    prototypeRows.forEach((row, index) => {
+      if (row.count !== previousCount) {
+        currentRank = index + 1;
+        previousCount = row.count;
+      }
+
+      finalRows.push({
+        Prototype: prototype,
+        "Rank Within Prototype": currentRank,
+        "Adjacent Category": row.category,
+        Count: row.count,
+        "Share Within Prototype": prototypeTotals[prototype] > 0
+          ? row.count / prototypeTotals[prototype]
+          : 0
+      });
+    });
+  });
+
+  return finalRows.sort((a, b) => {
+    const indexA = layoutOrder.findIndex(layout =>
+      normalizePrototypeName(layout) === normalizePrototypeName(a["Prototype"])
+    );
+
+    const indexB = layoutOrder.findIndex(layout =>
+      normalizePrototypeName(layout) === normalizePrototypeName(b["Prototype"])
+    );
+
+    const safeIndexA = indexA === -1 ? 999 : indexA;
+    const safeIndexB = indexB === -1 ? 999 : indexB;
+
+    if (safeIndexA !== safeIndexB) return safeIndexA - safeIndexB;
+
+    return Number(a["Rank Within Prototype"]) - Number(b["Rank Within Prototype"]);
+  });
+}
+
+function renderImmediateLayoutPieCharts(rowsForCharts) {
+  const container = document.getElementById("immediateLayoutPieChartGrid");
+  if (!container) return;
+
+  const prototypeOrder = [
+    "Urban Context",
+    "Standalone",
+    "Mall / Destination",
+    "Branch",
+    "Spine",
+    "C-Shape",
+    "Cluster"
+  ];
+
+  const prototypes = prototypeOrder.filter(prototypeName =>
+    rowsForCharts.some(row =>
+      normalizePrototypeName(row["Prototype"]) === normalizePrototypeName(prototypeName)
+    )
+  );
+
+  container.innerHTML = prototypes.map(prototypeName => {
+    const canvasId = `immediate-layout-pie-${safeId(prototypeName)}`;
+
+    return `
+      <div class="layout-pie-card">
+        <div class="layout-pie-title">${prototypeName}</div>
+        <div class="layout-pie-frame">
+          <canvas id="${canvasId}"></canvas>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  prototypes.forEach(prototypeName => {
+    const rows = rowsForCharts.filter(row =>
+      normalizePrototypeName(row["Prototype"]) === normalizePrototypeName(prototypeName)
+    );
+
+    const chartRows = getAllChartRows(
+      rows,
+      "Adjacent Category",
+      "Count"
+    );
+
+    createPieChart(
+      `immediate-layout-pie-${safeId(prototypeName)}`,
+      chartRows.map(row => row.label),
+      chartRows.map(row => row.count),
+      prototypeName
+    );
+  });
+}
+
+function renderAdjacentImmediatePrototypeSummaryTable() {
+  const prototypeGrid = document.getElementById("prototypeGrid");
+  if (!prototypeGrid) return;
+
+  if (!tjAdjacentTenantsLong || !tjAdjacentTenantsLong.length) {
+    prototypeGrid.innerHTML = `
+      <div class="co-tenant-table-wrap adjacent-table-wrap">
+        ${adjacentTenantTableTabsHTML()}
+        <p>No immediate adjacent tenant data loaded. Check WithinCenter/tj_adjacent_tenants_long.csv.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const summaryRows = getImmediateAdjacentByPrototypeCategoryRows();
+
+  if (!summaryRows.length) {
+    prototypeGrid.innerHTML = `
+      <div class="co-tenant-table-wrap adjacent-table-wrap">
+        ${adjacentTenantTableTabsHTML()}
+        <p>No immediate adjacent layout summary data available.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const rows = summaryRows
+    .map(row => `
+      <tr>
+        <td class="co-tenant-name">${row["Prototype"] || ""}</td>
+        <td class="co-tenant-rank">${row["Rank Within Prototype"] || ""}</td>
+        <td>${row["Adjacent Category"] || ""}</td>
+        <td class="co-tenant-count">${row["Count"] || ""}</td>
+        <td class="co-tenant-count">${formatPercent(row["Share Within Prototype"])}</td>
+      </tr>
+    `)
+    .join("");
+
+  prototypeGrid.innerHTML = `
+    <div class="co-tenant-table-wrap adjacent-table-wrap">
+      ${adjacentTenantTableTabsHTML()}
+
+      <div class="co-tenant-table-header">
+        <h3>Trader Joe’s Immediate Adjacent Tenant Category Mix by Layout</h3>
+        <p>
+          Pie charts summarize only the closest adjacent tenants on each side of Trader Joe’s:
+          Adjacent_Left_1 and Adjacent_Right_1. The table below shows category ranking and share within each layout group.
+        </p>
+      </div>
+
+      <div id="immediateLayoutPieChartGrid" class="layout-pie-chart-grid"></div>
+
+      <table class="co-tenant-table adjacent-tenant-table">
+        <thead>
+          <tr>
+            <th>Layout Prototype</th>
+            <th>Rank</th>
+            <th>Adjacent Category</th>
+            <th>Count</th>
+            <th>Share Within Layout</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  requestAnimationFrame(() => {
+    renderImmediateLayoutPieCharts(summaryRows);
   });
 }
 
@@ -2772,11 +3012,6 @@ function formatPercent(value) {
 function renderAdjacentTenantTable() {
   clearAdjacentCharts();
 
-  if (adjacentTenantTableMode === "summary") {
-    renderAdjacentPrototypeSummaryTable();
-    return;
-  }
-
   if (adjacentTenantTableMode === "category") {
     renderAdjacentCategoryFrequencyTable();
     return;
@@ -2784,6 +3019,11 @@ function renderAdjacentTenantTable() {
 
   if (adjacentTenantTableMode === "store") {
     renderAdjacentStoreFrequencyTable();
+    return;
+  }
+
+  if (adjacentTenantTableMode === "summary") {
+    renderAdjacentPrototypeSummaryTable();
     return;
   }
 
@@ -2797,8 +3037,11 @@ function renderAdjacentTenantTable() {
     return;
   }
 
+  if (adjacentTenantTableMode === "immediateSummary") {
+    renderAdjacentImmediatePrototypeSummaryTable();
+    return;
+  }
 }
-
 function toggleParkingDistanceTable() {
   if (prototypeDisplayMode === "parkingDistance") {
     prototypeDisplayMode = "matrix";
@@ -3090,25 +3333,77 @@ function createPieChart(canvasId, labels, values, titleText = "", options = {}) 
   const canvas = document.getElementById(canvasId);
   if (!canvas || typeof Chart === "undefined") return;
 
+  function normalizeChartLabel(label) {
+    const clean = String(label || "").trim();
+
+    const aliases = {
+      // Parking distance categories
+      "7–15 ft": "7–15 ft",
+      "15–30 ft": "15–30 ft",
+      "30+ ft": "30+ ft",
+      "No Data / Urban": "No Data / Urban",
+      "No Data / Urban Context": "No Data / Urban",
+
+      // Co-tenant + adjacent tenant shared categories
+      "Food & Beverage": "Food & Beverage",
+
+      "Apparel / Soft Goods": "Apparel / Soft Goods",
+      "Fashion / Apparel": "Apparel / Soft Goods",
+
+      "Beauty / Personal Care": "Beauty / Personal Care",
+
+      "Service / Bank": "Service / Bank / Telecom",
+      "Service / Bank / Telecom": "Service / Bank / Telecom",
+      "Service / Health": "Service / Bank / Telecom",
+
+      "Furniture / Home": "Furniture / Home",
+
+      "Fitness / Recreation": "Fitness / Recreation",
+
+      "Health / Pharmacy": "Medical / Health",
+      "Medical / Health": "Medical / Health",
+
+      "Hard Goods": "Hard Goods / Specialty Retail",
+      "Hard Goods / Specialty Retail": "Hard Goods / Specialty Retail",
+
+      "General / Specialty Retail": "General / Specialty Retail",
+
+      "Other Retail": "Other Retail",
+      "Discount Retail": "Discount Retail",
+      "Books / Media": "Books / Media",
+      "Entertainment": "Entertainment",
+      "Auto Service": "Auto Service",
+      "Pet": "Pet",
+      "Vacancy": "Vacancy",
+      "Other": "Other"
+    };
+
+    return aliases[clean] || clean;
+  }
+
   const fixedColorMap = {
     // Parking distance categories
     "7–15 ft": "#3ba3e6",
     "15–30 ft": "#f45b83",
     "30+ ft": "#ff9f40",
     "No Data / Urban": "#f9c74f",
-    "No Data / Urban Context": "#f9c74f",
 
-    // Adjacent tenant categories
+    // Unified tenant category colors
     "Food & Beverage": "#4c78a8",
     "Apparel / Soft Goods": "#f58518",
     "Beauty / Personal Care": "#e45756",
-    "Service / Bank": "#72b7b2",
-    "Furniture / Home": "#54a24b",
+    "Service / Bank / Telecom": "#72b7b2",
+    "Medical / Health": "#54a24b",
     "Fitness / Recreation": "#b279a2",
-    "Health / Pharmacy": "#ff9da6",
-    "Hard Goods": "#9d755d",
+    "Furniture / Home": "#6f4e7c",
+    "Hard Goods / Specialty Retail": "#9d755d",
+    "General / Specialty Retail": "#edc948",
+    "Pet": "#ffbe7d",
+    "Books / Media": "#1f77b4",
+    "Discount Retail": "#af7aa1",
+    "Entertainment": "#ff9da6",
+    "Auto Service": "#499894",
     "Other Retail": "#8c6d62",
-    "Pet": "#edc948",
     "Vacancy": "#8f8f8f",
     "Other": "#bab0ac"
   };
@@ -3123,12 +3418,29 @@ function createPieChart(canvasId, labels, values, titleText = "", options = {}) 
     "#ff9da6",
     "#9d755d",
     "#edc948",
-    "#bab0ac"
+    "#bab0ac",
+    "#6f4e7c",
+    "#499894",
+    "#af7aa1",
+    "#ffbe7d"
   ];
 
-  const backgroundColors = labels.map((label, index) =>
-    fixedColorMap[label] || fallbackPalette[index % fallbackPalette.length]
-  );
+  function fallbackColorForLabel(label) {
+    const clean = String(label || "");
+    let hash = 0;
+
+    for (let i = 0; i < clean.length; i++) {
+      hash = clean.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    const index = Math.abs(hash) % fallbackPalette.length;
+    return fallbackPalette[index];
+  }
+
+  const backgroundColors = labels.map(label => {
+    const normalizedLabel = normalizeChartLabel(label);
+    return fixedColorMap[normalizedLabel] || fallbackColorForLabel(normalizedLabel);
+  });
 
   const chart = new Chart(canvas, {
     type: "pie",
