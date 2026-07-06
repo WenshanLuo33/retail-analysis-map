@@ -6,6 +6,7 @@ let highlightedMarker = null;
 let traderJoePrototypes = [];
 let tjCoTenants = [];
 let tjCategorySummary = [];
+let tjCoTenantDetailRows = [];
 let tjAdjacentCategoryFrequency = [];
 let tjAdjacentStoreFrequency = [];
 let tjAdjacentByPrototypeCategory = [];
@@ -19,7 +20,7 @@ let adjacentCharts = [];
 let adjacentTenantTableMode = "summary";
 
 let prototypeDisplayMode = "matrix"; // "matrix", "cotenant", "adjacent", or "parkingDistance"
-let coTenantTableMode = "frequency"; // "frequency" or "category"
+let coTenantTableMode = "category"; // "category", "frequency", or "layoutCategory"
 
 const matrixModeConfig = {
   layout: {
@@ -226,6 +227,7 @@ Promise.all([
   loadCSV("data/trader_joes_prototypes.csv"),
   loadCSV("WithinCenter/tj_co_tenants_rechecked.csv"),
   loadCSV("WithinCenter/tj_49_category_summary.csv"),
+  loadCSV("WithinCenter/tj_49_co_tenant_detail_rows.csv"),
 
   // Adjacent tenant analysis CSVs
   loadCSV("WithinCenter/tj_adjacent_category_frequency.csv"),
@@ -241,6 +243,7 @@ Promise.all([
   prototypeData,
   coTenantData,
   categorySummaryData,
+  coTenantDetailData,
 
   adjacentCategoryFrequencyData,
   adjacentStoreFrequencyData,
@@ -255,6 +258,7 @@ Promise.all([
   traderJoePrototypes = prototypeData;
   tjCoTenants = coTenantData;
   tjCategorySummary = categorySummaryData;
+  tjCoTenantDetailRows = coTenantDetailData;
 
   tjAdjacentCategoryFrequency = adjacentCategoryFrequencyData;
   tjAdjacentStoreFrequency = adjacentStoreFrequencyData;
@@ -1985,7 +1989,7 @@ function toggleCoTenantTable() {
   }
 
   prototypeDisplayMode = "cotenant";
-  coTenantTableMode = "frequency";
+  coTenantTableMode = "category";
   setPrototypePanelsVisible(false);
 
   const btn = document.getElementById("coTenantTableBtn");
@@ -2044,9 +2048,15 @@ function renderCoTenantTable() {
     return;
   }
 
+  if (coTenantTableMode === "layoutCategory") {
+    renderCoTenantLayoutCategoryTable();
+    return;
+  }
+
   if (!tjCoTenants || !tjCoTenants.length) {
     prototypeGrid.innerHTML = `
       <div class="co-tenant-table-wrap">
+        ${coTenantTableTabsHTML()}
         <p>No co-tenant data loaded. Check WithinCenter/tj_co_tenants_rechecked.csv.</p>
       </div>
     `;
@@ -2075,9 +2085,9 @@ function renderCoTenantTable() {
       ${coTenantTableTabsHTML()}
 
       <div class="co-tenant-table-header">
-        <h3>Trader Joe’s Co-Tenant Frequency</h3>
+        <h3>Trader Joe’s Co-Tenant Store Ranking</h3>
         <p>
-          Ranked tenants that appear in the same retail centers as Trader Joe’s.
+          Store ranking of tenants that appear in the same retail centers as Trader Joe’s.
           Click any project name to open it in the Filter Map.
         </p>
       </div>
@@ -2099,6 +2109,7 @@ function renderCoTenantTable() {
     </div>
   `;
 }
+
 
 function toggleAdjacentTenantTable() {
   if (prototypeDisplayMode === "adjacent") {
@@ -2157,19 +2168,25 @@ function adjacentTenantTableTabsHTML() {
       <button
         class="${adjacentTenantTableMode === "category" ? "active" : ""}"
         onclick="setAdjacentTenantTableMode('category')">
-        Category Ranking
+        Adjacent Tenant × Category Ranking
       </button>
 
       <button
         class="${adjacentTenantTableMode === "store" ? "active" : ""}"
         onclick="setAdjacentTenantTableMode('store')">
-        Store Ranking
+        Adjacent Tenant × Store Ranking
       </button>
 
       <button
         class="${adjacentTenantTableMode === "immediate" ? "active" : ""}"
         onclick="setAdjacentTenantTableMode('immediate')">
-        Immediate Only
+        Immediate Only × Category Ranking
+      </button>
+
+      <button
+        class="${adjacentTenantTableMode === "immediateStore" ? "active" : ""}"
+        onclick="setAdjacentTenantTableMode('immediateStore')">
+        Immediate Only × Store Ranking
       </button>
 
       <button
@@ -2177,13 +2194,6 @@ function adjacentTenantTableTabsHTML() {
         onclick="setAdjacentTenantTableMode('summary')">
         Layout Summary
       </button>
-
-      <button
-        class="${adjacentTenantTableMode === "layoutCategory" ? "active" : ""}"
-        onclick="setAdjacentTenantTableMode('layoutCategory')">
-        Layout × Category
-      </button>
-
     </div>
   `;
 }
@@ -2197,35 +2207,61 @@ function renderAdjacentPrototypeSummaryTable() {
   const prototypeGrid = document.getElementById("prototypeGrid");
   if (!prototypeGrid) return;
 
-  if (!tjAdjacentPrototypeTopSummary || !tjAdjacentPrototypeTopSummary.length) {
+  if (!tjAdjacentByPrototypeCategory || !tjAdjacentByPrototypeCategory.length) {
     prototypeGrid.innerHTML = `
       <div class="co-tenant-table-wrap adjacent-table-wrap">
         ${adjacentTenantTableTabsHTML()}
-        <p>No adjacent tenant summary data loaded.</p>
+        <p>No adjacent tenant layout category data loaded.</p>
       </div>
     `;
     return;
   }
 
-  function getPrototypeProjectCount(prototypeName) {
-    return traderJoePrototypes.filter(item =>
-      normalizePrototypeName(item["Prototype"]) === normalizePrototypeName(prototypeName)
-    ).length;
-  }
+  const layoutOrder = [
+    "Urban Context",
+    "Standalone",
+    "Mall / Destination",
+    "Branch",
+    "Spine",
+    "C-Shape",
+    "Cluster"
+  ];
 
-  const rows = [...tjAdjacentPrototypeTopSummary]
-    .sort((a, b) =>
-      String(a["Prototype"] || "").localeCompare(String(b["Prototype"] || ""))
-    )
+  const sortedRows = [...tjAdjacentByPrototypeCategory]
+    .sort((a, b) => {
+      const prototypeA = String(a["Prototype"] || "");
+      const prototypeB = String(b["Prototype"] || "");
+
+      const indexA = layoutOrder.findIndex(layout =>
+        normalizePrototypeName(layout) === normalizePrototypeName(prototypeA)
+      );
+
+      const indexB = layoutOrder.findIndex(layout =>
+        normalizePrototypeName(layout) === normalizePrototypeName(prototypeB)
+      );
+
+      const safeIndexA = indexA === -1 ? 999 : indexA;
+      const safeIndexB = indexB === -1 ? 999 : indexB;
+
+      if (safeIndexA !== safeIndexB) return safeIndexA - safeIndexB;
+
+      const rankA = Number(a["Rank Within Prototype"]) || 9999;
+      const rankB = Number(b["Rank Within Prototype"]) || 9999;
+
+      if (rankA !== rankB) return rankA - rankB;
+
+      return String(a["Adjacent Category"] || "")
+        .localeCompare(String(b["Adjacent Category"] || ""));
+    });
+
+  const rows = sortedRows
     .map(row => `
       <tr>
         <td class="co-tenant-name">${row["Prototype"] || ""}</td>
-        <td class="co-tenant-count">${getPrototypeProjectCount(row["Prototype"])}</td>
-        <td class="co-tenant-count">${row["Adjacent Tenant Records"] || ""}</td>
-        <td>${row["Top Category"] || ""}</td>
-        <td class="co-tenant-count">${row["Top Category Count"] || ""}</td>
-        <td class="co-tenant-count">${formatPercent(row["Top Category Share"])}</td>
-        <td>${row["Top Store"] || ""}</td>
+        <td class="co-tenant-rank">${row["Rank Within Prototype"] || ""}</td>
+        <td>${row["Adjacent Category"] || ""}</td>
+        <td class="co-tenant-count">${row["Count"] || ""}</td>
+        <td class="co-tenant-count">${formatPercent(row["Share Within Prototype"])}</td>
       </tr>
     `)
     .join("");
@@ -2235,10 +2271,10 @@ function renderAdjacentPrototypeSummaryTable() {
       ${adjacentTenantTableTabsHTML()}
 
       <div class="co-tenant-table-header">
-        <h3>Trader Joe’s Adjacent Tenant Summary by Layout</h3>
+        <h3>Trader Joe’s Adjacent Tenant Category Mix by Layout</h3>
         <p>
-          This table summarizes the most frequent adjacent tenant category and store within each layout prototype.
-          It helps test whether adjacent tenant patterns vary by layout type.
+          Pie charts summarize adjacent tenant category mix within each layout prototype.
+          The table below shows category ranking and share within each layout group.
         </p>
       </div>
 
@@ -2248,12 +2284,10 @@ function renderAdjacentPrototypeSummaryTable() {
         <thead>
           <tr>
             <th>Layout Prototype</th>
-            <th>Project Count</th>
-            <th>Adjacent Records</th>
-            <th>Top Category</th>
-            <th>Category Count</th>
-            <th>Category Share</th>
-            <th>Top Store</th>
+            <th>Rank</th>
+            <th>Adjacent Category</th>
+            <th>Count</th>
+            <th>Share Within Layout</th>
           </tr>
         </thead>
         <tbody>
@@ -2533,6 +2567,149 @@ function renderAdjacentImmediateCategoryTable() {
   });
 }
 
+function getImmediateAdjacentStoreFrequencyRows() {
+  const summary = {};
+
+  tjAdjacentTenantsLong.forEach(row => {
+    const adjacentColumn = String(row["Adjacent Column"] || "").trim();
+    const proximityGroup = String(row["Proximity Group"] || "").trim();
+    const position = Number(row["Adjacent Position"]);
+    const tenant = String(row["Adjacent Tenant"] || "").trim();
+    const category = String(row["Adjacent Category"] || "").trim();
+    const isVacancy = String(row["Is Vacancy"] || "").trim().toLowerCase();
+
+    const isImmediate =
+      adjacentColumn === "Adjacent_Left_1" ||
+      adjacentColumn === "Adjacent_Right_1" ||
+      proximityGroup.toLowerCase() === "immediate" ||
+      position === 1;
+
+    if (!isImmediate) return;
+    if (!tenant) return;
+
+    const tenantLower = tenant.toLowerCase();
+    const categoryLower = category.toLowerCase();
+
+    // Match the regular Store Ranking logic:
+    // exclude available / vacant spaces from store ranking.
+    if (
+      tenantLower === "available" ||
+      tenantLower === "vacant" ||
+      categoryLower === "vacancy" ||
+      isVacancy === "yes" ||
+      isVacancy === "true"
+    ) {
+      return;
+    }
+
+    const key = `${tenant}||${category}`;
+
+    if (!summary[key]) {
+      summary[key] = {
+        tenant,
+        category,
+        count: 0
+      };
+    }
+
+    summary[key].count += 1;
+  });
+
+  const rows = Object.values(summary)
+    .sort((a, b) => {
+      if (b.count !== a.count) return b.count - a.count;
+      return a.tenant.localeCompare(b.tenant);
+    });
+
+  const total = rows.reduce((sum, row) => sum + row.count, 0);
+
+  let currentRank = 0;
+  let previousCount = null;
+
+  return rows.map((row, index) => {
+    if (row.count !== previousCount) {
+      currentRank = index + 1;
+      previousCount = row.count;
+    }
+
+    return {
+      rank: currentRank,
+      tenant: row.tenant,
+      category: row.category,
+      count: row.count,
+      share: total > 0 ? row.count / total : 0
+    };
+  });
+}
+
+function renderAdjacentImmediateStoreTable() {
+  const prototypeGrid = document.getElementById("prototypeGrid");
+  if (!prototypeGrid) return;
+
+  const immediateStoreRows = getImmediateAdjacentStoreFrequencyRows();
+
+  if (!immediateStoreRows.length) {
+    prototypeGrid.innerHTML = `
+      <div class="co-tenant-table-wrap adjacent-table-wrap">
+        ${adjacentTenantTableTabsHTML()}
+
+        <div class="co-tenant-table-header">
+          <h3>Immediate Adjacent Store Ranking</h3>
+          <p>
+            Store frequency using only the closest tenants on each side of Trader Joe’s:
+            Adjacent_Left_1 and Adjacent_Right_1.
+          </p>
+        </div>
+
+        <p>No immediate adjacent store data available.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const rows = immediateStoreRows
+    .map(row => `
+      <tr>
+        <td class="co-tenant-rank">${row.rank}</td>
+        <td class="co-tenant-name">${row.tenant}</td>
+        <td>${row.category || ""}</td>
+        <td class="co-tenant-count">${row.count}</td>
+        <td class="co-tenant-count">${(row.share * 100).toFixed(1)}%</td>
+      </tr>
+    `)
+    .join("");
+
+  prototypeGrid.innerHTML = `
+    <div class="co-tenant-table-wrap adjacent-table-wrap">
+      ${adjacentTenantTableTabsHTML()}
+
+      <div class="co-tenant-table-header">
+        <h3>Immediate Adjacent Store Ranking</h3>
+        <p>
+          Store frequency using only the closest tenants on each side of Trader Joe’s:
+          Adjacent_Left_1 and Adjacent_Right_1.
+          Vacancy / available spaces are excluded from this ranking.
+        </p>
+      </div>
+
+      <table class="co-tenant-table adjacent-tenant-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Adjacent Store</th>
+            <th>Category</th>
+            <th>Count</th>
+            <th>Share</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
 function renderAdjacentByPrototypeCategoryTable() {
   const prototypeGrid = document.getElementById("prototypeGrid");
   if (!prototypeGrid) return;
@@ -2615,8 +2792,8 @@ function renderAdjacentTenantTable() {
     return;
   }
 
-  if (adjacentTenantTableMode === "layoutCategory") {
-    renderAdjacentByPrototypeCategoryTable();
+  if (adjacentTenantTableMode === "immediateStore") {
+    renderAdjacentImmediateStoreTable();
     return;
   }
 
@@ -3044,15 +3221,21 @@ function coTenantTableTabsHTML() {
   return `
     <div class="co-tenant-tabs">
       <button
-        class="${coTenantTableMode === "frequency" ? "active" : ""}"
-        onclick="setCoTenantTableMode('frequency')">
-        Co-Tenant Frequency
+        class="${coTenantTableMode === "category" ? "active" : ""}"
+        onclick="setCoTenantTableMode('category')">
+        Category Ranking
       </button>
 
       <button
-        class="${coTenantTableMode === "category" ? "active" : ""}"
-        onclick="setCoTenantTableMode('category')">
-        Category Summary
+        class="${coTenantTableMode === "frequency" ? "active" : ""}"
+        onclick="setCoTenantTableMode('frequency')">
+        Store Ranking
+      </button>
+
+      <button
+        class="${coTenantTableMode === "layoutCategory" ? "active" : ""}"
+        onclick="setCoTenantTableMode('layoutCategory')">
+        Layout Summary
       </button>
     </div>
   `;
@@ -3100,9 +3283,9 @@ function renderCategorySummaryTable() {
       ${coTenantTableTabsHTML()}
 
       <div class="co-tenant-table-header">
-        <h3>Trader Joe’s Category Summary</h3>
+        <h3>Trader Joe’s Co-Tenant Category Ranking</h3>
         <p>
-          Summary of tenant categories that appear across the Trader Joe’s center dataset.
+          Category ranking of tenants that appear across the Trader Joe’s center dataset.
           Click any project ID to open it in the Filter Map.
         </p>
       </div>
@@ -3148,6 +3331,250 @@ function renderCategorySummaryTable() {
     );
   });
 }
+
+function getPrototypeForProjectId(projectId) {
+  const project = traderJoePrototypes.find(item =>
+    String(item["Project ID"]) === String(projectId)
+  );
+
+  return project ? (project["Prototype"] || "Unknown") : "Unknown";
+}
+
+function isTrueValue(value) {
+  const clean = String(value || "").trim().toLowerCase();
+  return clean === "true" || clean === "yes" || clean === "1";
+}
+
+function getCoTenantLayoutCategoryRows() {
+  const layoutOrder = [
+    "Urban Context",
+    "Standalone",
+    "Mall / Destination",
+    "Branch",
+    "Spine",
+    "C-Shape",
+    "Cluster"
+  ];
+
+  const summary = {};
+
+  tjCoTenantDetailRows.forEach(row => {
+    const projectId = String(row["Project ID"] || "").trim();
+    const tenant = String(row["Tenant"] || "").trim();
+    const category = String(row["Tenant Category"] || "").trim();
+
+    if (!projectId || !tenant || !category) return;
+
+    // 不统计 Trader Joe's 自己
+    if (tenant.toLowerCase().includes("trader joe")) return;
+
+    // 如果 CSV 标记了要排除，就不统计
+    if (isTrueValue(row["Exclude From Category Summary"])) return;
+
+    // 不统计 vacancy / available
+    const tenantLower = tenant.toLowerCase();
+    const categoryLower = category.toLowerCase();
+
+    if (
+      tenantLower === "available" ||
+      tenantLower === "vacant" ||
+      categoryLower === "vacancy"
+    ) {
+      return;
+    }
+
+    const layout = getPrototypeForProjectId(projectId);
+    const normalizedLayout = layoutOrder.find(item =>
+      normalizePrototypeName(item) === normalizePrototypeName(layout)
+    ) || layout;
+
+    const key = `${normalizedLayout}||${category}`;
+
+    if (!summary[key]) {
+      summary[key] = {
+        layout: normalizedLayout,
+        category,
+        count: 0,
+        projectIds: new Set(),
+        tenants: {}
+      };
+    }
+
+    summary[key].count += 1;
+    summary[key].projectIds.add(projectId);
+
+    if (!summary[key].tenants[tenant]) {
+      summary[key].tenants[tenant] = 0;
+    }
+
+    summary[key].tenants[tenant] += 1;
+  });
+
+  const rows = Object.values(summary);
+
+  const layoutTotals = {};
+  rows.forEach(row => {
+    if (!layoutTotals[row.layout]) {
+      layoutTotals[row.layout] = 0;
+    }
+    layoutTotals[row.layout] += row.count;
+  });
+
+  return rows
+    .map(row => {
+      const topTenants = Object.entries(row.tenants)
+        .sort((a, b) => {
+          if (b[1] !== a[1]) return b[1] - a[1];
+          return a[0].localeCompare(b[0]);
+        })
+        .slice(0, 6)
+        .map(([tenant, count]) => `${tenant} (${count})`)
+        .join("; ");
+
+      return {
+        layout: row.layout,
+        category: row.category,
+        count: row.count,
+        share: layoutTotals[row.layout] > 0 ? row.count / layoutTotals[row.layout] : 0,
+        projectCount: row.projectIds.size,
+        topTenants
+      };
+    })
+    .sort((a, b) => {
+      const layoutA = layoutOrder.indexOf(a.layout);
+      const layoutB = layoutOrder.indexOf(b.layout);
+
+      const safeLayoutA = layoutA === -1 ? 999 : layoutA;
+      const safeLayoutB = layoutB === -1 ? 999 : layoutB;
+
+      if (safeLayoutA !== safeLayoutB) return safeLayoutA - safeLayoutB;
+      if (b.count !== a.count) return b.count - a.count;
+
+      return a.category.localeCompare(b.category);
+    });
+}
+
+function getCoTenantLayoutChartRows(layoutName, allRows) {
+  return allRows
+    .filter(row => normalizePrototypeName(row.layout) === normalizePrototypeName(layoutName))
+    .sort((a, b) => b.count - a.count)
+    .map(row => ({
+      label: row.category,
+      count: row.count
+    }));
+}
+
+function renderCoTenantLayoutCategoryCharts(layoutNames, allRows) {
+  requestAnimationFrame(() => {
+    layoutNames.forEach(layoutName => {
+      const chartRows = getCoTenantLayoutChartRows(layoutName, allRows);
+      const canvasId = `cotenant-layout-category-pie-${safeId(layoutName)}`;
+
+      createPieChart(
+        canvasId,
+        chartRows.map(row => row.label),
+        chartRows.map(row => row.count),
+        layoutName
+      );
+    });
+  });
+}
+
+function renderCoTenantLayoutCategoryTable() {
+  clearAdjacentCharts();
+
+  const prototypeGrid = document.getElementById("prototypeGrid");
+  if (!prototypeGrid) return;
+
+  if (!tjCoTenantDetailRows || !tjCoTenantDetailRows.length) {
+    prototypeGrid.innerHTML = `
+      <div class="co-tenant-table-wrap">
+        ${coTenantTableTabsHTML()}
+        <p>No co-tenant detail data loaded. Check WithinCenter/tj_49_co_tenant_detail_rows.csv.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const allRows = getCoTenantLayoutCategoryRows();
+
+  const layoutOrder = [
+    "Urban Context",
+    "Standalone",
+    "Mall / Destination",
+    "Branch",
+    "Spine",
+    "C-Shape",
+    "Cluster"
+  ];
+
+  const layoutNames = layoutOrder.filter(layoutName =>
+    allRows.some(row =>
+      normalizePrototypeName(row.layout) === normalizePrototypeName(layoutName)
+    )
+  );
+
+  const chartCardsHTML = layoutNames.map(layoutName => {
+    const canvasId = `cotenant-layout-category-pie-${safeId(layoutName)}`;
+
+    return `
+      <div class="layout-pie-card">
+        <div class="layout-pie-title">${layoutName}</div>
+        <div class="layout-pie-frame">
+          <canvas id="${canvasId}"></canvas>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const tableRows = allRows.map(row => `
+    <tr>
+      <td class="co-tenant-name">${row.layout}</td>
+      <td>${row.category}</td>
+      <td class="co-tenant-count">${row.count}</td>
+      <td class="co-tenant-count">${(row.share * 100).toFixed(1)}%</td>
+      <td class="co-tenant-count">${row.projectCount}</td>
+      <td>${row.topTenants}</td>
+    </tr>
+  `).join("");
+
+  prototypeGrid.innerHTML = `
+    <div class="co-tenant-table-wrap">
+      ${coTenantTableTabsHTML()}
+
+      <div class="co-tenant-table-header">
+        <h3>Trader Joe’s Co-Tenant Layout Summary</h3>
+        <p>
+          This table summarizes co-tenant category frequency within each Trader Joe’s layout prototype.
+          Share is calculated within each layout group, not across all projects.
+        </p>
+      </div>
+
+      <div id="coTenantLayoutCategoryPieGrid" class="layout-pie-chart-grid">
+        ${chartCardsHTML}
+      </div>
+
+      <table class="co-tenant-table">
+        <thead>
+          <tr>
+            <th>Layout Prototype</th>
+            <th>Tenant Category</th>
+            <th>Tenant Records</th>
+            <th>Share Within Layout</th>
+            <th>Project Count</th>
+            <th>Top Tenants</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRows}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  renderCoTenantLayoutCategoryCharts(layoutNames, allRows);
+}
+
 function categorySummaryProjectLinksHTML(row) {
   const projectIds = splitSemicolonList(row["Project IDs"]);
 
@@ -3166,6 +3593,8 @@ function categorySummaryProjectLinksHTML(row) {
     `;
   }).join("");
 }
+
+
 
 function coTenantProjectLinksHTML(row) {
   const projectNames = splitSemicolonList(row["Example / Matching Centers"]);
