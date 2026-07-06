@@ -18,7 +18,7 @@ let adjacentCharts = [];
 
 let adjacentTenantTableMode = "summary";
 
-let prototypeDisplayMode = "matrix"; // "matrix" or "cotenant"
+let prototypeDisplayMode = "matrix"; // "matrix", "cotenant", "adjacent", or "parkingDistance"
 let coTenantTableMode = "frequency"; // "frequency" or "category"
 
 const matrixModeConfig = {
@@ -525,16 +525,25 @@ function metric(label, value) {
   `;
 }
 
-function sitePlanHTML(project) {
+
+function compareSitePlanHTML(project) {
   const imagePath = project["Site Plan Image Path"];
 
   if (!imagePath || imagePath === 0) {
-    return `<p>No site plan image available.</p>`;
+    return `
+      <div class="compare-no-image">
+        No site plan image available
+      </div>
+    `;
   }
 
   return `
-    <h3 class="section-title">Site Plan</h3>
-    <img class="site-plan" src="${imagePath}" alt="Site Plan">
+    <img
+      class="compare-site-plan clickable-image"
+      src="${imagePath}"
+      alt="Site Plan"
+      onclick="openImageLightbox('${escapeJS(imagePath)}')"
+    >
   `;
 }
 
@@ -1415,6 +1424,12 @@ function setMatrixMode(mode) {
    adjacentTenantBtn.classList.remove("active");
   }
 
+  const parkingDistanceBtn = document.getElementById("parkingDistanceTableBtn");
+  if (parkingDistanceBtn) {
+   parkingDistanceBtn.textContent = "Show Parking Distance Table";
+   parkingDistanceBtn.classList.remove("active");
+  }
+
   matrixMode = mode;
 
   const subtitle = document.getElementById("prototypeMatrixSubtitle");
@@ -1646,6 +1661,12 @@ function showPrototypeView() {
   if (adjacentTenantBtn) {
     adjacentTenantBtn.textContent = "Show Adjacent Tenant Table";
     adjacentTenantBtn.classList.remove("active");
+  }
+
+  const parkingDistanceBtn = document.getElementById("parkingDistanceTableBtn");
+  if (parkingDistanceBtn) {
+   parkingDistanceBtn.textContent = "Show Parking Distance Table";
+   parkingDistanceBtn.classList.remove("active");
   }
 
   renderMatrixModeToggle();
@@ -1979,6 +2000,12 @@ function toggleCoTenantTable() {
     adjacentTenantBtn.classList.remove("active");
   }
 
+  const parkingDistanceBtn = document.getElementById("parkingDistanceTableBtn");
+  if (parkingDistanceBtn) {
+   parkingDistanceBtn.textContent = "Show Parking Distance Table";
+   parkingDistanceBtn.classList.remove("active");
+  }
+
   const subtitle = document.getElementById("prototypeMatrixSubtitle");
   if (subtitle) {
     subtitle.textContent =
@@ -1991,6 +2018,7 @@ function toggleCoTenantTable() {
 function setPrototypePanelsVisible(visible) {
   const categoryPanel = document.querySelector(".matrix-category-panel");
   const highlightPanel = document.querySelector(".matrix-highlight-panel");
+  const matrixToolsRow = document.querySelector(".matrix-tools-row");
 
   if (categoryPanel) {
     categoryPanel.style.display = visible ? "" : "none";
@@ -1998,6 +2026,10 @@ function setPrototypePanelsVisible(visible) {
 
   if (highlightPanel) {
     highlightPanel.style.display = visible ? "" : "none";
+  }
+
+  if (matrixToolsRow) {
+    matrixToolsRow.style.display = visible ? "" : "none";
   }
 }
 
@@ -2102,6 +2134,12 @@ function toggleAdjacentTenantTable() {
   if (coTenantBtn) {
     coTenantBtn.textContent = "Show Co-Tenant Table";
     coTenantBtn.classList.remove("active");
+  }
+
+  const parkingDistanceBtn = document.getElementById("parkingDistanceTableBtn");
+  if (parkingDistanceBtn) {
+    parkingDistanceBtn.textContent = "Show Parking Distance Table";
+    parkingDistanceBtn.classList.remove("active");
   }
 
   const subtitle = document.getElementById("prototypeMatrixSubtitle");
@@ -2268,11 +2306,10 @@ function renderLayoutPieCharts() {
       normalizePrototypeName(row["Prototype"]) === normalizePrototypeName(prototypeName)
     );
 
-    const chartRows = getTopChartRows(
+    const chartRows = getAllChartRows(
       rows,
       "Adjacent Category",
-      "Count",
-      5
+      "Count"
     );
 
     createPieChart(
@@ -2335,11 +2372,10 @@ function renderAdjacentCategoryFrequencyTable() {
   `;
 
   requestAnimationFrame(() => {
-    const chartRows = getTopChartRows(
+    const chartRows = getAllChartRows(
       tjAdjacentCategoryFrequency,
       "Adjacent Category",
-      "Count",
-      6
+      "Count"
     );
 
     createPieChart(
@@ -2482,11 +2518,10 @@ function renderAdjacentImmediateCategoryTable() {
   `;
 
   requestAnimationFrame(() => {
-    const chartRows = getTopChartRows(
+    const chartRows = getAllChartRows(
       tjAdjacentImmediateCategoryFrequency,
       "Adjacent Category",
-      "Count",
-      6
+      "Count"
     );
 
     createPieChart(
@@ -2587,21 +2622,346 @@ function renderAdjacentTenantTable() {
 
 }
 
+function toggleParkingDistanceTable() {
+  if (prototypeDisplayMode === "parkingDistance") {
+    prototypeDisplayMode = "matrix";
+    setPrototypePanelsVisible(true);
+
+    const btn = document.getElementById("parkingDistanceTableBtn");
+    if (btn) {
+      btn.textContent = "Show Parking Distance Table";
+      btn.classList.remove("active");
+    }
+
+    const subtitle = document.getElementById("prototypeMatrixSubtitle");
+    if (subtitle) {
+      subtitle.textContent = matrixModeConfig[matrixMode].subtitle;
+    }
+
+    renderPrototypeView();
+    return;
+  }
+
+  prototypeDisplayMode = "parkingDistance";
+  setPrototypePanelsVisible(false);
+
+  const parkingBtn = document.getElementById("parkingDistanceTableBtn");
+  if (parkingBtn) {
+    parkingBtn.textContent = "Back to Matrix";
+    parkingBtn.classList.add("active");
+  }
+
+  const coTenantBtn = document.getElementById("coTenantTableBtn");
+  if (coTenantBtn) {
+    coTenantBtn.textContent = "Show Co-Tenant Table";
+    coTenantBtn.classList.remove("active");
+  }
+
+  const adjacentTenantBtn = document.getElementById("adjacentTenantTableBtn");
+  if (adjacentTenantBtn) {
+    adjacentTenantBtn.textContent = "Show Adjacent Tenant Table";
+    adjacentTenantBtn.classList.remove("active");
+  }
+
+  const subtitle = document.getElementById("prototypeMatrixSubtitle");
+  if (subtitle) {
+    subtitle.textContent =
+      "Storefront-to-parking distance grouped by layout prototype";
+  }
+
+  renderParkingDistanceTable();
+}
+
+function getParkingDistanceCategory(item) {
+  const distance = Number(item["ClosestParkingDistanceFt"]);
+
+  if (!Number.isFinite(distance) || distance <= 0) {
+    return "No Data / Urban Context";
+  }
+
+  if (distance <= 15) {
+    return "7–15 ft";
+  }
+
+  if (distance <= 30) {
+    return "15–30 ft";
+  }
+
+  return "30+ ft";
+}
+
+function getParkingDistanceCategoryLabel(category) {
+  const labels = {
+    "7–15 ft": "Storefront 90° Parking",
+    "15–30 ft": "Across Drive Aisle",
+    "30+ ft": "Landscape / Setback",
+    "No Data / Urban Context": "No Data / Urban Context"
+  };
+
+  return labels[category] || category;
+}
+
+function getParkingDistanceRows() {
+  const layoutOrder = [
+    "All Projects",
+    "Urban Context",
+    "Standalone",
+    "Mall / Destination",
+    "Branch",
+    "Spine",
+    "C-Shape",
+    "Cluster"
+  ];
+
+  return layoutOrder.map(layoutName => {
+    const layoutProjects = layoutName === "All Projects"
+      ? traderJoePrototypes
+      : traderJoePrototypes.filter(item =>
+          normalizePrototypeName(item["Prototype"]) === normalizePrototypeName(layoutName)
+        );
+
+    const counts = {
+      "7–15 ft": 0,
+      "15–30 ft": 0,
+      "30+ ft": 0,
+      "No Data / Urban Context": 0
+    };
+
+    layoutProjects.forEach(item => {
+      const category = getParkingDistanceCategory(item);
+      counts[category] = (counts[category] || 0) + 1;
+    });
+
+    return {
+      layoutName,
+      totalProjects: layoutProjects.length,
+      counts
+    };
+  }).filter(row => row.totalProjects > 0);
+}
+
+function parkingDistanceCellHTML(count, denominator) {
+  const pct = denominator > 0
+    ? ((count / denominator) * 100).toFixed(1) + "%"
+    : "—";
+
+  return `
+    <td class="parking-distance-cell">
+      <span>${pct}</span>
+      <strong>${count} projects</strong>
+    </td>
+  `;
+}
+
+function getParkingDistanceChartRows(row) {
+  return [
+    {
+      label: "7–15 ft",
+      count: row.counts["7–15 ft"]
+    },
+    {
+      label: "15–30 ft",
+      count: row.counts["15–30 ft"]
+    },
+    {
+      label: "30+ ft",
+      count: row.counts["30+ ft"]
+    },
+    {
+      label: "No Data / Urban",
+      count: row.counts["No Data / Urban Context"]
+    }
+  ].filter(item => item.count > 0);
+}
+
+function renderParkingDistanceTable() {
+  clearAdjacentCharts();
+
+  const prototypeGrid = document.getElementById("prototypeGrid");
+  if (!prototypeGrid) return;
+
+  if (!traderJoePrototypes || !traderJoePrototypes.length) {
+    prototypeGrid.innerHTML = `
+      <div class="co-tenant-table-wrap parking-distance-table-wrap">
+        <p>No Trader Joe’s prototype data loaded. Check data/trader_joes_prototypes.csv.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const rows = getParkingDistanceRows();
+
+  const allProjectsRow = rows.find(row => row.layoutName === "All Projects");
+  const layoutRows = rows.filter(row => row.layoutName !== "All Projects");
+
+  const allProjectsChartHTML = allProjectsRow ? `
+    <div class="parking-distance-overall-row">
+      <div class="layout-pie-card parking-distance-pie-card parking-distance-overall-card">
+        <div class="layout-pie-title">${allProjectsRow.layoutName}</div>
+        <div class="layout-pie-frame parking-distance-pie-frame">
+          <canvas id="parking-distance-pie-${safeId(allProjectsRow.layoutName)}"></canvas>
+        </div>
+      </div>
+    </div>
+  ` : "";
+
+  const layoutChartCardsHTML = layoutRows.map(row => {
+    const canvasId = `parking-distance-pie-${safeId(row.layoutName)}`;
+
+    return `
+      <div class="layout-pie-card parking-distance-pie-card">
+        <div class="layout-pie-title">${row.layoutName}</div>
+        <div class="layout-pie-frame parking-distance-pie-frame">
+          <canvas id="${canvasId}"></canvas>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const tableRows = rows.map(row => {
+    const denominator = row.totalProjects;
+
+    return `
+      <tr class="${row.layoutName === "All Projects" ? "parking-distance-total-row" : ""}">
+        <td class="co-tenant-name">${row.layoutName}</td>
+        <td class="co-tenant-count">${row.totalProjects}</td>
+        ${parkingDistanceCellHTML(row.counts["7–15 ft"], denominator)}
+        ${parkingDistanceCellHTML(row.counts["15–30 ft"], denominator)}
+        ${parkingDistanceCellHTML(row.counts["30+ ft"], denominator)}
+        ${parkingDistanceCellHTML(row.counts["No Data / Urban Context"], denominator)}
+      </tr>
+    `;
+  }).join("");
+
+  prototypeGrid.innerHTML = `
+    <div class="co-tenant-table-wrap parking-distance-table-wrap">
+      <div class="co-tenant-table-header">
+        <h3>Storefront-to-Parking Distance by Layout</h3>
+        <p>
+          Distance from Trader Joe’s storefront to the closest front parking area.
+          7–15 ft usually indicates 90° parking directly in front of the storefront;
+          15–30 ft usually indicates parking across a drive aisle;
+          30+ ft usually indicates a deeper foreground condition with landscape, setback, or circulation.
+          Projects without a measurable front parking distance are grouped as No Data / Urban Context.
+        </p>
+      </div>
+
+      <div class="parking-distance-chart-section">
+        <div class="adjacent-chart-title">Storefront-to-Parking Distance Mix by Layout</div>
+
+        ${allProjectsChartHTML}
+
+        <div class="layout-pie-chart-grid parking-distance-pie-grid">
+          ${layoutChartCardsHTML}
+        </div>
+      </div>
+
+      <table class="co-tenant-table parking-distance-table">
+        <thead>
+          <tr>
+            <th>Layout Prototype</th>
+            <th>Total Projects</th>
+            <th>
+              7–15 ft<br>
+              <span>Storefront 90° Parking</span>
+            </th>
+            <th>
+              15–30 ft<br>
+              <span>Across Drive Aisle</span>
+            </th>
+            <th>
+              30+ ft<br>
+              <span>Landscape / Setback</span>
+            </th>
+            <th>
+              No Data / Urban<br>
+              <span>No measurable front parking</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRows}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  requestAnimationFrame(() => {
+    rows.forEach(row => {
+      const chartRows = getParkingDistanceChartRows(row);
+      const canvasId = `parking-distance-pie-${safeId(row.layoutName)}`;
+
+      createPieChart(
+        canvasId,
+        chartRows.map(item => item.label),
+        chartRows.map(item => item.count),
+        row.layoutName,
+        {
+          showLegend: row.layoutName === "All Projects"
+        }
+      );
+    });
+  });
+}
+
 function clearAdjacentCharts() {
   adjacentCharts.forEach(chart => chart.destroy());
   adjacentCharts = [];
 }
 
-function createPieChart(canvasId, labels, values, titleText = "") {
+function createPieChart(canvasId, labels, values, titleText = "", options = {}) {
   const canvas = document.getElementById(canvasId);
   if (!canvas || typeof Chart === "undefined") return;
+
+  const fixedColorMap = {
+    // Parking distance categories
+    "7–15 ft": "#3ba3e6",
+    "15–30 ft": "#f45b83",
+    "30+ ft": "#ff9f40",
+    "No Data / Urban": "#f9c74f",
+    "No Data / Urban Context": "#f9c74f",
+
+    // Adjacent tenant categories
+    "Food & Beverage": "#4c78a8",
+    "Apparel / Soft Goods": "#f58518",
+    "Beauty / Personal Care": "#e45756",
+    "Service / Bank": "#72b7b2",
+    "Furniture / Home": "#54a24b",
+    "Fitness / Recreation": "#b279a2",
+    "Health / Pharmacy": "#ff9da6",
+    "Hard Goods": "#9d755d",
+    "Other Retail": "#8c6d62",
+    "Pet": "#edc948",
+    "Vacancy": "#8f8f8f",
+    "Other": "#bab0ac"
+  };
+
+  const fallbackPalette = [
+    "#4c78a8",
+    "#f58518",
+    "#e45756",
+    "#72b7b2",
+    "#54a24b",
+    "#b279a2",
+    "#ff9da6",
+    "#9d755d",
+    "#edc948",
+    "#bab0ac"
+  ];
+
+  const backgroundColors = labels.map((label, index) =>
+    fixedColorMap[label] || fallbackPalette[index % fallbackPalette.length]
+  );
 
   const chart = new Chart(canvas, {
     type: "pie",
     data: {
       labels: labels,
       datasets: [{
-        data: values
+        data: values,
+        backgroundColor: backgroundColors,
+        borderColor: "#ffffff",
+        borderWidth: 2
       }]
     },
     options: {
@@ -2609,6 +2969,7 @@ function createPieChart(canvasId, labels, values, titleText = "") {
       maintainAspectRatio: false,
       plugins: {
         legend: {
+          display: options.showLegend !== false,
           position: "right",
           labels: {
             boxWidth: 12,
@@ -2640,6 +3001,16 @@ function createPieChart(canvasId, labels, values, titleText = "") {
   });
 
   adjacentCharts.push(chart);
+}
+
+function getAllChartRows(data, labelField, countField) {
+  return [...data]
+    .filter(row => row[labelField] && Number(row[countField]) > 0)
+    .sort((a, b) => Number(b[countField]) - Number(a[countField]))
+    .map(row => ({
+      label: row[labelField],
+      count: Number(row[countField]) || 0
+    }));
 }
 
 function getTopChartRows(data, labelField, countField, maxSlices = 6) {

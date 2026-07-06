@@ -1324,6 +1324,19 @@ body.prototype-mode #topNav {
   margin-top: 8px;
 }
 
+.matrix-table-tools-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-bottom: 2px;
+}
+
+.matrix-table-tools-row + .matrix-tools-row {
+  margin-top: 6px;
+}
+
 /* Collapse button: light gray pill */
 .matrix-tool-btn,
 #matrixCompactToggleBtn {
@@ -1359,33 +1372,6 @@ body.prototype-mode #topNav {
   color: #111;
 }
 
-/* Current-table category panel */
-.matrix-category-panel {
-  width: fit-content;
-  max-width: 720px;
-  margin-top: 10px;
-  padding: 9px 10px;
-  border: 1px solid #d8d8d8;
-  border-radius: 10px;
-  background: #f9fafb;
-  box-sizing: border-box;
-}
-
-.matrix-category-panel-title {
-  margin-bottom: 7px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  color: #5d666b;
-}
-
-.matrix-category-panel .prototype-type-filter {
-  width: fit-content;
-  max-width: 700px;
-  justify-content: flex-start;
-}
-
 /* Right highlight panel: left edge after Size of TJ, right edge to page right */
 .matrix-highlight-panel {
   justify-self: stretch;
@@ -1396,7 +1382,7 @@ body.prototype-mode #topNav {
   border-radius: 12px;
   background: #fbfbfb;
   padding: 10px;
-  max-height: 190px;
+  max-height: 155px;
   overflow-y: auto;
 }
 
@@ -1808,8 +1794,105 @@ body.prototype-mode #topNav {
   height: 230px;
 }
 
+/* =========================
+   Parking Distance Table
+   ========================= */
+
+.parking-distance-table-wrap {
+  border-color: #d4d4d4;
+}
+
+.parking-distance-table th {
+  text-align: center;
+}
+
+.parking-distance-table th:first-child,
+.parking-distance-table td:first-child {
+  text-align: left;
+}
+
+.parking-distance-table th span {
+  display: block;
+  margin-top: 3px;
+  font-size: 10px;
+  font-weight: 500;
+  color: #666;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.parking-distance-cell {
+  text-align: center;
+}
+
+.parking-distance-cell span {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111;
+  line-height: 1.2;
+}
+
+.parking-distance-cell strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 10.5px;
+  font-weight: 400;
+  color: #777;
+}
+
+.parking-distance-total-row {
+  background: #f4f7f8;
+  font-weight: 700;
+}
+
+.parking-distance-total-row td {
+  border-bottom: 2px solid #c8d2d8;
+}
+
+.parking-distance-chart-section {
+  margin: 12px 0 20px 0;
+  padding: 14px;
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+  background: #f8f9fa;
+}
 
 
+.parking-distance-pie-card {
+  background: #ffffff;
+}
+
+.parking-distance-pie-frame {
+  height: 210px;
+}
+
+.parking-distance-overall-row {
+  display: flex;
+  justify-content: flex-start;
+  margin: 10px 0 14px 0;
+}
+
+.parking-distance-overall-card {
+  width: 300px;
+  max-width: 300px;
+}
+
+.parking-distance-pie-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(180px, 1fr));
+  gap: 14px;
+  margin: 0;
+}
+
+.parking-distance-pie-card {
+  min-width: 0;
+  background: #ffffff;
+}
+
+.parking-distance-pie-frame {
+  height: 210px;
+}
 
 
 

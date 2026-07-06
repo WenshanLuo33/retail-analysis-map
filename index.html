@@ -48,7 +48,7 @@
           <span class="tool-number">02</span>
           <h3>Prototype Matrix</h3>
           <p>
-            Compare approximately 30 Trader Joe’s projects and study their
+            Compare approximately 50 Trader Joe’s projects and study their
             layout patterns. The matrix summarizes the projects into seven
             prototype types based on store placement, parking organization,
             visibility, access, and surrounding site context.
@@ -160,73 +160,83 @@
   </div>
 
   <!-- Prototype Matrix View -->
-  <!-- Prototype Matrix View -->
-<!-- Prototype Matrix View -->
-<div id="prototypeView" class="hidden">
-  <div class="prototype-page-header">
-    <div class="prototype-header-main">
-      <h2>Trader Joe’s Matrix</h2>
+  <div id="prototypeView" class="hidden">
+    <div class="prototype-page-header">
+      <div class="prototype-header-main">
+        <h2>Trader Joe’s Matrix</h2>
 
-      <p id="prototypeMatrixSubtitle">
-        Trader Joe’s locations grouped by site layout pattern
-      </p>
+        <p id="prototypeMatrixSubtitle">
+          Trader Joe’s locations grouped by site layout pattern
+        </p>
 
-      <div id="matrixModeToggle" class="matrix-mode-toggle"></div>
+        <div id="matrixModeToggle" class="matrix-mode-toggle"></div>
 
-      <div class="matrix-tools-row">
-        <button id="matrixCompactToggleBtn"
-          class="matrix-tool-btn"
-          onclick="toggleMatrixCardCompact()">
-          Collapse Cards
-        </button>
+        <div class="matrix-table-tools-row">
+          <button
+            id="coTenantTableBtn"
+            class="matrix-tool-btn table-tool-btn"
+            onclick="toggleCoTenantTable()"
+          >
+            Show Co-Tenant Table
+          </button>
 
-        <button id="matrixImageToggleBtn"
-          class="matrix-tool-btn"
-          onclick="toggleMatrixImageMode()">
-          Show Storefront
-         </button>
+          <button
+            id="adjacentTenantTableBtn"
+            class="matrix-tool-btn table-tool-btn"
+            onclick="toggleAdjacentTenantTable()"
+          >
+            Show Adjacent Tenant Table
+          </button>
 
-         <button id="coTenantTableBtn"
-          class="matrix-tool-btn table-tool-btn"
-          onclick="toggleCoTenantTable()">
-          Show Co-Tenant Table
-        </button>
-
-        <button id="adjacentTenantTableBtn"
-          class="matrix-tool-btn table-tool-btn"
-          onclick="toggleAdjacentTenantTable()">
-          Show Adjacent Tenant Table
-        </button>
-      </div>
-
-      <div class="matrix-category-panel">
-        <div class="matrix-category-panel-title">
-          <span id="matrixCategoryPanelTitle">Layout Prototype Categories</span>
+          <button
+            id="parkingDistanceTableBtn"
+            class="matrix-tool-btn table-tool-btn"
+            onclick="toggleParkingDistanceTable()"
+          >
+            Show Parking Distance Table
+          </button>
         </div>
 
-        <div id="prototypeTypeFilter" class="prototype-type-filter"></div>
+        <div class="matrix-tools-row">
+          <button
+            id="matrixCompactToggleBtn"
+            class="matrix-tool-btn"
+            onclick="toggleMatrixCardCompact()"
+          >
+            Collapse Cards
+          </button>
+
+          <button
+            id="matrixImageToggleBtn"
+            class="matrix-tool-btn"
+            onclick="toggleMatrixImageMode()"
+          >
+            Show Storefront
+          </button>
+        </div>
       </div>
+
+      <aside class="matrix-highlight-panel">
+        <div class="matrix-highlight-header">
+          <div>
+            <h3>Highlight Tool</h3>
+            <p>Highlight cards matching all selected conditions.</p>
+          </div>
+
+          <button
+            class="matrix-tool-btn secondary"
+            onclick="clearMatrixHighlight()"
+          >
+            Clear
+          </button>
+        </div>
+
+        <div id="matrixHighlightOptions"></div>
+      </aside>
     </div>
 
-    <aside class="matrix-highlight-panel">
-      <div class="matrix-highlight-header">
-        <div>
-          <h3>Highlight Tool</h3>
-          <p>Highlight cards matching all selected conditions.</p>
-        </div>
-
-        <button class="matrix-tool-btn secondary"
-                onclick="clearMatrixHighlight()">
-          Clear
-        </button>
-      </div>
-
-      <div id="matrixHighlightOptions"></div>
-    </aside>
+    <div id="prototypeGrid"></div>
   </div>
-
-  <div id="prototypeGrid"></div>
-</div>
 
   <!-- Draw Your Own View -->
   <div id="drawView" class="hidden">
