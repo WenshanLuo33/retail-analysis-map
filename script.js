@@ -154,6 +154,7 @@ const matrixModeConfig = {
 };
 
 let matrixMode = "layout";
+let matrixMoreExpanded = false;
 
 let matrixCardsCompact = false;
 let matrixImageMode = "siteplan"; // "siteplan" or "storefront"
@@ -1416,23 +1417,7 @@ function setMatrixMode(mode) {
   prototypeDisplayMode = "matrix";
   setPrototypePanelsVisible(true);
 
-  const coTenantBtn = document.getElementById("coTenantTableBtn");
-  if (coTenantBtn) {
-    coTenantBtn.textContent = "Show Co-Tenant Table";
-    coTenantBtn.classList.remove("active");
-  }
-
-  const adjacentTenantBtn = document.getElementById("adjacentTenantTableBtn");
-  if (adjacentTenantBtn) {
-   adjacentTenantBtn.textContent = "Show Adjacent Tenant Table";
-   adjacentTenantBtn.classList.remove("active");
-  }
-
-  const parkingDistanceBtn = document.getElementById("parkingDistanceTableBtn");
-  if (parkingDistanceBtn) {
-   parkingDistanceBtn.textContent = "Show Parking Distance Table";
-   parkingDistanceBtn.classList.remove("active");
-  }
+  resetMatrixTableButtons();
 
   matrixMode = mode;
 
@@ -1452,11 +1437,59 @@ function setMatrixMode(mode) {
   renderPrototypeView();
 }
 
+function resetMatrixTableButtons() {
+  const buttonConfigs = [
+    {
+      id: "coTenantTableBtn",
+      text: "Show Co-Tenant Table"
+    },
+    {
+      id: "adjacentTenantTableBtn",
+      text: "Show Neighboring Tenant Table"
+    },
+    {
+      id: "immediateTenantTableBtn",
+      text: "Show Closest Neighbor Table"
+    },
+    {
+      id: "parkingDistanceTableBtn",
+      text: "Show Storefront-to-Parking Table"
+    }
+  ];
+
+  buttonConfigs.forEach(config => {
+    const btn = document.getElementById(config.id);
+    if (!btn) return;
+
+    btn.textContent = config.text;
+    btn.classList.remove("active");
+  });
+}
+
 function renderMatrixModeToggle() {
   const toggle = document.getElementById("matrixModeToggle");
   if (!toggle) return;
 
-  toggle.innerHTML = Object.entries(matrixModeConfig).map(([mode, config]) => {
+  const primaryModes = [
+    "layout",
+    "storefront",
+    "residential"
+  ];
+
+  const moreModes = [
+    "typology",
+    "position",
+    "parking",
+    "visibility",
+    "size"
+  ];
+
+  const visibleModes = matrixMoreExpanded
+    ? [...primaryModes, ...moreModes]
+    : primaryModes;
+
+  const modeButtons = visibleModes.map(mode => {
+    const config = matrixModeConfig[mode];
     const active = matrixMode === mode ? "active" : "";
 
     return `
@@ -1467,6 +1500,27 @@ function renderMatrixModeToggle() {
       </button>
     `;
   }).join("");
+
+  toggle.innerHTML = `
+    ${modeButtons}
+
+    <button
+      class="matrix-more-icon-btn ${matrixMoreExpanded ? "active" : ""}"
+      data-tooltip="${matrixMoreExpanded ? "Hide additional matrix categories" : "Show more matrix categories"}"
+      onclick="toggleMatrixMoreTabs(event)"
+    >
+      ${matrixMoreExpanded ? "×" : "⋯"}
+    </button>
+  `;
+}
+
+function toggleMatrixMoreTabs(event) {
+  if (event) {
+    event.stopPropagation();
+  }
+
+  matrixMoreExpanded = !matrixMoreExpanded;
+  renderMatrixModeToggle();
 }
 
 function toggleMatrixCardCompact() {
@@ -1655,23 +1709,7 @@ function showPrototypeView() {
   prototypeDisplayMode = "matrix";
   setPrototypePanelsVisible(true);
 
-  const coTenantBtn = document.getElementById("coTenantTableBtn");
-  if (coTenantBtn) {
-    coTenantBtn.textContent = "Show Co-Tenant Table";
-    coTenantBtn.classList.remove("active");
-  }
-
-  const adjacentTenantBtn = document.getElementById("adjacentTenantTableBtn");
-  if (adjacentTenantBtn) {
-    adjacentTenantBtn.textContent = "Show Adjacent Tenant Table";
-    adjacentTenantBtn.classList.remove("active");
-  }
-
-  const parkingDistanceBtn = document.getElementById("parkingDistanceTableBtn");
-  if (parkingDistanceBtn) {
-   parkingDistanceBtn.textContent = "Show Parking Distance Table";
-   parkingDistanceBtn.classList.remove("active");
-  }
+  resetMatrixTableButtons();
 
   renderMatrixModeToggle();
   renderPrototypeTypeFilter();
@@ -1973,11 +2011,7 @@ function toggleCoTenantTable() {
     prototypeDisplayMode = "matrix";
     setPrototypePanelsVisible(true);
 
-    const btn = document.getElementById("coTenantTableBtn");
-    if (btn) {
-      btn.textContent = "Show Co-Tenant Table";
-      btn.classList.remove("active");
-    }
+    resetMatrixTableButtons();
 
     const subtitle = document.getElementById("prototypeMatrixSubtitle");
     if (subtitle) {
@@ -1992,22 +2026,12 @@ function toggleCoTenantTable() {
   coTenantTableMode = "category";
   setPrototypePanelsVisible(false);
 
+  resetMatrixTableButtons();
+
   const btn = document.getElementById("coTenantTableBtn");
   if (btn) {
     btn.textContent = "Back to Matrix";
     btn.classList.add("active");
-  }
-
-  const adjacentTenantBtn = document.getElementById("adjacentTenantTableBtn");
-  if (adjacentTenantBtn) {
-    adjacentTenantBtn.textContent = "Show Adjacent Tenant Table";
-    adjacentTenantBtn.classList.remove("active");
-  }
-
-  const parkingDistanceBtn = document.getElementById("parkingDistanceTableBtn");
-  if (parkingDistanceBtn) {
-   parkingDistanceBtn.textContent = "Show Parking Distance Table";
-   parkingDistanceBtn.classList.remove("active");
   }
 
   const subtitle = document.getElementById("prototypeMatrixSubtitle");
@@ -2098,7 +2122,12 @@ function renderCoTenantTable() {
             <th>Rank</th>
             <th>Tenant Name</th>
             <th>Category</th>
-            <th>Appears Time</th>
+
+            ${tableHeaderTooltipHTML(
+              "Appears in Centers",
+              "Number of Trader Joe’s retail centers where this tenant appears. This is counted at the center level, not as total store count across all projects."
+            )}
+
             <th>Project Name</th>
           </tr>
         </thead>
@@ -2110,17 +2139,12 @@ function renderCoTenantTable() {
   `;
 }
 
-
 function toggleAdjacentTenantTable() {
   if (prototypeDisplayMode === "adjacent") {
     prototypeDisplayMode = "matrix";
     setPrototypePanelsVisible(true);
 
-    const btn = document.getElementById("adjacentTenantTableBtn");
-    if (btn) {
-      btn.textContent = "Show Adjacent Tenant Table";
-      btn.classList.remove("active");
-    }
+    resetMatrixTableButtons();
 
     const subtitle = document.getElementById("prototypeMatrixSubtitle");
     if (subtitle) {
@@ -2135,73 +2159,114 @@ function toggleAdjacentTenantTable() {
   adjacentTenantTableMode = "category";
   setPrototypePanelsVisible(false);
 
+  resetMatrixTableButtons();
+
   const adjacentBtn = document.getElementById("adjacentTenantTableBtn");
   if (adjacentBtn) {
     adjacentBtn.textContent = "Back to Matrix";
     adjacentBtn.classList.add("active");
   }
 
-  const coTenantBtn = document.getElementById("coTenantTableBtn");
-  if (coTenantBtn) {
-    coTenantBtn.textContent = "Show Co-Tenant Table";
-    coTenantBtn.classList.remove("active");
+  const subtitle = document.getElementById("prototypeMatrixSubtitle");
+  if (subtitle) {
+    subtitle.textContent =
+      "Neighboring tenants within up to two spaces on each side of Trader Joe’s.";
   }
 
-  const parkingDistanceBtn = document.getElementById("parkingDistanceTableBtn");
-  if (parkingDistanceBtn) {
-    parkingDistanceBtn.textContent = "Show Parking Distance Table";
-    parkingDistanceBtn.classList.remove("active");
+  renderAdjacentTenantTable();
+}
+
+function toggleImmediateAdjacentTenantTable() {
+  if (prototypeDisplayMode === "immediateAdjacent") {
+    prototypeDisplayMode = "matrix";
+    setPrototypePanelsVisible(true);
+
+    resetMatrixTableButtons();
+
+    const subtitle = document.getElementById("prototypeMatrixSubtitle");
+    if (subtitle) {
+      subtitle.textContent = matrixModeConfig[matrixMode].subtitle;
+    }
+
+    renderPrototypeView();
+    return;
+  }
+
+  prototypeDisplayMode = "immediateAdjacent";
+  adjacentTenantTableMode = "immediate";
+  setPrototypePanelsVisible(false);
+
+  resetMatrixTableButtons();
+
+  const immediateBtn = document.getElementById("immediateTenantTableBtn");
+  if (immediateBtn) {
+    immediateBtn.textContent = "Back to Matrix";
+    immediateBtn.classList.add("active");
   }
 
   const subtitle = document.getElementById("prototypeMatrixSubtitle");
   if (subtitle) {
     subtitle.textContent =
-      "Tenants directly adjacent to Trader Joe’s, summarized by store, category, and layout prototype";
+      "Closest tenants immediately next to Trader Joe’s, using only one tenant on each side.";
   }
 
   renderAdjacentTenantTable();
 }
 
 function adjacentTenantTableTabsHTML() {
-  return `
-    <div class="co-tenant-tabs adjacent-tenant-tabs">
-      <button
-        class="${adjacentTenantTableMode === "category" ? "active" : ""}"
-        onclick="setAdjacentTenantTableMode('category')">
-        Adjacent Tenant × Category Ranking
-      </button>
+  // Neighboring Tenant Table:
+  // up to two tenants on each side of Trader Joe's
+  if (prototypeDisplayMode === "adjacent") {
+    return `
+      <div class="co-tenant-tabs adjacent-tenant-tabs">
+        <button
+          class="${adjacentTenantTableMode === "category" ? "active" : ""}"
+          onclick="setAdjacentTenantTableMode('category')">
+          Category Ranking
+        </button>
 
-      <button
-        class="${adjacentTenantTableMode === "store" ? "active" : ""}"
-        onclick="setAdjacentTenantTableMode('store')">
-        Adjacent Tenant × Store Ranking
-      </button>
+        <button
+          class="${adjacentTenantTableMode === "store" ? "active" : ""}"
+          onclick="setAdjacentTenantTableMode('store')">
+          Store Ranking
+        </button>
 
-      <button
-        class="${adjacentTenantTableMode === "summary" ? "active" : ""}"
-        onclick="setAdjacentTenantTableMode('summary')">
-        Adjacent Tenant × Layout Summary
-      </button>
+        <button
+          class="${adjacentTenantTableMode === "summary" ? "active" : ""}"
+          onclick="setAdjacentTenantTableMode('summary')">
+          Layout Summary
+        </button>
+      </div>
+    `;
+  }
 
-      <button
-        class="${adjacentTenantTableMode === "immediate" ? "active" : ""}"
-        onclick="setAdjacentTenantTableMode('immediate')">
-        Immediate Only × Category Ranking
-      </button>
+  // Closest Neighbor Table:
+  // only the closest tenant on each side of Trader Joe's
+  if (prototypeDisplayMode === "immediateAdjacent") {
+    return `
+      <div class="co-tenant-tabs adjacent-tenant-tabs">
+        <button
+          class="${adjacentTenantTableMode === "immediate" ? "active" : ""}"
+          onclick="setAdjacentTenantTableMode('immediate')">
+          Category Ranking
+        </button>
 
-      <button
-        class="${adjacentTenantTableMode === "immediateStore" ? "active" : ""}"
-        onclick="setAdjacentTenantTableMode('immediateStore')">
-        Immediate Only × Store Ranking
-      </button>
+        <button
+          class="${adjacentTenantTableMode === "immediateStore" ? "active" : ""}"
+          onclick="setAdjacentTenantTableMode('immediateStore')">
+          Store Ranking
+        </button>
 
-      <button
-        class="${adjacentTenantTableMode === "immediateSummary" ? "active" : ""}"
-        onclick="setAdjacentTenantTableMode('immediateSummary')">
-        Immediate Only × Layout Summary
-      </button>
-    </div>
-  `;
+        <button
+          class="${adjacentTenantTableMode === "immediateSummary" ? "active" : ""}"
+          onclick="setAdjacentTenantTableMode('immediateSummary')">
+          Layout Summary
+        </button>
+      </div>
+    `;
+  }
+
+  return "";
 }
 
 function setAdjacentTenantTableMode(mode) {
@@ -2292,7 +2357,12 @@ function renderAdjacentPrototypeSummaryTable() {
             <th>Layout Prototype</th>
             <th>Rank</th>
             <th>Adjacent Category</th>
-            <th>Count</th>
+
+            ${tableHeaderTooltipHTML(
+              "Adjacent Records",
+              "Number of neighboring tenant records within this layout prototype and category. This uses up to two tenants on the left and two tenants on the right of Trader Joe’s, so each project can contribute up to four records."
+            )}
+
             <th>Share Within Layout</th>
           </tr>
         </thead>
@@ -2526,7 +2596,12 @@ function renderAdjacentImmediatePrototypeSummaryTable() {
             <th>Layout Prototype</th>
             <th>Rank</th>
             <th>Adjacent Category</th>
-            <th>Count</th>
+
+            ${tableHeaderTooltipHTML(
+              "Closest Neighbor Records",
+              "Number of closest-neighbor tenant records within this layout prototype and category. This only uses Adjacent_Left_1 and Adjacent_Right_1, so each project can contribute up to two records."
+            )}
+
             <th>Share Within Layout</th>
           </tr>
         </thead>
@@ -2634,7 +2709,12 @@ function renderAdjacentCategoryFrequencyTable() {
           <tr>
             <th>Rank</th>
             <th>Adjacent Category</th>
-            <th>Count</th>
+
+            ${tableHeaderTooltipHTML(
+              "Adjacent Records",
+              "Number of neighboring tenant records across all Trader Joe’s projects. This table uses up to two tenants on the left and two tenants on the right of Trader Joe’s, so each project can contribute up to four records."
+            )}
+
             <th>Share</th>
           </tr>
         </thead>
@@ -2728,7 +2808,12 @@ function renderAdjacentStoreFrequencyTable() {
             <th>Rank</th>
             <th>Adjacent Store</th>
             <th>Category</th>
-            <th>Count</th>
+
+            ${tableHeaderTooltipHTML(
+              "Adjacent Records",
+              "Number of times this specific store appears as a neighboring tenant around Trader Joe’s. This uses up to two tenants on each side, for up to four records per project. Vacancy and available spaces are excluded."
+            )}
+
             <th>Share</th>
           </tr>
         </thead>
@@ -2780,7 +2865,12 @@ function renderAdjacentImmediateCategoryTable() {
           <tr>
             <th>Rank</th>
             <th>Adjacent Category</th>
-            <th>Count</th>
+
+            ${tableHeaderTooltipHTML(
+              "Closest Neighbor Records",
+              "Number of closest-neighbor tenant records across all Trader Joe’s projects. This only uses the closest tenant on the left and the closest tenant on the right, so each project can contribute up to two records."
+            )}
+
             <th>Share</th>
           </tr>
         </thead>
@@ -2938,7 +3028,12 @@ function renderAdjacentImmediateStoreTable() {
             <th>Rank</th>
             <th>Adjacent Store</th>
             <th>Category</th>
-            <th>Count</th>
+
+            ${tableHeaderTooltipHTML(
+              "Closest Neighbor Records",
+              "Number of times this specific store appears as the closest neighboring tenant to Trader Joe’s. This only includes one tenant on the left and one tenant on the right, for up to two records per project. Vacancy and available spaces are excluded."
+            )}
+
             <th>Share</th>
           </tr>
         </thead>
@@ -2988,7 +3083,12 @@ function renderAdjacentByPrototypeCategoryTable() {
             <th>Layout Prototype</th>
             <th>Rank</th>
             <th>Adjacent Category</th>
-            <th>Count</th>
+
+            ${tableHeaderTooltipHTML(
+              "Adjacent Records",
+              "Number of neighboring tenant records within this layout prototype and category. This uses up to two tenants on the left and two tenants on the right of Trader Joe’s, so each project can contribute up to four records."
+            )}
+
             <th>Share Within Layout</th>
           </tr>
         </thead>
@@ -3008,6 +3108,16 @@ function formatPercent(value) {
   return (Number(value) * 100).toFixed(1) + "%";
 }
 
+function tableHeaderTooltipHTML(label, tooltip) {
+  return `
+    <th
+      class="table-header-tooltip"
+      data-tooltip="${escapeAttribute(tooltip)}"
+    >
+      ${label}
+    </th>
+  `;
+}
 
 function renderAdjacentTenantTable() {
   clearAdjacentCharts();
@@ -3042,16 +3152,13 @@ function renderAdjacentTenantTable() {
     return;
   }
 }
+
 function toggleParkingDistanceTable() {
   if (prototypeDisplayMode === "parkingDistance") {
     prototypeDisplayMode = "matrix";
     setPrototypePanelsVisible(true);
 
-    const btn = document.getElementById("parkingDistanceTableBtn");
-    if (btn) {
-      btn.textContent = "Show Parking Distance Table";
-      btn.classList.remove("active");
-    }
+    resetMatrixTableButtons();
 
     const subtitle = document.getElementById("prototypeMatrixSubtitle");
     if (subtitle) {
@@ -3065,28 +3172,18 @@ function toggleParkingDistanceTable() {
   prototypeDisplayMode = "parkingDistance";
   setPrototypePanelsVisible(false);
 
+  resetMatrixTableButtons();
+
   const parkingBtn = document.getElementById("parkingDistanceTableBtn");
   if (parkingBtn) {
     parkingBtn.textContent = "Back to Matrix";
     parkingBtn.classList.add("active");
   }
 
-  const coTenantBtn = document.getElementById("coTenantTableBtn");
-  if (coTenantBtn) {
-    coTenantBtn.textContent = "Show Co-Tenant Table";
-    coTenantBtn.classList.remove("active");
-  }
-
-  const adjacentTenantBtn = document.getElementById("adjacentTenantTableBtn");
-  if (adjacentTenantBtn) {
-    adjacentTenantBtn.textContent = "Show Adjacent Tenant Table";
-    adjacentTenantBtn.classList.remove("active");
-  }
-
   const subtitle = document.getElementById("prototypeMatrixSubtitle");
   if (subtitle) {
     subtitle.textContent =
-      "Storefront-to-parking distance grouped by layout prototype";
+      "Distance from Trader Joe’s storefront to the closest front parking area.";
   }
 
   renderParkingDistanceTable();
@@ -3280,7 +3377,12 @@ function renderParkingDistanceTable() {
         <thead>
           <tr>
             <th>Layout Prototype</th>
-            <th>Total Projects</th>
+
+            ${tableHeaderTooltipHTML(
+              "Total Projects",
+              "Number of Trader Joe’s projects included in this layout prototype group."
+            )}
+
             <th>
               7–15 ft<br>
               <span>Storefront 90° Parking</span>
@@ -3613,9 +3715,22 @@ function renderCategorySummaryTable() {
         <thead>
           <tr>
             <th>Tenant Category</th>
-            <th>TJ Center Count</th>
-            <th>Rows Count</th>
-            <th>Distinct Tenant Count</th>
+
+            ${tableHeaderTooltipHTML(
+              "TJ Center Count",
+              "Number of Trader Joe’s retail centers where this tenant category appears at least once."
+            )}
+
+            ${tableHeaderTooltipHTML(
+              "Tenant Records",
+              "Total tenant records in this category across all Trader Joe’s centers. If the same tenant appears in multiple centers, each appearance is counted."
+            )}
+
+            ${tableHeaderTooltipHTML(
+              "Unique Tenant Names",
+              "Number of unique tenant names in this category. Repeated appearances of the same tenant are counted only once."
+            )}
+
             <th>Top Tenants</th>
             <th>Project IDs</th>
           </tr>
@@ -3871,9 +3986,19 @@ function renderCoTenantLayoutCategoryTable() {
           <tr>
             <th>Layout Prototype</th>
             <th>Tenant Category</th>
-            <th>Tenant Records</th>
+
+            ${tableHeaderTooltipHTML(
+              "Tenant Records",
+              "Total co-tenant records within this layout prototype and tenant category. Each record represents one tenant appearance in a Trader Joe’s center. Trader Joe’s itself, vacancy, and available spaces are excluded."
+            )}
+
             <th>Share Within Layout</th>
-            <th>Project Count</th>
+
+            ${tableHeaderTooltipHTML(
+              "Project Count",
+              "Number of Trader Joe’s centers in this layout prototype where this tenant category appears at least once."
+            )}
+
             <th>Top Tenants</th>
           </tr>
         </thead>

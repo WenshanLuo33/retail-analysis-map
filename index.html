@@ -172,30 +172,42 @@
         <div id="matrixModeToggle" class="matrix-mode-toggle"></div>
 
         <div class="matrix-table-tools-row">
-          <button
-            id="coTenantTableBtn"
-            class="matrix-tool-btn table-tool-btn"
-            onclick="toggleCoTenantTable()"
+        <button
+          id="coTenantTableBtn"
+          class="matrix-tool-btn table-tool-btn"
+          data-tooltip="Co-Tenant Table shows all tenants located in the same retail center as Trader Joe’s. It is not limited to tenants directly next to TJ."
+          onclick="toggleCoTenantTable()"
           >
-            Show Co-Tenant Table
-          </button>
+         Show Co-Tenant Table
+       </button>
 
-          <button
-            id="adjacentTenantTableBtn"
-            class="matrix-tool-btn table-tool-btn"
-            onclick="toggleAdjacentTenantTable()"
-          >
-            Show Adjacent Tenant Table
-          </button>
+       <button
+          id="adjacentTenantTableBtn"
+          class="matrix-tool-btn table-tool-btn"
+          data-tooltip="Neighboring Tenant Table focuses on nearby tenants directly around Trader Joe’s. It includes up to two tenants on the left and two tenants on the right, for up to four neighboring tenants total."
+          onclick="toggleAdjacentTenantTable()"
+        >
+          Show Neighboring Tenant Table
+        </button>
 
-          <button
-            id="parkingDistanceTableBtn"
-            class="matrix-tool-btn table-tool-btn"
-            onclick="toggleParkingDistanceTable()"
-          >
-            Show Parking Distance Table
-          </button>
-        </div>
+        <button
+         id="immediateTenantTableBtn"
+         class="matrix-tool-btn table-tool-btn"
+         data-tooltip="Closest Neighbor Table is a narrower version of the neighboring tenant analysis. It only includes the closest tenant on the left and the closest tenant on the right, for up to two tenants total."
+         onclick="toggleImmediateAdjacentTenantTable()"
+        >
+         Show Closest Neighbor Table
+        </button>
+
+        <button
+          id="parkingDistanceTableBtn"
+          class="matrix-tool-btn table-tool-btn"
+          data-tooltip="Storefront-to-Parking Table summarizes the distance from Trader Joe’s storefront to the closest front parking area, grouped by layout prototype."
+          onclick="toggleParkingDistanceTable()"
+        >
+          Show Storefront-to-Parking Table
+        </button>
+      </div>
 
         <div class="matrix-tools-row">
           <button

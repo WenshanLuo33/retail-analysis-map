@@ -1223,7 +1223,10 @@ body.prototype-mode #topNav {
 */
 .prototype-page-header {
   display: grid !important;
-  grid-template-columns: max-content minmax(360px, 1fr);
+
+  /* left side takes content, right side uses remaining space */
+  grid-template-columns: minmax(900px, auto) minmax(260px, 1fr);
+
   gap: 16px;
   align-items: start;
 
@@ -1239,8 +1242,8 @@ body.prototype-mode #topNav {
 }
 
 .prototype-header-main {
-  width: 1050px;
-  max-width: calc(100vw - 420px);
+  width: auto;
+  max-width: none;
   min-width: 0;
 }
 
@@ -1249,23 +1252,31 @@ body.prototype-mode #topNav {
   position: relative;
   z-index: 4000;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
   margin-top: 10px;
   overflow: visible;
 }
 
+
 .matrix-mode-toggle button {
   position: relative;
   z-index: 4001;
-  height: 28px;
-  padding: 0 12px;
+
+  height: 24px;
+  padding: 0 9px;
+
   border: 1px solid #003b5c;
   border-radius: 999px;
   background: white;
   color: #003b5c;
-  font-size: 11px;
+
+  font-size: 10px;
   font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+
   cursor: pointer;
   transition:
     background 0.16s ease,
@@ -1281,6 +1292,41 @@ body.prototype-mode #topNav {
   background: #003b5c;
   color: white;
 }
+
+/* Small More icon for Matrix tabs */
+.matrix-more-icon-btn {
+  width: 22px !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  padding: 0 !important;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+
+  background: #003b5c !important;
+  color: white !important;
+  border: 1px solid #003b5c !important;
+}
+
+.matrix-more-icon-btn:hover {
+  background: #e5e8ea !important;
+  border-color: #8f9aa0 !important;
+  transform: translateY(-1px);
+}
+
+.matrix-more-icon-btn.active {
+  background: #003b5c !important;
+  color: white !important;
+  border-color: #003b5c !important;
+}
+
 
 /* Hover pop-up explanation */
 .matrix-mode-toggle button::after {
@@ -1337,14 +1383,14 @@ body.prototype-mode #topNav {
   margin-top: 6px;
 }
 
-/* Collapse button: light gray pill */
+/* Collapse Cards / Show Storefront: very light gray pill */
 .matrix-tool-btn,
 #matrixCompactToggleBtn {
   height: 28px;
   padding: 0 12px;
-  border: 1px solid #b9c0c4;
+  border: 1px solid #d2d7da;
   border-radius: 999px;
-  background: #f3f4f5;
+  background: #fafafa;
   color: #33424a;
   font-size: 11px;
   font-weight: 700;
@@ -1360,15 +1406,15 @@ body.prototype-mode #topNav {
 
 .matrix-tool-btn:hover,
 #matrixCompactToggleBtn:hover {
-  background: #e5e8ea;
-  border-color: #8f9aa0;
+  background: #f1f3f4;
+  border-color: #bfc7cc;
   transform: translateY(-1px);
 }
 
 .matrix-tool-btn.active,
 #matrixCompactToggleBtn.active {
-  background: #dfe3e5;
-  border-color: #7d888e;
+  background: #eef1f2;
+  border-color: #aeb8be;
   color: #111;
 }
 
@@ -1376,12 +1422,16 @@ body.prototype-mode #topNav {
 .matrix-highlight-panel {
   justify-self: stretch;
   width: 100%;
+  min-width: 300px;
+  max-width: 100%;
+
   box-sizing: border-box;
 
   border: 1px solid #d8d8d8;
   border-radius: 12px;
   background: #fbfbfb;
   padding: 10px;
+
   max-height: 155px;
   overflow-y: auto;
 }
@@ -1600,8 +1650,8 @@ body.prototype-mode #topNav {
   position: sticky;
   top: 0;
   z-index: 5;
-  background: #f1f3f4;
-  color: #333;
+  background: #2f3437;
+  color: #ffffff;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.4px;
@@ -1688,28 +1738,74 @@ body.prototype-mode #topNav {
 }
 
 .co-tenant-tabs button.active {
-  background: #003b5c;
+  background: #2f3437;
   color: white;
-  border-color: #003b5c;
+  border-color: #2f3437;
 }
 
 /* Dark gray buttons for data tables */
+/* Dark buttons for data tables */
 .matrix-tool-btn.table-tool-btn {
-  background: #e0e2e3;
-  border-color: #b8bec2;
-  color: #263238;
+  background: #6a6f72;
+  border-color: #6a6f72;
+  color: #ffffff;
 }
 
 .matrix-tool-btn.table-tool-btn:hover {
-  background: #d4d7d9;
-  border-color: #9fa8ad;
-  color: #111;
+  background: #3f4447;
+  border-color: #3f4447;
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .matrix-tool-btn.table-tool-btn.active {
-  background: #c7cbce;
-  border-color: #8f989e;
-  color: #111;
+  background: #111111;
+  border-color: #111111;
+  color: #ffffff;
+}
+
+
+/* =========================
+   Table Button Hover Tooltips
+   ========================= */
+
+.matrix-table-tools-row .table-tool-btn {
+  position: relative;
+}
+
+.matrix-table-tools-row .table-tool-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
+
+  width: 340px;
+  padding: 10px 12px;
+  border-radius: 8px;
+
+  background: #1f2a30;
+  color: #ffffff;
+  font-size: 11px;
+  line-height: 1.45;
+  font-weight: 400;
+  text-align: left;
+  white-space: normal;
+
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+
+  z-index: 99999;
+}
+
+.matrix-table-tools-row .table-tool-btn:hover::after {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* =========================
@@ -1720,10 +1816,6 @@ body.prototype-mode #topNav {
   border-color: #c9c9c9;
 }
 
-.adjacent-tenant-table th {
-  background: #2f3437;
-  color: #ffffff;
-}
 
 .adjacent-tenant-table .co-tenant-rank {
   color: #222;
@@ -1816,7 +1908,7 @@ body.prototype-mode #topNav {
   margin-top: 3px;
   font-size: 10px;
   font-weight: 500;
-  color: #666;
+  color: rgba(255, 255, 255, 0.85);
   text-transform: none;
   letter-spacing: 0;
 }
@@ -1894,7 +1986,119 @@ body.prototype-mode #topNav {
   height: 210px;
 }
 
+/* =========================
+   Unified dark gray table style
+   ========================= */
 
+/* Co-Tenant / Adjacent / Immediate tab active color */
+.co-tenant-tabs button.active,
+.adjacent-tenant-tabs button.active {
+  background: #2f3437;
+  color: #ffffff;
+  border-color: #2f3437;
+}
+
+/* Co-Tenant / Adjacent / Immediate tab hover */
+.co-tenant-tabs button:hover,
+.adjacent-tenant-tabs button:hover {
+  background: #e6e8e9;
+  border-color: #2f3437;
+  color: #2f3437;
+}
+
+/* Co-Tenant / Adjacent / Immediate tab default */
+.co-tenant-tabs button,
+.adjacent-tenant-tabs button {
+  border-color: #4a4f52;
+  color: #2f3437;
+}
+
+/* Make all data table headers dark gray */
+.co-tenant-table th,
+.adjacent-tenant-table th,
+.parking-distance-table th {
+  background: #2f3437;
+  color: #ffffff;
+}
+
+/* =========================
+   Table Header Tooltips
+   ========================= */
+
+.table-header-tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.table-header-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+
+  left: 50%;
+  top: calc(100% + 8px);
+  transform: translate(-50%, -4px);
+
+  width: max-content;
+  max-width: 300px;
+  min-width: 220px;
+  padding: 9px 11px;
+  border-radius: 8px;
+
+  background: #1f2a30;
+  color: #ffffff;
+  font-size: 11px;
+  line-height: 1.45;
+  font-weight: 400;
+  text-align: left;
+  white-space: normal;
+  text-transform: none;
+  letter-spacing: 0;
+
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+
+  z-index: 99999;
+}
+
+.table-header-tooltip:hover::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Keep right-side table header tooltips inside the table/card */
+.co-tenant-table th:last-child.table-header-tooltip::after,
+.adjacent-tenant-table th:last-child.table-header-tooltip::after,
+.parking-distance-table th:last-child.table-header-tooltip::after {
+  left: auto;
+  right: 0;
+  transform: translateY(-4px);
+}
+
+.co-tenant-table th:last-child.table-header-tooltip:hover::after,
+.adjacent-tenant-table th:last-child.table-header-tooltip:hover::after,
+.parking-distance-table th:last-child.table-header-tooltip:hover::after {
+  transform: translateY(0);
+}
+
+/* Adjacent Records / Closest Neighbor Records are often the second-to-last column */
+.co-tenant-table th:nth-last-child(2).table-header-tooltip::after,
+.adjacent-tenant-table th:nth-last-child(2).table-header-tooltip::after,
+.parking-distance-table th:nth-last-child(2).table-header-tooltip::after {
+  left: auto;
+  right: 0;
+  transform: translateY(-4px);
+}
+
+.co-tenant-table th:nth-last-child(2).table-header-tooltip:hover::after,
+.adjacent-tenant-table th:nth-last-child(2).table-header-tooltip:hover::after,
+.parking-distance-table th:nth-last-child(2).table-header-tooltip:hover::after {
+  transform: translateY(0);
+}
 
 
 
