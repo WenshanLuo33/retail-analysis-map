@@ -20,6 +20,7 @@ let drawAreaMeasureMode = false;
 let drawBuildingLayer = null;
 let drawPoiLayer = null;
 let drawParkingLayer = null;
+let drawAnalysisRunning = false;
 
 // =========================
 // Initialize after Draw View opens
@@ -369,47 +370,132 @@ function isDrawFeatureInsidePolygon(feature, polygon) {
 async function fetchDrawOSMData(bbox) {
   const { south, west, north, east } = bbox;
 
+  // Lighter Overpass query:
+  // 1. Buildings
+  // 2. Named POIs only
+  // 3. Parking separately
   const query = `
-    [out:json][timeout:90];
+    [out:json][timeout:40];
     (
       way["building"](${south},${west},${north},${east});
 
-      node["shop"](${south},${west},${north},${east});
-      node["amenity"](${south},${west},${north},${east});
-      node["tourism"](${south},${west},${north},${east});
-      node["leisure"](${south},${west},${north},${east});
-      node["office"](${south},${west},${north},${east});
-      node["healthcare"](${south},${west},${north},${east});
+      node["shop"]["name"](${south},${west},${north},${east});
+      way["shop"]["name"](${south},${west},${north},${east});
 
-      way["shop"](${south},${west},${north},${east});
-      way["amenity"](${south},${west},${north},${east});
-      way["tourism"](${south},${west},${north},${east});
-      way["leisure"](${south},${west},${north},${east});
-      way["office"](${south},${west},${north},${east});
-      way["healthcare"](${south},${west},${north},${east});
+      node["amenity"]["name"](${south},${west},${north},${east});
+      way["amenity"]["name"](${south},${west},${north},${east});
+
+      node["tourism"]["name"](${south},${west},${north},${east});
+      way["tourism"]["name"](${south},${west},${north},${east});
+
+      node["leisure"]["name"](${south},${west},${north},${east});
+      way["leisure"]["name"](${south},${west},${north},${east});
+
+      node["office"]["name"](${south},${west},${north},${east});
+      way["office"]["name"](${south},${west},${north},${east});
+
+      node["healthcare"]["name"](${south},${west},${north},${east});
+      way["healthcare"]["name"](${south},${west},${north},${east});
 
       way["amenity"="parking"](${south},${west},${north},${east});
       relation["amenity"="parking"](${south},${west},${north},${east});
     );
+
     out body geom;
   `;
 
-  const response = await fetch("https://overpass-api.de/api/interpreter", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-    },
-    body: "data=" + encodeURIComponent(query)
-  });
+  const endpoints = [
+    "https://overpass.private.coffee/api/interpreter",
+    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+    "https://overpass-api.de/api/interpreter"
+  ];
 
-  if (!response.ok) {
-    const text = await response.text();
-    console.error(text);
-    throw new Error("Overpass API request failed.");
+  let lastError = null;
+
+  for (let i = 0; i < endpoints.length; i++) {
+    const endpoint = endpoints[i];
+
+    const controller = new AbortController();
+
+    // Give each server up to 25 seconds
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+    }, 40000);
+
+    try {
+      console.log(
+        `Trying Overpass server ${i + 1}/${endpoints.length}:`,
+        endpoint
+      );
+
+      const summary = document.getElementById("drawSummary");
+
+      if (summary) {
+        summary.innerHTML = `
+          <p>
+            <b>Loading OSM data...</b><br>
+            Trying data server ${i + 1} of ${endpoints.length}.
+          </p>
+        `;
+      }
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/x-www-form-urlencoded;charset=UTF-8"
+        },
+        body: "data=" + encodeURIComponent(query),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(
+          `Server returned ${response.status}`
+        );
+      }
+
+      const osmJson = await response.json();
+
+      if (!osmJson || !Array.isArray(osmJson.elements)) {
+        throw new Error(
+          "Invalid response from Overpass server."
+        );
+      }
+
+      console.log(
+        `Overpass request successful using server ${i + 1}:`,
+        endpoint,
+        `Elements: ${osmJson.elements.length}`
+      );
+
+      return drawOverpassToGeoJSON(osmJson);
+
+    } catch (error) {
+      clearTimeout(timeoutId);
+
+      if (error.name === "AbortError") {
+        console.warn(
+          `Overpass server ${i + 1} timed out after 40 seconds:`,
+          endpoint
+        );
+      } else {
+        console.warn(
+          `Overpass server ${i + 1} failed:`,
+          endpoint,
+          error
+        );
+      }
+
+      lastError = error;
+    }
   }
 
-  const osmJson = await response.json();
-  return drawOverpassToGeoJSON(osmJson);
+  throw new Error(
+    "All OSM data servers are currently unavailable. Please try again shortly."
+  );
 }
 
 function drawOverpassToGeoJSON(osmJson) {
@@ -802,44 +888,120 @@ function clearDrawMeasurements() {
 // =========================
 
 async function runDrawAnalysis() {
+  // Prevent multiple simultaneous requests
+  if (drawAnalysisRunning) {
+    console.log("Analysis is already running.");
+    return;
+  }
+
   if (!drawSelectedPolygon) {
     alert("Please draw the main analysis boundary first.");
     return;
   }
 
+  const runBtn = document.getElementById("drawRunBtn");
+  const summary = document.getElementById("drawSummary");
+
+  drawAnalysisRunning = true;
+
+  if (runBtn) {
+    runBtn.disabled = true;
+    runBtn.textContent = "Loading...";
+    runBtn.style.opacity = "0.65";
+    runBtn.style.cursor = "wait";
+  }
+
   setDrawManualParkingMode(false);
   setDrawAreaMeasureMode(false);
 
-  document.getElementById("drawSummary").innerHTML = "<p>Loading OSM data...</p>";
+  if (summary) {
+    summary.innerHTML = `
+      <p>
+        <b>Loading OSM data...</b><br>
+        This may take a few seconds.
+      </p>
+    `;
+  }
 
-  if (drawBuildingLayer) drawMap.removeLayer(drawBuildingLayer);
-  if (drawPoiLayer) drawMap.removeLayer(drawPoiLayer);
-  if (drawParkingLayer) drawMap.removeLayer(drawParkingLayer);
+  // Remove previous analysis layers
+
 
   const bbox = drawPolygonToBbox(drawSelectedPolygon);
 
-
   try {
+    // =========================
+    // Load OSM data
+    // =========================
+
     const rawGeojson = await fetchDrawOSMData(bbox);
+
+    // Only remove the previous result AFTER new OSM data loads successfully
+    if (drawBuildingLayer) {
+      drawMap.removeLayer(drawBuildingLayer);
+      drawBuildingLayer = null;
+    }
+
+    if (drawPoiLayer) {
+      drawMap.removeLayer(drawPoiLayer);
+      drawPoiLayer = null;
+    }
+
+    if (drawParkingLayer) {
+      drawMap.removeLayer(drawParkingLayer);
+      drawParkingLayer = null;
+    }
+
+    if (
+      !rawGeojson ||
+      !Array.isArray(rawGeojson.features)
+    ) {
+      throw new Error("Invalid OSM data received.");
+    }
 
     let features = rawGeojson.features.filter(f =>
       isDrawFeatureInsidePolygon(f, drawSelectedPolygon)
     );
 
+    // =========================
+    // Buildings
+    // =========================
+
     const buildings = features.filter(f =>
       f.properties &&
       f.properties.building &&
-      (f.geometry.type === "Polygon" || f.geometry.type === "MultiPolygon")
+      (
+        f.geometry.type === "Polygon" ||
+        f.geometry.type === "MultiPolygon"
+      )
     );
+
+    // =========================
+    // OSM parking
+    // =========================
 
     const osmParkingLots = features.filter(f =>
       f.properties &&
       f.properties.amenity === "parking" &&
-      (f.geometry.type === "Polygon" || f.geometry.type === "MultiPolygon")
+      (
+        f.geometry.type === "Polygon" ||
+        f.geometry.type === "MultiPolygon"
+      )
     );
 
+    // =========================
+    // Manual parking
+    // =========================
+
     const manualParkingLots = getDrawManualParkingFeatures();
-    const parkingLots = [...osmParkingLots, ...manualParkingLots];
+
+    const parkingLots = [
+      ...osmParkingLots,
+      ...manualParkingLots
+    ];
+
+    // =========================
+    // POIs / tenants
+    // =========================
 
     let pois = features.filter(f =>
       f.properties &&
@@ -854,222 +1016,642 @@ async function runDrawAnalysis() {
       )
     );
 
+    // Only keep named POIs
     pois = pois.filter(f =>
       f.properties.name &&
       String(f.properties.name).trim() !== ""
     );
 
     pois.forEach(p => {
-      p.properties.tenant_category = classifyDrawPOI(p.properties);
-      p.properties.tenant_name = p.properties.name || "";
-      p.properties.point = getDrawFeaturePoint(p);
+      p.properties.tenant_category =
+        classifyDrawPOI(p.properties);
+
+      p.properties.tenant_name =
+        p.properties.name || "";
+
+      p.properties.point =
+        getDrawFeaturePoint(p);
     });
+
+    // =========================
+    // Building metrics
+    // =========================
 
     buildings.forEach((b, i) => {
-      b.properties.building_id = i;
-      b.properties.building_use = classifyDrawBuilding(b.properties);
+      b.properties.building_id = i + 1;
 
-      const metrics = estimateDrawBuildingMetrics(b);
-      b.properties.depth_est_ft = Math.round(metrics.depthFt);
-      b.properties.length_est_ft = Math.round(metrics.lengthFt);
-      b.properties.building_area_sf = Math.round(metrics.areaSqFt);
+      b.properties.building_use =
+        classifyDrawBuilding(b.properties);
+
+      const metrics =
+        estimateDrawBuildingMetrics(b);
+
+      b.properties.depth_est_ft =
+        Math.round(metrics.depthFt);
+
+      b.properties.length_est_ft =
+        Math.round(metrics.lengthFt);
+
+      b.properties.building_area_sf =
+        Math.round(metrics.areaSqFt);
     });
+
+    // =========================
+    // Parking metrics
+    // =========================
 
     osmParkingLots.forEach((p, i) => {
-      const metrics = estimateDrawParkingMetrics(p);
+      const metrics =
+        estimateDrawParkingMetrics(p);
 
-      p.properties.parking_id = `O-${i + 1}`;
-      p.properties.parking_area_sf = metrics.areaSqFt;
-      p.properties.osm_capacity = metrics.osmCapacity;
-      p.properties.estimated_capacity = metrics.estimatedCapacity;
-      p.properties.capacity_source = metrics.capacitySource;
+      p.properties.parking_id =
+        `O-${i + 1}`;
+
+      p.properties.parking_area_sf =
+        metrics.areaSqFt;
+
+      p.properties.osm_capacity =
+        metrics.osmCapacity;
+
+      p.properties.estimated_capacity =
+        metrics.estimatedCapacity;
+
+      p.properties.capacity_source =
+        metrics.capacitySource;
     });
 
+    // =========================
+    // Use tenant information
+    // to improve building use
+    // =========================
+
     pois.forEach(poi => {
-      const point = poi.properties.point;
-      const category = poi.properties.tenant_category;
+      const point =
+        poi.properties.point;
+
+      const category =
+        poi.properties.tenant_category;
 
       buildings.forEach(b => {
-        if (turf.booleanPointInPolygon(point, b)) {
-          if (isDrawRetailLike(category)) {
-            b.properties.building_use = "Retail / Commercial";
+        try {
+          if (turf.booleanPointInPolygon(point, b)) {
+
+            if (isDrawRetailLike(category)) {
+              b.properties.building_use =
+                "Retail / Commercial";
+            }
+
+            if (category === "Hotel") {
+              b.properties.building_use =
+                "Hotel";
+            }
+
+            if (category === "Office") {
+              b.properties.building_use =
+                "Office";
+            }
           }
-          if (category === "Hotel") {
-            b.properties.building_use = "Hotel";
-          }
-          if (category === "Office") {
-            b.properties.building_use = "Office";
-          }
+        } catch (error) {
+          console.warn(
+            "Could not test POI against building:",
+            error
+          );
         }
       });
     });
 
-    drawParkingLayer = L.geoJSON(parkingLots, {
-      style: feature => {
-        const isManual =
-          feature.properties.capacity_source === "Manually drawn / area ÷ 400 sf";
+    // =========================
+    // Parking layer
+    // =========================
 
-        return {
-          fillColor: isManual ? "#bfbfbf" : "#d9d9d9",
-          color: isManual ? "#555555" : "#777777",
-          weight: 1,
-          fillOpacity: 0.45
-        };
-      },
-      onEachFeature: (feature, layer) => {
-        const area = feature.properties.parking_area_sf ?? null;
-        const spaces = feature.properties.estimated_capacity ?? "N/A";
-        const source = feature.properties.capacity_source ?? "N/A";
+    drawParkingLayer = L.geoJSON(
+      parkingLots,
+      {
+        style: feature => {
+          const isManual =
+            feature.properties.capacity_source ===
+            "Manually drawn / area ÷ 400 sf";
 
-        layer.bindPopup(`
-          <b>Parking Lot ID:</b> ${feature.properties.parking_id}<br>
-          <b>Area:</b> ${area === null ? "N/A" : area.toLocaleString()} sf<br>
-          <b>Parking Spaces:</b> ${spaces === "N/A" ? "N/A" : spaces.toLocaleString()}<br>
-          <b>Source:</b> ${source}
-        `);
+          return {
+            fillColor:
+              isManual
+                ? "#bfbfbf"
+                : "#d9d9d9",
+
+            color:
+              isManual
+                ? "#555555"
+                : "#777777",
+
+            weight: 1,
+            fillOpacity: 0.45
+          };
+        },
+
+        onEachFeature: (
+          feature,
+          layer
+        ) => {
+          const area =
+            feature.properties.parking_area_sf ??
+            null;
+
+          const spaces =
+            feature.properties.estimated_capacity ??
+            "N/A";
+
+          const source =
+            feature.properties.capacity_source ??
+            "N/A";
+
+          layer.bindPopup(`
+            <b>Parking Lot ID:</b>
+            ${feature.properties.parking_id || "N/A"}
+            <br>
+
+            <b>Area:</b>
+            ${
+              area === null
+                ? "N/A"
+                : area.toLocaleString()
+            } sf
+            <br>
+
+            <b>Parking Spaces:</b>
+            ${
+              spaces === "N/A"
+                ? "N/A"
+                : spaces.toLocaleString()
+            }
+            <br>
+
+            <b>Source:</b>
+            ${source}
+          `);
+        }
       }
-    }).addTo(drawMap);
+    ).addTo(drawMap);
 
-    drawBuildingLayer = L.geoJSON(buildings, {
-      style: feature => ({
-        fillColor: drawBuildingColor(feature.properties.building_use),
-        color: "#333",
-        weight: 0.8,
-        fillOpacity: 0.5
-      }),
-      onEachFeature: (feature, layer) => {
-        const length = feature.properties.length_est_ft ?? null;
-        const depth = feature.properties.depth_est_ft ?? null;
-        const area = feature.properties.building_area_sf ?? null;
+    // =========================
+    // Building layer
+    // =========================
 
-        layer.bindPopup(`
-          <b>Building ID:</b> ${feature.properties.building_id}<br>
-          <b>Use:</b> ${feature.properties.building_use}<br>
-          <b>Length:</b> ${length === null ? "N/A" : length.toLocaleString()} ft<br>
-          <b>Depth / Width:</b> ${depth === null ? "N/A" : depth.toLocaleString()} ft<br>
-          <b>Area:</b> ${area === null ? "N/A" : area.toLocaleString()} sf
-        `);
+    drawBuildingLayer = L.geoJSON(
+      buildings,
+      {
+        style: feature => ({
+          fillColor:
+            drawBuildingColor(
+              feature.properties.building_use
+            ),
+
+          color: "#333",
+          weight: 0.8,
+          fillOpacity: 0.5
+        }),
+
+        onEachFeature: (
+          feature,
+          layer
+        ) => {
+          const length =
+            feature.properties.length_est_ft ??
+            null;
+
+          const depth =
+            feature.properties.depth_est_ft ??
+            null;
+
+          const area =
+            feature.properties.building_area_sf ??
+            null;
+
+          layer.bindPopup(`
+            <b>Building ID:</b>
+            ${feature.properties.building_id}
+            <br>
+
+            <b>Use:</b>
+            ${feature.properties.building_use}
+            <br>
+
+            <b>Length:</b>
+            ${
+              length === null
+                ? "N/A"
+                : length.toLocaleString()
+            } ft
+            <br>
+
+            <b>Depth / Width:</b>
+            ${
+              depth === null
+                ? "N/A"
+                : depth.toLocaleString()
+            } ft
+            <br>
+
+            <b>Area:</b>
+            ${
+              area === null
+                ? "N/A"
+                : area.toLocaleString()
+            } sf
+          `);
+        }
       }
-    }).addTo(drawMap);
+    ).addTo(drawMap);
 
-    drawPoiLayer = L.layerGroup().addTo(drawMap);
+    // =========================
+    // POI / tenant layer
+    // =========================
+
+    drawPoiLayer =
+      L.layerGroup().addTo(drawMap);
 
     pois.forEach(p => {
-      const point = p.properties.point.geometry.coordinates;
-      const category = p.properties.tenant_category;
+      const point =
+        p.properties.point.geometry.coordinates;
 
-      L.circleMarker([point[1], point[0]], {
-        radius: 3,
-        color: drawPoiColor(category),
-        fillColor: drawPoiColor(category),
-        fillOpacity: 0.85,
-        weight: 1
-      })
+      const category =
+        p.properties.tenant_category;
+
+      L.circleMarker(
+        [point[1], point[0]],
+        {
+          radius: 3,
+
+          color:
+            drawPoiColor(category),
+
+          fillColor:
+            drawPoiColor(category),
+
+          fillOpacity: 0.85,
+          weight: 1
+        }
+      )
         .bindPopup(`
-          <b>${p.properties.tenant_name}</b><br>
-          Category: ${category}<br>
-          Shop: ${p.properties.shop || ""}<br>
-          Amenity: ${p.properties.amenity || ""}
+          <b>
+            ${p.properties.tenant_name}
+          </b>
+          <br>
+
+          Category:
+          ${category}
+          <br>
+
+          Shop:
+          ${p.properties.shop || ""}
+          <br>
+
+          Amenity:
+          ${p.properties.amenity || ""}
         `)
         .addTo(drawPoiLayer);
     });
 
+    // =========================
+    // Building use counts
+    // =========================
+
     const buildingUseCounts = {};
+
     buildings.forEach(b => {
-      const use = b.properties.building_use;
-      buildingUseCounts[use] = (buildingUseCounts[use] || 0) + 1;
+      const use =
+        b.properties.building_use;
+
+      buildingUseCounts[use] =
+        (buildingUseCounts[use] || 0) + 1;
     });
+
+    // =========================
+    // Tenant category counts
+    // =========================
 
     const tenantCounts = {};
+
     pois.forEach(p => {
-      const cat = p.properties.tenant_category;
-      tenantCounts[cat] = (tenantCounts[cat] || 0) + 1;
+      const category =
+        p.properties.tenant_category;
+
+      tenantCounts[category] =
+        (tenantCounts[category] || 0) + 1;
     });
 
-    const totalParkingSpaces = parkingLots.reduce((sum, p) => {
-      return sum + (p.properties.estimated_capacity || 0);
-    }, 0);
+    // =========================
+    // Parking totals
+    // =========================
 
-    const totalParkingArea = parkingLots.reduce((sum, p) => {
-      return sum + (p.properties.parking_area_sf || 0);
-    }, 0);
+    const totalParkingSpaces =
+      parkingLots.reduce(
+        (sum, p) => {
+          return (
+            sum +
+            (
+              p.properties
+                .estimated_capacity || 0
+            )
+          );
+        },
+        0
+      );
 
-    const osmParkingArea = osmParkingLots.reduce((sum, p) => {
-      return sum + (p.properties.parking_area_sf || 0);
-    }, 0);
+    const totalParkingArea =
+      parkingLots.reduce(
+        (sum, p) => {
+          return (
+            sum +
+            (
+              p.properties
+                .parking_area_sf || 0
+            )
+          );
+        },
+        0
+      );
 
-    const manualParkingArea = manualParkingLots.reduce((sum, p) => {
-      return sum + (p.properties.parking_area_sf || 0);
-    }, 0);
+    const osmParkingArea =
+      osmParkingLots.reduce(
+        (sum, p) => {
+          return (
+            sum +
+            (
+              p.properties
+                .parking_area_sf || 0
+            )
+          );
+        },
+        0
+      );
 
-    const siteAreaSqFt = turf.area(drawSelectedPolygon) * 10.7639;
-    const siteAreaAcres = siteAreaSqFt / 43560;
+    const manualParkingArea =
+      manualParkingLots.reduce(
+        (sum, p) => {
+          return (
+            sum +
+            (
+              p.properties
+                .parking_area_sf || 0
+            )
+          );
+        },
+        0
+      );
 
-    const totalRetailBuildingArea = buildings.reduce((sum, b) => {
-      if (b.properties.building_use === "Retail / Commercial") {
-        return sum + (b.properties.building_area_sf || 0);
-      }
-      return sum;
-    }, 0);
+    // =========================
+    // Site area
+    // =========================
 
-    const totalBuildingArea = buildings.reduce((sum, b) => {
-      return sum + (b.properties.building_area_sf || 0);
-    }, 0);
+    const siteAreaSqFt =
+      turf.area(drawSelectedPolygon) *
+      10.7639;
 
-    const parkingRatio = totalRetailBuildingArea > 0
-      ? totalParkingSpaces / (totalRetailBuildingArea / 1000)
-      : 0;
+    const siteAreaAcres =
+      siteAreaSqFt / 43560;
 
-    const sfPerParkingSpace = totalParkingSpaces > 0
-      ? totalRetailBuildingArea / totalParkingSpaces
-      : 0;
+    // =========================
+    // Retail building area
+    // =========================
 
-    const buildingCoverage = siteAreaSqFt > 0
-      ? (totalBuildingArea / siteAreaSqFt) * 100
-      : 0;
+    const totalRetailBuildingArea =
+      buildings.reduce(
+        (sum, b) => {
+          if (
+            b.properties.building_use ===
+            "Retail / Commercial"
+          ) {
+            return (
+              sum +
+              (
+                b.properties
+                  .building_area_sf || 0
+              )
+            );
+          }
 
-    document.getElementById("drawSummary").innerHTML = `
-      <p><b>Site Area:</b> ${siteAreaAcres.toFixed(2)} acres</p>
-      <p><b>Total Retail Building Area:</b> ${Math.round(totalRetailBuildingArea).toLocaleString()} sf</p>
-      <p><b>Parking Lots:</b> ${parkingLots.length}</p>
-      <p><b>OSM Parking Lots:</b> ${osmParkingLots.length}</p>
-      <p><b>Manual Parking Lots:</b> ${manualParkingLots.length}</p>
-      <p><b>Total Parking Area:</b> ${Math.round(totalParkingArea).toLocaleString()} sf</p>
-      <p><b>OSM Parking Area:</b> ${Math.round(osmParkingArea).toLocaleString()} sf</p>
-      <p><b>Manual Parking Area:</b> ${Math.round(manualParkingArea).toLocaleString()} sf</p>
-      <p><b>Estimated Parking Spaces:</b> ${totalParkingSpaces.toLocaleString()}</p>
-      <p><b>Parking Ratio:</b> ${parkingRatio.toFixed(2)} spaces / 1,000 sf retail</p>
-      <p><b>SF per Parking Space:</b> ${sfPerParkingSpace > 0 ? Math.round(sfPerParkingSpace).toLocaleString() : "N/A"} sf retail / space</p>
-      <p><b>Building Coverage:</b> ${buildingCoverage.toFixed(1)}%</p>
+          return sum;
+        },
+        0
+      );
 
-      <hr>
+    // =========================
+    // Total building area
+    // =========================
 
-      <p><b>Formula Notes</b><br>
-      Site acreage = polygon area / 43,560<br>
-      Retail area = sum of Retail / Commercial building footprints<br>
-      Parking count = OSM capacity, or parking lot area / 400 sf; manual parking also uses area / 400 sf<br>
-      Parking ratio = spaces / retail sf × 1,000<br>
-      SF per parking space = retail sf / spaces<br>
-      Building coverage = total building footprint area / site area</p>
+    const totalBuildingArea =
+      buildings.reduce(
+        (sum, b) => {
+          return (
+            sum +
+            (
+              b.properties
+                .building_area_sf || 0
+            )
+          );
+        },
+        0
+      );
 
-      <hr>
+    // =========================
+    // Metrics
+    // =========================
 
-      <p><b>Buildings:</b> ${buildings.length}</p>
-      <p><b>Named Tenants:</b> ${pois.length}</p>
+    const parkingRatio =
+      totalRetailBuildingArea > 0
+        ? totalParkingSpaces /
+          (
+            totalRetailBuildingArea /
+            1000
+          )
+        : 0;
 
-      <p><b>Building Use</b><br>
-      ${Object.entries(buildingUseCounts).map(([k, v]) => `${k}: ${v}`).join("<br>")}</p>
+    const sfPerParkingSpace =
+      totalParkingSpaces > 0
+        ? totalRetailBuildingArea /
+          totalParkingSpaces
+        : 0;
 
-      <p><b>Tenant Mix</b><br>
-      ${Object.entries(tenantCounts).map(([k, v]) => `${k}: ${v}`).join("<br>")}</p>
-    `;
+    const buildingCoverage =
+      siteAreaSqFt > 0
+        ? (
+            totalBuildingArea /
+            siteAreaSqFt
+          ) * 100
+        : 0;
+
+    // =========================
+    // Final summary
+    // =========================
+
+    if (summary) {
+      summary.innerHTML = `
+        <p>
+          <b>Site Area:</b>
+          ${siteAreaAcres.toFixed(2)}
+          acres
+        </p>
+
+        <p>
+          <b>Total Retail Building Area:</b>
+          ${Math.round(
+            totalRetailBuildingArea
+          ).toLocaleString()}
+          sf
+        </p>
+
+        <p>
+          <b>Parking Lots:</b>
+          ${parkingLots.length}
+        </p>
+
+        <p>
+          <b>OSM Parking Lots:</b>
+          ${osmParkingLots.length}
+        </p>
+
+        <p>
+          <b>Manual Parking Lots:</b>
+          ${manualParkingLots.length}
+        </p>
+
+        <p>
+          <b>Total Parking Area:</b>
+          ${Math.round(
+            totalParkingArea
+          ).toLocaleString()}
+          sf
+        </p>
+
+        <p>
+          <b>OSM Parking Area:</b>
+          ${Math.round(
+            osmParkingArea
+          ).toLocaleString()}
+          sf
+        </p>
+
+        <p>
+          <b>Manual Parking Area:</b>
+          ${Math.round(
+            manualParkingArea
+          ).toLocaleString()}
+          sf
+        </p>
+
+        <p>
+          <b>Estimated Parking Spaces:</b>
+          ${totalParkingSpaces.toLocaleString()}
+        </p>
+
+        <p>
+          <b>Parking Ratio:</b>
+          ${parkingRatio.toFixed(2)}
+          spaces / 1,000 sf retail
+        </p>
+
+        <p>
+          <b>SF per Parking Space:</b>
+          ${
+            sfPerParkingSpace > 0
+              ? Math.round(
+                  sfPerParkingSpace
+                ).toLocaleString()
+              : "N/A"
+          }
+          sf retail / space
+        </p>
+
+        <p>
+          <b>Building Coverage:</b>
+          ${buildingCoverage.toFixed(1)}%
+        </p>
+
+        <hr>
+
+        <p>
+          <b>Formula Notes</b><br>
+          Site acreage = polygon area / 43,560<br>
+          Retail area = sum of Retail / Commercial building footprints<br>
+          Parking count = OSM capacity, or parking lot area / 400 sf; manual parking also uses area / 400 sf<br>
+          Parking ratio = spaces / retail sf × 1,000<br>
+          SF per parking space = retail sf / spaces<br>
+          Building coverage = total building footprint area / site area
+        </p>
+
+        <hr>
+
+        <p>
+          <b>Buildings:</b>
+          ${buildings.length}
+        </p>
+
+        <p>
+          <b>Named Tenants:</b>
+          ${pois.length}
+        </p>
+
+        <p>
+          <b>Building Use</b><br>
+          ${
+            Object.entries(
+              buildingUseCounts
+            )
+              .map(
+                ([key, value]) =>
+                  `${key}: ${value}`
+              )
+              .join("<br>")
+          }
+        </p>
+
+        <p>
+          <b>Tenant Mix</b><br>
+          ${
+            Object.entries(
+              tenantCounts
+            )
+              .map(
+                ([key, value]) =>
+                  `${key}: ${value}`
+              )
+              .join("<br>")
+          }
+        </p>
+      `;
+    }
+
+    console.log(
+      "Draw analysis completed successfully."
+    );
 
   } catch (error) {
-    console.error(error);
+    console.error(
+      "Draw analysis failed:",
+      error
+    );
 
-    document.getElementById("drawSummary").innerHTML = `
-      <p style="color:red;">Error loading data. Try again or draw a smaller polygon.</p>
-    `;
+    if (summary) {
+      summary.innerHTML = `
+        <p style="color:red;">
+          <b>Error loading OSM data.</b><br>
+          The public OpenStreetMap data server may be busy.
+          Please wait a moment and try again,
+          or draw a smaller analysis area.
+        </p>
+      `;
+    }
+
+  } finally {
+    // Always restore the button
+    drawAnalysisRunning = false;
+
+    if (runBtn) {
+      runBtn.disabled = false;
+      runBtn.textContent = "Run Analysis";
+      runBtn.style.opacity = "";
+      runBtn.style.cursor = "";
+    }
   }
 }
 

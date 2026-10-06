@@ -4421,27 +4421,31 @@ function initializeDrawMap() {
 
   drawMap = L.map("drawMap").setView([42.5190, -71.0325], 16);
 
-  const drawCartoLight = L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+  // OpenStreetMap base map
+  const drawOsmLayer = L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
-      attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-      maxZoom: 20
+      attribution: "&copy; OpenStreetMap contributors",
+      maxZoom: 19
     }
   );
 
+  // Esri satellite map
   const drawEsriSatellite = L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     {
       attribution: "Tiles &copy; Esri",
-      maxZoom: 20
+      maxZoom: 19
     }
   );
 
-  drawCartoLight.addTo(drawMap);
+  // Default map
+  drawOsmLayer.addTo(drawMap);
 
+  // Layer switcher
   L.control.layers(
     {
-      "Light Map": drawCartoLight,
+      "Street Map": drawOsmLayer,
       "Satellite": drawEsriSatellite
     },
     null,
